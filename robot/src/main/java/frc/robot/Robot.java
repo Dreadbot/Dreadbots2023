@@ -7,6 +7,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.OperatorConstants;
+import util.controls.DreadbotController;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -16,7 +18,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-
+  DreadbotController controller = new DreadbotController(OperatorConstants.PRIMARY_JOYSTICK_PORT);
   private RobotContainer m_robotContainer;
 
   /**
@@ -77,6 +79,7 @@ public class Robot extends TimedRobot {
     if (m_autonomousCommand != null) {
       m_autonomousCommand.cancel();
     }
+    System.out.println(controller.getDpadDown().get()); 
   }
 
   /** This function is called periodically during operator control. */

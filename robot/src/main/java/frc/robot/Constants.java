@@ -4,16 +4,19 @@
 
 package frc.robot;
 
-/**
- * The Constants class provides a convenient place for teams to hold robot-wide numerical or boolean
- * constants. This class should not be used for any other purpose. All constants should be declared
- * globally (i.e. public static). Do not put anything functional in this class.
- *
- * <p>It is advised to statically import this class (or one of its inner classes) wherever the
- * constants are needed, to reduce verbosity.
- */
-public final class Constants {
-  public static class OperatorConstants {
-    public static final int kDriverControllerPort = 0;
-  }
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.I2C;
+import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.util.Color;
+
+@SuppressWarnings("SpellCheckingInspection")
+public abstract class Constants {
+    public static class OperatorConstants {
+      public static final int PRIMARY_JOYSTICK_PORT   = 0;
+      public static final int SECONDARY_JOYSTICK_PORT = 1;
+    }
+
+    private Constants() throws IllegalStateException {
+        throw new IllegalStateException("Constants is a utility class. It should not be instantiated.");
+    }
 }
