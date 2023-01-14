@@ -35,7 +35,7 @@ public class DreadbotPowerLogger {
         this.startingCurrent = startingCurrent;
     }
 
-
+    @SuppressWarnings("unused")
     private void logCurrents(){
         if(pwrDistro.getTotalCurrent() >= startingCurrent) {
                 String powerOutput = "Power output:,";
