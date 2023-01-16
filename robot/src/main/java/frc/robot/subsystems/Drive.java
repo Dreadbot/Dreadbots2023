@@ -5,8 +5,9 @@ import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import util.DreadbotMotor;
+import util.misc.DreadbotSubsystem;
 
-public class Drive {
+public class Drive extends DreadbotSubsystem {
     private DifferentialDrive diffDrive;
 
     private MotorControllerGroup leftMotors;
@@ -43,6 +44,17 @@ public class Drive {
         diffDrive.tankDrive(ySpeed, wSpeed);
     }
 
-    
+    @Override
+    public void close() throws Exception {
+        // TODO Auto-generated method stub
+        
+    }
+
+    @Override
+    public void stopMotors() {
+        // TODO Auto-generated method stub
+        
+    }
+
     
 }
