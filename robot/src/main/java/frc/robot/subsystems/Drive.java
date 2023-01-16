@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import util.DreadbotMotor;
@@ -29,5 +31,18 @@ public class Drive {
         diffDrive = new DifferentialDrive(leftMotors, rightMotors);
     }
 
+    public void ArcadeDrive(double xSpeed, double rot) {
+        diffDrive.arcadeDrive(xSpeed, rot, true);
+    }
+
+    public void CurvatureDrive(double xSpeed, double rot) {
+        diffDrive.curvatureDrive(xSpeed, rot, true);
+    }
+
+    public void TankDrive(double ySpeed, double wSpeed ) { //WUMBO SPEED
+        diffDrive.tankDrive(ySpeed, wSpeed);
+    }
+
+    
     
 }
