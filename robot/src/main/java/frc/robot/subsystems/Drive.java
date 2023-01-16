@@ -1,12 +1,18 @@
 package frc.robot.subsystems;
 
+import edu.wpi.first.wpilibj.drive.DifferentialDrive;
+import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import util.DreadbotMotor;
 
 public class Drive {
-    private DreadbotMotor frontLeftMotor;
-    private DreadbotMotor frontRightMotor;
-    private DreadbotMotor backLeftMotor;
-    private DreadbotMotor backRightMotor;
+    private DifferentialDrive diffDrive;
+
+    private MotorControllerGroup leftMotors;
+        private DreadbotMotor frontLeftMotor;
+        private DreadbotMotor frontRightMotor;
+    private MotorControllerGroup rightMotors;
+        private DreadbotMotor backLeftMotor;
+        private DreadbotMotor backRightMotor;
 
     public Drive(
         DreadbotMotor frontLeftMotor,
@@ -15,8 +21,12 @@ public class Drive {
         DreadbotMotor backRightMotor){
         this.frontLeftMotor = frontLeftMotor;
         this.frontRightMotor = frontRightMotor;
+        leftMotors = new MotorControllerGroup(frontLeftMotor.getSparkMax(), backLeftMotor.getSparkMax());
         this.backLeftMotor = backLeftMotor; 
         this.backRightMotor = backRightMotor;
+        rightMotors = new MotorControllerGroup(frontRightMotor.getSparkMax(), backRightMotor.getSparkMax());
+
+        diffDrive = new DifferentialDrive(leftMotors, rightMotors);
     }
 
     
