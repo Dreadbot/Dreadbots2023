@@ -3,6 +3,7 @@ from dt_apriltags import Detector
 import yaml
 import argparse
 import os
+import util
 
 def main():
     parser = argparse.ArgumentParser()
@@ -59,9 +60,7 @@ def main():
             
             cv2.line(frame, (int(original[0]), int(original[1])), (int(to[0]), int(to[1])), (0, 255, 0), 2)
 
-        center = tag.center
-        centerCord = (int(center[0]), int(center[1]))
-        cv2.putText(frame, "dZ: " + str(tag.pose_t[2]), centerCord, cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2)
+        
     
 
     while True:
@@ -71,6 +70,13 @@ def main():
         tags = at_detector.detect(image, estimate_tag_pose=True, camera_params=camera_params, tag_size=0.1397)
         for tag in tags:
             result_callback(tag, frame)
+
+            center = tag.center
+            centerCord = (int(center[0]), int(center[1]))
+            cv2.putText(frame, "dX: " + str(tag.pose_t[0]), (int(center[0]), int(center[1])), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2)
+            cv2.putText(frame, "dY: " + str(tag.pose_t[1]), (int(center[0]), int(center[1]) + 20), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2)
+            cv2.putText(frame, "dZ: " + str(tag.pose_t[2]), (int(center[0]), int(center[1]) + 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2)
+            
 
 
         cv2.imshow("frame", frame)
