@@ -15,5 +15,11 @@ public class DriveCommand extends CommandBase {
         this.joystickRotationalAxis = joystickRotationalAxis;
         addRequirements(drive);
     }
-    
+
+    @Override
+    public void execute() {
+        double joystickForward = (joystickForwardAxis.getAsDouble())* 0.55;
+        double joystickRotation = (joystickRotationalAxis.getAsDouble());
+        drive.ArcadeDrive(joystickForward, joystickRotation);
+    }
 }

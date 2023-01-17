@@ -4,7 +4,7 @@ import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import util.DreadbotMotor;
+import util.misc.DreadbotMotor;
 import util.misc.DreadbotSubsystem;
 
 public class Drive extends DreadbotSubsystem {
