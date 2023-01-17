@@ -7,6 +7,8 @@ package frc.robot;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.OperatorConstants;
+import util.controls.DreadbotController;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -17,6 +19,9 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
+  private final DreadbotController m_driverController =
+      new DreadbotController(OperatorConstants.PRIMARY_JOYSTICK_PORT);
+  private final double xAxisTest = m_driverController.getXAxis();
 
   /**
    * This function is run when the robot is first started up and should be used for any
@@ -80,7 +85,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    System.out.println(xAxisTest);
+  }
 
   @Override
   public void testInit() {
