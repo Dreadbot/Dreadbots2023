@@ -1,6 +1,6 @@
 import json
 
-def getPosition(dist_tuple: (int, int), tag_id: int):
+def getPosition(dist_tuple: tuple[int, int], tag_id: int):
     """
     Returns the current position of the camera on the game field
 
