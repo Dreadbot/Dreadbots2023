@@ -9,7 +9,7 @@ import frc.robot.subsystems.Drive;
 public class DriveCommand extends CommandBase {
     private final Drive drive;
     private final DoubleSupplier joystickForwardAxis;
-    private final DoubleSupplier joystickRotationalAxis)
+    private final DoubleSupplier joystickRotationalAxis;
     public DriveCommand(Drive drive, DoubleSupplier joystickForwardAxis, DoubleSupplier joystickRotationalAxis) {
         this.drive = drive;
         this.joystickForwardAxis = joystickForwardAxis;
