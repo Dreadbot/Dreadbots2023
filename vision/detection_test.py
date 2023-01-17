@@ -23,7 +23,7 @@ def main():
         camera_params[2] = params["cx"]
         camera_params[3] = params["cy"]
 
-    cap = cv2.VideoCapture(0)
+    cap = cv2.VideoCapture(2)
     cap.set(cv2.CAP_PROP_EXPOSURE, -4) 
 
     at_detector = Detector(searchpath=['apriltags'],
