@@ -34,12 +34,13 @@ def main():
             )
     
     current_frame = 0
-    frame_buffer = 3
+    frame_buffer = 5
     detected_tags = {}
     validated = []
+    previous_frame = None
 
     def valid_tag(id):
-        return id in validated and (detected_tags[id] and False not in detected_tags)
+        return (detected_tags[id] and False not in detected_tags[id])
 
 
     def result_callback(tag, frame):
@@ -49,7 +50,7 @@ def main():
 
         detected_tags[tag_id][current_frame] = True
 
-        if not valid_tag(tag_id): return
+        if tag_id not in validated and not valid_tag(tag_id): return
 
         for c in range(4):
             toI = c + 1
@@ -61,23 +62,27 @@ def main():
             cv2.line(frame, (int(original[0]), int(original[1])), (int(to[0]), int(to[1])), (0, 255, 0), 2)
 
         
-    
-
     while True:
         _, frame = cap.read()
+
         image = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         tags = at_detector.detect(image, estimate_tag_pose=True, camera_params=camera_params, tag_size=0.1397)
         for tag in tags:
+            if int(tag.tag_id) < 1 or int(tag.tag_id) > 8:
+                continue
+
             result_callback(tag, frame)
 
             center = tag.center
             centerCord = (int(center[0]), int(center[1]))
             cv2.putText(frame, "dX: " + str(tag.pose_t[0]), (int(center[0]), int(center[1])), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2)
-            cv2.putText(frame, "dY: " + str(tag.pose_t[1]), (int(center[0]), int(center[1]) + 20), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2)
-            cv2.putText(frame, "dZ: " + str(tag.pose_t[2]), (int(center[0]), int(center[1]) + 40), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2)
-            
+            cv2.putText(frame, "dY: " + str(tag.pose_t[1]), (int(center[0]), int(center[1]) + 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2)
+            cv2.putText(frame, "dZ: " + str(tag.pose_t[2]), (int(center[0]), int(center[1]) + 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2)
 
+            pos = util.getPosition((tag.pose_t[0], tag.pose_t[2]), tag.tag_id)
+            cv2.putText(frame, "Pos: " + str(pos), (int(center[0]), int(center[1]) + 90), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 0), 2)
+            
 
         cv2.imshow("frame", frame)
 

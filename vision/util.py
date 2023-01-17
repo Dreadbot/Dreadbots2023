@@ -1,7 +1,6 @@
 import json
 
-# dist
-def getPosition(dist_tuple: (int, int), tag_id):
+def getPosition(dist_tuple: (int, int), tag_id: int):
     """
     Returns the current position of the camera on the game field
 
@@ -11,19 +10,10 @@ def getPosition(dist_tuple: (int, int), tag_id):
     :rtype: (int, int)
     """
 
-    dist_from_tag = (-dist_tuple[0], -dist_tuple[1])
+    dist_from_tag = (-1 * dist_tuple[0], -1 * dist_tuple[1])
 
-    # TODO: add correct coordinate file
-    f = open('data.json')
-    coords = json.load(f)
-    tag_coord = coords
-    return ((dis))
-
-    # returns JSON object as 
-    # a dictionary
-    
-    
-    
-
-    print("amongus")
+    f = open('apriltag_positions.json')
+    tag_coord_object = json.load(f)["points"][str(tag_id)]
+    tag_coord = (int(tag_coord_object["x"]), int(tag_coord_object["z"]))
+    return (tag_coord[0] + dist_from_tag[0], tag_coord[1] + dist_from_tag[1])
 
