@@ -25,11 +25,14 @@ def getPosition(dist_tuple: tuple[int, int], rot_yaw: int, tag_id: int):
     """
     Returns the current position of the camera on the game field
 
-    :param (int, int) dist_tuple: The relative distance from the camera to the tag (X, Z)
-    :param int rot_yaw: The rotation of the april tag from its flat plane (in radians)
-    :param int tag_id: The ID of the detected tag
+    :param dist_tuple: The relative distance from the camera to the tag (X, Z)
+    :param rot_yaw: The rotation of the april tag from its flat plane (in radians)
+    :param tag_id: The ID of the detected tag
+    :type dist_tuple: tuple[int, int]
+    :type rot_yaw: int
+    :type tag_id: int
     :return: (X, Z)
-    :rtype: (int, int)
+    :rtype: tuple[int, int]
     """
     
     dist_hyp_rel = math.sqrt((dist_tuple[0]**2) + (dist_tuple[1]**2))
