@@ -25,10 +25,10 @@ import util.controls.DreadbotController;
  */
 public class RobotContainer {
 
-  private final DreadbotMotor frontLeftMotor = new DreadbotMotor(new CANSparkMax(10, MotorType.kBrushless), "frontLeft");
-  private final DreadbotMotor frontRightMotor = new DreadbotMotor(new CANSparkMax(1, MotorType.kBrushless), "frontRight");
-  private final DreadbotMotor backLeftMotor = new DreadbotMotor(new CANSparkMax(2, MotorType.kBrushless), "backLeft");
-  private final DreadbotMotor backRightMotor = new DreadbotMotor(new CANSparkMax(3, MotorType.kBrushless), "backRight");
+  private final DreadbotMotor frontLeftMotor = new DreadbotMotor(new CANSparkMax(1, MotorType.kBrushless), "frontLeft");
+  private final DreadbotMotor frontRightMotor = new DreadbotMotor(new CANSparkMax(4, MotorType.kBrushless), "frontRight");
+  private final DreadbotMotor backLeftMotor = new DreadbotMotor(new CANSparkMax(3, MotorType.kBrushless), "backLeft");
+  private final DreadbotMotor backRightMotor = new DreadbotMotor(new CANSparkMax(2, MotorType.kBrushless), "backRight");
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
  private final Drive drive = new Drive(
     frontLeftMotor,
