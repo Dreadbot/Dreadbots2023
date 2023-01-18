@@ -36,7 +36,9 @@ def getPosition(dist_tuple: tuple[int, int], rot_yaw: int, tag_id: int):
     """
     
     dist_hyp_rel = math.sqrt((dist_tuple[0]**2) + (dist_tuple[1]**2))
-    dist_x_abs = dist_hyp_rel * math.cos(rot_yaw)
+    dist_x_abs = dist_hyp_rel * math.cos(rot_yaw) * (-1 * (dist_tuple(0) / abs(dist_tuple(0))))
+    # Opposite sign of the rel_x
+
     dist_z_abs = dist_hyp_rel * math.sin(rot_yaw)
 
     if tag_id <= 4 and tag_id >= 1:
