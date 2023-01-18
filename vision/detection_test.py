@@ -4,6 +4,7 @@ import yaml
 import argparse
 import os
 import util
+import math
 
 def main():
     parser = argparse.ArgumentParser()
@@ -23,7 +24,7 @@ def main():
         camera_params[2] = params["cx"]
         camera_params[3] = params["cy"]
 
-    cap = cv2.VideoCapture(2)
+    cap = cv2.VideoCapture(0)
     cap.set(cv2.CAP_PROP_EXPOSURE, -4) 
 
     at_detector = Detector(searchpath=['apriltags'],
@@ -80,8 +81,15 @@ def main():
             cv2.putText(frame, "dY: " + str(tag.pose_t[1]), (int(center[0]), int(center[1]) + 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2)
             cv2.putText(frame, "dZ: " + str(tag.pose_t[2]), (int(center[0]), int(center[1]) + 60), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2)
 
-            pos = util.getPosition((tag.pose_t[0], tag.pose_t[2]), tag.tag_id)
-            cv2.putText(frame, "Pos: " + str(pos), (int(center[0]), int(center[1]) + 90), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 0), 2)
+            rot = tag.pose_R
+            #print(rot)
+            
+            print(math.degrees(util.getYawRotation(rot)))
+            # cv2.putText(frame, "rot: " + str(rot), (int(center[0]), int(center[1]) + 90), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2)
+
+
+#            pos = util.getPosition((tag.pose_t[0], tag.pose_t[2]), tag.tag_id)
+#            cv2.putText(frame, "Pos: " + str(pos), (int(center[0]), int(center[1]) + 90), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 0), 2)
             
 
         cv2.imshow("frame", frame)
