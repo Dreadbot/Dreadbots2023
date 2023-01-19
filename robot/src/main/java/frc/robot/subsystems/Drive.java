@@ -4,28 +4,29 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import util.misc.DreadbotMotor;
 import util.misc.DreadbotSubsystem;
+
 public class Drive extends DreadbotSubsystem {
     private DifferentialDrive diffDrive;
     private MotorControllerGroup leftMotors;
     @SuppressWarnings("unused")
-        private DreadbotMotor frontLeftMotor;
+    private DreadbotMotor frontLeftMotor;
     @SuppressWarnings("unused")
-        private DreadbotMotor frontRightMotor;
+    private DreadbotMotor frontRightMotor;
     private MotorControllerGroup rightMotors;
     @SuppressWarnings("unused")
-        private DreadbotMotor backLeftMotor;
+    private DreadbotMotor backLeftMotor;
     @SuppressWarnings("unused")
-        private DreadbotMotor backRightMotor;
+    private DreadbotMotor backRightMotor;
 
     public Drive(
-        DreadbotMotor frontLeftMotor,
-        DreadbotMotor frontRightMotor,
-        DreadbotMotor backLeftMotor,
-        DreadbotMotor backRightMotor){
+            DreadbotMotor frontLeftMotor,
+            DreadbotMotor frontRightMotor,
+            DreadbotMotor backLeftMotor,
+            DreadbotMotor backRightMotor) {
         this.frontLeftMotor = frontLeftMotor;
         this.frontRightMotor = frontRightMotor;
         leftMotors = new MotorControllerGroup(frontLeftMotor.getSparkMax(), backLeftMotor.getSparkMax());
-        this.backLeftMotor = backLeftMotor; 
+        this.backLeftMotor = backLeftMotor;
         this.backRightMotor = backRightMotor;
         rightMotors = new MotorControllerGroup(frontRightMotor.getSparkMax(), backRightMotor.getSparkMax());
 
@@ -40,25 +41,26 @@ public class Drive extends DreadbotSubsystem {
         diffDrive.curvatureDrive(xSpeed, rot, true);
     }
 
-    public void TankDrive(double ySpeed, double wSpeed ) { //WUMBO SPEED
+    public void TankDrive(double ySpeed, double wSpeed) { // WUMBO SPEED
         diffDrive.tankDrive(ySpeed, wSpeed);
     }
+
     public void TankDriveVoltage(double yVolts, double wVolts) {
         leftMotors.setVoltage(yVolts);
         rightMotors.setVoltage(wVolts);
         diffDrive.feed();
     }
+
     @Override
     public void close() throws Exception {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void stopMotors() {
-        // TODO Auto-generated method stub
-        
+        leftMotors.stopMotor();
+        rightMotors.stopMotor();
     }
 
-    
 }
