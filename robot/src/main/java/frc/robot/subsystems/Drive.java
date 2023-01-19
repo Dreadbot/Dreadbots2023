@@ -43,7 +43,11 @@ public class Drive extends DreadbotSubsystem {
     public void TankDrive(double ySpeed, double wSpeed ) { //WUMBO SPEED
         diffDrive.tankDrive(ySpeed, wSpeed);
     }
-
+    public void TankDriveVoltage(double yVolts, double wVolts) {
+        leftMotors.setVoltage(yVolts);
+        rightMotors.setVoltage(wVolts);
+        diffDrive.feed();
+    }
     @Override
     public void close() throws Exception {
         // TODO Auto-generated method stub
