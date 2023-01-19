@@ -14,6 +14,12 @@ public abstract class Constants {
       public static final double FORWARD_SPEED_LIMITER = 0.75f;
       public static final double ROT_SPEED_LIMITER = 0.75f;
     }
+    public static class MotorConstants {
+      public static final int FRONT_LEFT_MOTOR_PORT = 1;
+      public static final int FRONT_RIGHT_MOTOR_PORT = 4;
+      public static final int BACK_LEFT_MOTOR_PORT = 3;
+      public static final int BACK_RIGHT_MOTOR_PORT = 2;
+    }
     private Constants() throws IllegalStateException {
         throw new IllegalStateException("Constants is a utility class. It should not be instantiated.");
     }

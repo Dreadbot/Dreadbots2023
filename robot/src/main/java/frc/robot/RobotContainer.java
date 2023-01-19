@@ -4,9 +4,6 @@
 
 package frc.robot;
 
-import com.revrobotics.CANSparkMax;
-import com.revrobotics.CANSparkMax.IdleMode;
-import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
@@ -15,7 +12,6 @@ import frc.robot.commands.TurboCommand;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.ExampleSubsystem;
 import util.controls.DreadbotController;
-import util.misc.DreadbotMotor;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
