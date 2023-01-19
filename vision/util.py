@@ -45,6 +45,8 @@ def getRotation(rotation_matrix):
     cos_pitch = math.cos(pitch)
     yaw = math.acos(rotation_matrix[0][0] / cos_pitch)
     roll = math.acos(rotation_matrix[2][2] / cos_pitch)
+
+    # Roll Yaw Pitch?
     
     return (yaw, pitch, roll)
 
@@ -64,14 +66,14 @@ def getPosition(dist_tuple: tuple[float, float], rot: tuple[float, float, float]
     """
     
     # Solves for both the X and Z displacement while solving for the Pitch and Roll rotations
-    dist_z_solved = dist_tuple[1] / math.cos(rot[1])
-    dist_x_solved = dist_tuple[0] / math.cos(rot[2])
+    dist_z_solved = dist_tuple[1] / math.cos(rot[2])
+    dist_x_solved = dist_tuple[0] / math.cos(rot[0])
 
     dist_hyp_rel = math.sqrt((dist_x_solved**2) + (dist_z_solved**2))
-    dist_x_abs = dist_hyp_rel * math.cos(rot_yaw) * (-1 * (dist_tuple[0] / abs(dist_tuple[0])))
+    dist_x_abs = dist_hyp_rel * math.cos(rot[1]) * (rot[1] / abs(rot[1]))
     # Opposite sign of the rel_x
 
-    dist_z_abs = dist_hyp_rel * math.sin(rot_yaw)
+    dist_z_abs = dist_hyp_rel * math.sin(rot[1])
 
     if tag_id <= 4 and tag_id >= 1:
         dist_x_abs *= -1

@@ -84,7 +84,14 @@ def main():
             rot = tag.pose_R
             #print(rot)
             
-            print(math.degrees(util.getYawRotation(rot)))
+            rel_pos = (tag.pose_t[0], tag.pose_t[2])
+            rel_rot = util.getRotation(rot)
+            rot_read = [0] * 3
+            for i in range(3):
+                rot_read[i] = math.degrees(rel_rot[i])
+            # print(rot_read)
+            abs_pos = util.getPosition(rel_pos, rel_rot, tag.tag_id)
+            print(abs_pos)
             # cv2.putText(frame, "rot: " + str(rot), (int(center[0]), int(center[1]) + 90), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2)
 
 
