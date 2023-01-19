@@ -11,16 +11,14 @@ import util.misc.DreadbotSubsystem;
 
 public class Drive extends DreadbotSubsystem {
     private DifferentialDrive diffDrive;
-    private MotorControllerGroup leftMotors;
-    @SuppressWarnings("unused")
+    
     private DreadbotMotor frontLeftMotor;
-    @SuppressWarnings("unused")
     private DreadbotMotor frontRightMotor;
-    private MotorControllerGroup rightMotors;
-    @SuppressWarnings("unused")
     private DreadbotMotor backLeftMotor;
-    @SuppressWarnings("unused")
     private DreadbotMotor backRightMotor;
+
+    private MotorControllerGroup leftMotors;
+    private MotorControllerGroup rightMotors;
     public Drive() {
 
         this.frontLeftMotor = new DreadbotMotor(new CANSparkMax(1, MotorType.kBrushless), "frontLeft");
