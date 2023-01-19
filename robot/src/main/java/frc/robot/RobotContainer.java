@@ -4,13 +4,18 @@
 
 package frc.robot;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
+import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
+import frc.robot.commands.DriveCommand;
+import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.ExampleSubsystem;
-import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.button.CommandXboxController;
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+import util.misc.DreadbotMotor;
+import util.controls.DreadbotController;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -19,38 +24,34 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-  // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
-  // Replace with CommandPS4Controller or CommandJoystick if needed
-  private final CommandXboxController m_driverController =
-      new CommandXboxController(OperatorConstants.PRIMARY_JOYSTICK_PORT);
+  private final DreadbotMotor frontLeftMotor = new DreadbotMotor(new CANSparkMax(10, MotorType.kBrushless), "frontLeft");
+  private final DreadbotMotor frontRightMotor = new DreadbotMotor(new CANSparkMax(1, MotorType.kBrushless), "frontRight");
+  private final DreadbotMotor backLeftMotor = new DreadbotMotor(new CANSparkMax(2, MotorType.kBrushless), "backLeft");
+  private final DreadbotMotor backRightMotor = new DreadbotMotor(new CANSparkMax(3, MotorType.kBrushless), "backRight");
+  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
+ private final Drive drive = new Drive(
+    frontLeftMotor,
+    frontRightMotor,
+    backLeftMotor,
+    backRightMotor
+ );
+  private final DreadbotController primaryController = new DreadbotController(OperatorConstants.PRIMARY_JOYSTICK_PORT);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
+    frontLeftMotor.setIdleMode(IdleMode.kCoast);
+    frontRightMotor.setIdleMode(IdleMode.kCoast);
+    backLeftMotor.setIdleMode(IdleMode.kCoast);
+   // backRightMotor.setIdleMode(IdleMode.kCoast);
     configureBindings();
   }
 
-  /**
-   * Use this method to define your trigger->command mappings. Triggers can be created via the
-   * {@link Trigger#Trigger(java.util.function.BooleanSupplier)} constructor with an arbitrary
-   * predicate, or via the named factories in {@link
-   * edu.wpi.first.wpilibj2.command.button.CommandGenericHID}'s subclasses for {@link
-   * CommandXboxController Xbox}/{@link edu.wpi.first.wpilibj2.command.button.CommandPS4Controller
-   * PS4} controllers or {@link edu.wpi.first.wpilibj2.command.button.CommandJoystick Flight
-   * joysticks}.
-   */
   private void configureBindings() {
-    // Schedule `ExampleCommand` when `exampleCondition` changes to `true`
-    new Trigger(m_exampleSubsystem::exampleCondition)
-        .onTrue(new ExampleCommand(m_exampleSubsystem));
-
-    // Schedule `exampleMethodCommand` when the Xbox controller's B button is pressed,
-    // cancelling on release.
-    m_driverController.b().whileTrue(m_exampleSubsystem.exampleMethodCommand());
+    DriveCommand driveCommand = new DriveCommand(drive, primaryController::getYAxis, primaryController::getXAxis);
+    drive.setDefaultCommand(driveCommand); 
   }
-
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
    *

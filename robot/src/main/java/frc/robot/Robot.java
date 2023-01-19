@@ -4,9 +4,16 @@
 
 package frc.robot;
 
+import com.fasterxml.jackson.databind.ser.std.CalendarSerializer;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import frc.robot.Constants.OperatorConstants;
+import util.misc.DreadbotMotor;
+import util.controls.DreadbotController;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -17,7 +24,7 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
   private RobotContainer m_robotContainer;
-
+  // private DreadbotMotor motor = new DreadbotMotor(new CANSparkMax(3, MotorType.kBrushless), "motor");
   /**
    * This function is run when the robot is first started up and should be used for any
    * initialization code.
@@ -80,7 +87,10 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during operator control. */
   @Override
-  public void teleopPeriodic() {}
+  public void teleopPeriodic() {
+    // System.out.println(motor.getPosition());
+    // motor.set(0.3);
+  }
 
   @Override
   public void testInit() {
