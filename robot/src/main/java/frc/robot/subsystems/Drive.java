@@ -1,15 +1,11 @@
 package frc.robot.subsystems;
 
-import java.util.function.DoubleSupplier;
-
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import util.misc.DreadbotMotor;
 import util.misc.DreadbotSubsystem;
-
 public class Drive extends DreadbotSubsystem {
     private DifferentialDrive diffDrive;
-
     private MotorControllerGroup leftMotors;
         private DreadbotMotor frontLeftMotor;
         private DreadbotMotor frontRightMotor;
