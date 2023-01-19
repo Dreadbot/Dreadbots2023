@@ -25,28 +25,15 @@ import util.misc.DreadbotMotor;
  */
 public class RobotContainer {
 
-  private final DreadbotMotor frontLeftMotor = new DreadbotMotor(new CANSparkMax(1, MotorType.kBrushless), "frontLeft");
-  private final DreadbotMotor frontRightMotor = new DreadbotMotor(new CANSparkMax(4, MotorType.kBrushless), "frontRight");
-  private final DreadbotMotor backLeftMotor = new DreadbotMotor(new CANSparkMax(3, MotorType.kBrushless), "backLeft");
-  private final DreadbotMotor backRightMotor = new DreadbotMotor(new CANSparkMax(2, MotorType.kBrushless), "backRight");
 
   private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   
- private final Drive drive = new Drive(
-    frontLeftMotor,
-    frontRightMotor,
-    backLeftMotor,
-    backRightMotor
- );
+ private final Drive drive = new Drive();
   private final DreadbotController primaryController = new DreadbotController(OperatorConstants.PRIMARY_JOYSTICK_PORT);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
-    frontLeftMotor.setIdleMode(IdleMode.kCoast);
-    frontRightMotor.setIdleMode(IdleMode.kCoast);
-    backLeftMotor.setIdleMode(IdleMode.kCoast);
-    backRightMotor.setIdleMode(IdleMode.kCoast);
     configureBindings();
   }
 

@@ -1,5 +1,9 @@
 package frc.robot.subsystems;
 
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import util.misc.DreadbotMotor;
@@ -17,17 +21,19 @@ public class Drive extends DreadbotSubsystem {
     private DreadbotMotor backLeftMotor;
     @SuppressWarnings("unused")
     private DreadbotMotor backRightMotor;
+    public Drive() {
 
-    public Drive(
-            DreadbotMotor frontLeftMotor,
-            DreadbotMotor frontRightMotor,
-            DreadbotMotor backLeftMotor,
-            DreadbotMotor backRightMotor) {
-        this.frontLeftMotor = frontLeftMotor;
-        this.frontRightMotor = frontRightMotor;
+        this.frontLeftMotor = new DreadbotMotor(new CANSparkMax(1, MotorType.kBrushless), "frontLeft");
+        this.frontRightMotor = new DreadbotMotor(new CANSparkMax(4, MotorType.kBrushless), "frontRight");
+        this.backLeftMotor = new DreadbotMotor(new CANSparkMax(3, MotorType.kBrushless), "backLeft");
+        this.backRightMotor = new DreadbotMotor(new CANSparkMax(2, MotorType.kBrushless), "backRight");
+        
+        frontLeftMotor.setIdleMode(IdleMode.kCoast);
+        frontRightMotor.setIdleMode(IdleMode.kCoast);
+        backLeftMotor.setIdleMode(IdleMode.kCoast);
+        backRightMotor.setIdleMode(IdleMode.kCoast);
+
         leftMotors = new MotorControllerGroup(frontLeftMotor.getSparkMax(), backLeftMotor.getSparkMax());
-        this.backLeftMotor = backLeftMotor;
-        this.backRightMotor = backRightMotor;
         rightMotors = new MotorControllerGroup(frontRightMotor.getSparkMax(), backRightMotor.getSparkMax());
 
         diffDrive = new DifferentialDrive(leftMotors, rightMotors);
