@@ -1,5 +1,6 @@
 import json
 import math
+import numpy as np
 
 def getYawRotation(rotation_matrix):
     """
@@ -70,10 +71,16 @@ def getPosition(dist_tuple: tuple[float, float], rot: tuple[float, float, float]
     dist_x_solved = dist_tuple[0] / math.cos(rot[0])
 
     dist_hyp_rel = math.sqrt((dist_x_solved**2) + (dist_z_solved**2))
-    dist_x_abs = dist_hyp_rel * math.cos(rot[1]) * (rot[1] / abs(rot[1]))
+    print(f"Hyp: {dist_hyp_rel}")
+
+    mult = float(-1) * (rot[1] / abs(rot[1]))
+    # print(mult)
+    dist_x_abs = dist_hyp_rel * math.cos(rot[1])
+    print(f"DistXAbs: {dist_x_abs}")
     # Opposite sign of the rel_x
 
-    dist_z_abs = dist_hyp_rel * math.sin(rot[1])
+    dist_z_abs = dist_hyp_rel * math.sin(rot[1]) * mult
+    print(f"DistZAbs: {dist_z_abs}")
 
     if tag_id <= 4 and tag_id >= 1:
         dist_x_abs *= -1
@@ -83,4 +90,21 @@ def getPosition(dist_tuple: tuple[float, float], rot: tuple[float, float, float]
     tag_coord_object = json.load(f)["points"][str(tag_id)]
     tag_coord = (int(tag_coord_object["x"]), int(tag_coord_object["z"]))
     return (tag_coord[0] + dist_x_abs, tag_coord[1] + dist_z_abs)
+
+
+def getPositionNew(displacement_matrix, rotation_matrix, tag_id: int):
+    """
+    Return OC vector sorry for bad doc-string :(
+    """
+    f = open('apriltag_positions.json')
+    tag_coord_object = json.load(f)["points"][str(tag_id)]
+    origin_to_april = np.array([[tag_coord_object["x"]],
+                                [tag_coord_object["y"]],
+                                [tag_coord_object["z"]]])
+
+    inv_rot = np.linalg.inv(rotation_matrix)
+    camera_to_april_field = np.matmul(inv_rot, displacement_matrix)
+
+    return np.subtract(origin_to_april, camera_to_april_field)
+
 
