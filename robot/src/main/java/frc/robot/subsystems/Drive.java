@@ -10,21 +10,21 @@ import util.misc.DreadbotMotor;
 import util.misc.DreadbotSubsystem;
 
 public class Drive extends DreadbotSubsystem {
-    private DifferentialDrive diffDrive;
+    private final DifferentialDrive diffDrive;
     
-    private DreadbotMotor frontLeftMotor;
-    private DreadbotMotor frontRightMotor;
-    private DreadbotMotor backLeftMotor;
-    private DreadbotMotor backRightMotor;
+    private final DreadbotMotor frontLeftMotor;
+    private final DreadbotMotor frontRightMotor;
+    private final DreadbotMotor backLeftMotor;
+    private final DreadbotMotor backRightMotor;
 
-    private MotorControllerGroup leftMotors;
-    private MotorControllerGroup rightMotors;
+    private final MotorControllerGroup leftMotors;
+    private final MotorControllerGroup rightMotors;
+
     public Drive() {
-
-        this.frontLeftMotor = new DreadbotMotor(new CANSparkMax(1, MotorType.kBrushless), "frontLeft");
-        this.frontRightMotor = new DreadbotMotor(new CANSparkMax(4, MotorType.kBrushless), "frontRight");
-        this.backLeftMotor = new DreadbotMotor(new CANSparkMax(3, MotorType.kBrushless), "backLeft");
-        this.backRightMotor = new DreadbotMotor(new CANSparkMax(2, MotorType.kBrushless), "backRight");
+        frontLeftMotor = new DreadbotMotor(new CANSparkMax(1, MotorType.kBrushless), "frontLeft");
+        frontRightMotor = new DreadbotMotor(new CANSparkMax(4, MotorType.kBrushless), "frontRight");
+        backLeftMotor = new DreadbotMotor(new CANSparkMax(3, MotorType.kBrushless), "backLeft");
+        backRightMotor = new DreadbotMotor(new CANSparkMax(2, MotorType.kBrushless), "backRight");
         
         frontLeftMotor.setIdleMode(IdleMode.kCoast);
         frontRightMotor.setIdleMode(IdleMode.kCoast);
@@ -58,7 +58,6 @@ public class Drive extends DreadbotSubsystem {
     @Override
     public void close() throws Exception {
         // TODO Auto-generated method stub
-
     }
 
     @Override

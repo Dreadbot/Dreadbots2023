@@ -21,30 +21,32 @@ import util.controls.DreadbotController;
  */
 public class RobotContainer {
 
+    private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
 
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  
- private final Drive drive = new Drive();
-  private final DreadbotController primaryController = new DreadbotController(OperatorConstants.PRIMARY_JOYSTICK_PORT);
+    private final Drive drive = new Drive();
+    private final DreadbotController primaryController = new DreadbotController(OperatorConstants.PRIMARY_JOYSTICK_PORT);
 
-  /** The container for the robot. Contains subsystems, OI devices, and commands. */
-  public RobotContainer() {
-    // Configure the trigger bindings
-    configureBindings();
-  }
+    /**
+     * The container for the robot. Contains subsystems, OI devices, and commands.
+     */
+    public RobotContainer() {
+        // Configure the trigger bindings
+        configureBindings();
+    }
 
-  private void configureBindings() {
-    DriveCommand driveCommand = new DriveCommand(drive, primaryController::getYAxis, primaryController::getZAxis);
-    drive.setDefaultCommand(driveCommand); 
-    primaryController.getRightBumper().whileTrue(new TurboCommand(driveCommand));
-  }
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
-  }
+    private void configureBindings() {
+        DriveCommand driveCommand = new DriveCommand(drive, primaryController::getYAxis, primaryController::getZAxis);
+        drive.setDefaultCommand(driveCommand);
+        primaryController.getRightBumper().whileTrue(new TurboCommand(driveCommand));
+    }
+
+    /**
+     * Use this to pass the autonomous command to the main {@link Robot} class.
+     *
+     * @return the command to run in autonomous
+     */
+    public Command getAutonomousCommand() {
+        // An example command will be run in autonomous
+        return Autos.exampleAuto(m_exampleSubsystem);
+    }
 }
