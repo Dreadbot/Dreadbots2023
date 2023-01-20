@@ -96,13 +96,25 @@ def getPositionNew(displacement_matrix, rotation_matrix, tag_id: int):
     """
     Return OC vector sorry for bad doc-string :(
     """
+
+    rot_pitch_180 = np.array([[1, 0, 0],
+                              [0, -1, 0],
+                              [0, 0, -1]])
+    rot = np.matmul(rotation_matrix, rot_pitch_180)
+    
+    if tag_id >= 1 and tag_id <= 4:
+        rot_yaw_180 = np.array([[-1, 0, 0],
+                                [0, 1, 0],
+                                [0, 0, -1]])
+        rot = np.matmul(rot, rot_yaw_180)
+
     f = open('apriltag_positions.json')
     tag_coord_object = json.load(f)["points"][str(tag_id)]
     origin_to_april = np.array([[tag_coord_object["x"]],
                                 [tag_coord_object["y"]],
                                 [tag_coord_object["z"]]])
 
-    inv_rot = np.linalg.inv(rotation_matrix)
+    inv_rot = np.linalg.inv(rot)
     camera_to_april_field = np.matmul(inv_rot, displacement_matrix)
 
     return np.subtract(origin_to_april, camera_to_april_field)

@@ -93,6 +93,7 @@ def main():
             # abs_pos = util.getPosition(rel_pos, rel_rot, tag.tag_id)
             abs_pos_actually_good = util.getPositionNew(tag.pose_t, tag.pose_R, tag.tag_id)
             print(abs_pos_actually_good)
+            print(tag.tag_id)
             # print(abs_pos)
             # cv2.putText(frame, "rot: " + str(rot), (int(center[0]), int(center[1]) + 90), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2)
 
