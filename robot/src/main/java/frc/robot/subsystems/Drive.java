@@ -7,6 +7,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import frc.robot.Constants.MotorConstants;
 import util.misc.DreadbotMotor;
 import util.misc.DreadbotSubsystem;
 
@@ -22,10 +23,10 @@ public class Drive extends DreadbotSubsystem {
     private MotorControllerGroup rightMotors;
     public Drive() {
 
-        this.frontLeftMotor = new DreadbotMotor(new CANSparkMax(10, MotorType.kBrushless), "frontLeft");
-        this.frontRightMotor = new DreadbotMotor(new CANSparkMax(1, MotorType.kBrushless), "frontRight");
-        this.backLeftMotor = new DreadbotMotor(new CANSparkMax(2, MotorType.kBrushless), "backLeft");
-        this.backRightMotor = new DreadbotMotor(new CANSparkMax(3, MotorType.kBrushless), "backRight");
+        this.frontLeftMotor = new DreadbotMotor(new CANSparkMax(MotorConstants.FRONT_LEFT_MOTOR_PORT, MotorType.kBrushless), "frontLeft");
+        this.frontRightMotor = new DreadbotMotor(new CANSparkMax(MotorConstants.FRONT_RIGHT_MOTOR_PORT, MotorType.kBrushless), "frontRight");
+        this.backLeftMotor = new DreadbotMotor(new CANSparkMax(MotorConstants.BACK_LEFT_MOTOR_PORT, MotorType.kBrushless), "backLeft");
+        this.backRightMotor = new DreadbotMotor(new CANSparkMax(MotorConstants.BACK_RIGHT_MOTOR_PORT, MotorType.kBrushless), "backRight");
         
         frontLeftMotor.setIdleMode(IdleMode.kBrake);
         frontRightMotor.setIdleMode(IdleMode.kBrake);
