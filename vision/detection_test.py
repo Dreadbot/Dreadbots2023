@@ -71,6 +71,8 @@ def main():
         tags = at_detector.detect(image, estimate_tag_pose=True, camera_params=camera_params, tag_size=0.1397)
         abs_pos_possible = []
         for tag in tags:
+            if tag.hamming >= 1: continue
+
             if int(tag.tag_id) < 1 or int(tag.tag_id) > 8:
                 continue
 
@@ -104,7 +106,7 @@ def main():
             # cv2.putText(frame, "Pos: " + str(pos), (int(center[0]), int(center[1]) + 90), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 0), 2)
 
         true_pos = None
-        if True:
+        if len(abs_pos_possible) > 0:
             sum = 0
             dividend = 0
 
@@ -114,7 +116,8 @@ def main():
 
             true_pos = sum / dividend
 
-        print(true_pos)
+        if true_pos is not None:
+            cv2.putText(frame, str([round(true_pos[0][0] * 100) / 100, round(true_pos[1][0] * 100) / 100, round(true_pos[2][0] * 100) / 100]), (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
 
         cv2.imshow("frame", frame)
 
