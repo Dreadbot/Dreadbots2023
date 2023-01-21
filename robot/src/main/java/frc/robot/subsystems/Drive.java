@@ -56,5 +56,18 @@ public class Drive extends DreadbotSubsystem {
         
     }
 
+    public void setFrontRightSpeed(double speed) {
+        frontRightMotor.set(speed);
+    }
+    public void setFrontLeftSpeed(double speed) {
+        frontLeftMotor.set(speed);
+    }
+    public void setBackRightSpeed(double speed) {
+        backRightMotor.set(speed);
+    }
+    public void setBackLeftSpeed(double speed) {
+        backLeftMotor.set(speed);
+    }
+
     
 }
