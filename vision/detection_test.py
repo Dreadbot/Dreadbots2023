@@ -69,6 +69,7 @@ def main():
         image = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
         tags = at_detector.detect(image, estimate_tag_pose=True, camera_params=camera_params, tag_size=0.1397)
+        abs_pos_possible = []
         for tag in tags:
             if int(tag.tag_id) < 1 or int(tag.tag_id) > 8:
                 continue
@@ -91,16 +92,29 @@ def main():
                         math.degrees(rel_rot[2]))
             # print(rel_pos)
             # abs_pos = util.getPosition(rel_pos, rel_rot, tag.tag_id)
-            abs_pos_actually_good = util.getPositionNew(tag.pose_t, tag.pose_R, tag.tag_id)
-            print(abs_pos_actually_good)
-            print(tag.tag_id)
+            abs_pos = util.getPositionNew(tag.pose_t, tag.pose_R, tag.tag_id)
+            # print(abs_pos)
+            # print(tag.tag_id)
             # print(abs_pos)
             # cv2.putText(frame, "rot: " + str(rot), (int(center[0]), int(center[1]) + 90), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 255, 0), 2)
+            abs_pos_possible.append((abs_pos, tag.pose_err))
 
 
-#            pos = util.getPosition((tag.pose_t[0], tag.pose_t[2]), tag.tag_id)
-#            cv2.putText(frame, "Pos: " + str(pos), (int(center[0]), int(center[1]) + 90), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 0), 2)
-            
+            # pos = util.getPosition((tag.pose_t[0], tag.pose_t[2]), tag.tag_id)
+            # cv2.putText(frame, "Pos: " + str(pos), (int(center[0]), int(center[1]) + 90), cv2.FONT_HERSHEY_SIMPLEX, 0.7, (255, 255, 0), 2)
+
+        true_pos = None
+        if True:
+            sum = 0
+            dividend = 0
+
+            for possible_pos in abs_pos_possible:
+                dividend += possible_pos[1]
+                sum += possible_pos[0] * possible_pos[1]
+
+            true_pos = sum / dividend
+
+        print(true_pos)
 
         cv2.imshow("frame", frame)
 
