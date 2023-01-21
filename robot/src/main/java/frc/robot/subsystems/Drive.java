@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
@@ -21,15 +22,18 @@ public class Drive extends DreadbotSubsystem {
     private MotorControllerGroup rightMotors;
     public Drive() {
 
-        this.frontLeftMotor = new DreadbotMotor(new CANSparkMax(1, MotorType.kBrushless), "frontLeft");
-        this.frontRightMotor = new DreadbotMotor(new CANSparkMax(4, MotorType.kBrushless), "frontRight");
-        this.backLeftMotor = new DreadbotMotor(new CANSparkMax(3, MotorType.kBrushless), "backLeft");
-        this.backRightMotor = new DreadbotMotor(new CANSparkMax(2, MotorType.kBrushless), "backRight");
+        this.frontLeftMotor = new DreadbotMotor(new CANSparkMax(10, MotorType.kBrushless), "frontLeft");
+        this.frontRightMotor = new DreadbotMotor(new CANSparkMax(1, MotorType.kBrushless), "frontRight");
+        this.backLeftMotor = new DreadbotMotor(new CANSparkMax(2, MotorType.kBrushless), "backLeft");
+        this.backRightMotor = new DreadbotMotor(new CANSparkMax(3, MotorType.kBrushless), "backRight");
         
-        frontLeftMotor.setIdleMode(IdleMode.kCoast);
-        frontRightMotor.setIdleMode(IdleMode.kCoast);
-        backLeftMotor.setIdleMode(IdleMode.kCoast);
-        backRightMotor.setIdleMode(IdleMode.kCoast);
+        frontLeftMotor.setIdleMode(IdleMode.kBrake);
+        frontRightMotor.setIdleMode(IdleMode.kBrake);
+        backLeftMotor.setIdleMode(IdleMode.kBrake);
+        backRightMotor.setIdleMode(IdleMode.kBrake);
+
+        frontLeftMotor.setInverted(true);
+        backLeftMotor.setInverted(true);
 
         leftMotors = new MotorControllerGroup(frontLeftMotor.getSparkMax(), backLeftMotor.getSparkMax());
         rightMotors = new MotorControllerGroup(frontRightMotor.getSparkMax(), backRightMotor.getSparkMax());
@@ -53,6 +57,21 @@ public class Drive extends DreadbotSubsystem {
         leftMotors.setVoltage(yVolts);
         rightMotors.setVoltage(wVolts);
         diffDrive.feed();
+    }
+
+    public RelativeEncoder getMotorEncoder(int wheel) {
+        switch(wheel) {
+            case 1:
+                return frontLeftMotor.getEncoder();
+            case 2:
+                return frontRightMotor.getEncoder();
+            case 3:
+                return backLeftMotor.getEncoder();
+            case 4:
+                return backRightMotor.getEncoder();
+            default:
+                return frontLeftMotor.getEncoder();
+        }
     }
 
     @Override
