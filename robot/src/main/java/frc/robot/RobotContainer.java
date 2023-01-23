@@ -55,7 +55,7 @@ public class RobotContainer {
   private void configureBindings() {
     DriveCommand driveCommand = new DriveCommand(drive, primaryController::getWAxis, primaryController::getZAxis);
     drive.setDefaultCommand(driveCommand); 
-   primaryController.getXButton().whileHeld(new RobotBalanceCommand(drive, primaryController::getWAxis, primaryController::getZAxis,gyro));
+   primaryController.getXButton().whileTrue(new RobotBalanceCommand(drive, primaryController::getWAxis, primaryController::getZAxis,gyro));
     // if button x is pressed
     // drive.setCommand(RobotBalancCommand)
   }
