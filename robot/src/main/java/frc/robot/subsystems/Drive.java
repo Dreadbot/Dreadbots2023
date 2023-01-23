@@ -1,32 +1,42 @@
 package frc.robot.subsystems;
 
-import java.util.function.DoubleSupplier;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
-import util.DreadbotMotor;
+import frc.robot.Constants.MotorConstants;
+import util.misc.DreadbotMotor;
 import util.misc.DreadbotSubsystem;
 
 public class Drive extends DreadbotSubsystem {
     private DifferentialDrive diffDrive;
+    
+    private DreadbotMotor frontLeftMotor;
+    private DreadbotMotor frontRightMotor;
+    private DreadbotMotor backLeftMotor;
+    private DreadbotMotor backRightMotor;
 
     private MotorControllerGroup leftMotors;
-        private DreadbotMotor frontLeftMotor;
-        private DreadbotMotor frontRightMotor;
     private MotorControllerGroup rightMotors;
-        private DreadbotMotor backLeftMotor;
-        private DreadbotMotor backRightMotor;
+    public Drive() {
 
-    public Drive(
-        DreadbotMotor frontLeftMotor,
-        DreadbotMotor frontRightMotor,
-        DreadbotMotor backLeftMotor,
-        DreadbotMotor backRightMotor){
-        this.frontLeftMotor = frontLeftMotor;
-        this.frontRightMotor = frontRightMotor;
+        this.frontLeftMotor = new DreadbotMotor(new CANSparkMax(MotorConstants.FRONT_LEFT_MOTOR_PORT, MotorType.kBrushless), "frontLeft");
+        this.frontRightMotor = new DreadbotMotor(new CANSparkMax(MotorConstants.FRONT_RIGHT_MOTOR_PORT, MotorType.kBrushless), "frontRight");
+        this.backLeftMotor = new DreadbotMotor(new CANSparkMax(MotorConstants.BACK_LEFT_MOTOR_PORT, MotorType.kBrushless), "backLeft");
+        this.backRightMotor = new DreadbotMotor(new CANSparkMax(MotorConstants.BACK_RIGHT_MOTOR_PORT, MotorType.kBrushless), "backRight");
+        
+        frontLeftMotor.setIdleMode(IdleMode.kBrake);
+        frontRightMotor.setIdleMode(IdleMode.kBrake);
+        backLeftMotor.setIdleMode(IdleMode.kBrake);
+        backRightMotor.setIdleMode(IdleMode.kBrake);
+
+        frontLeftMotor.setInverted(true);
+        backLeftMotor.setInverted(true);
+
         leftMotors = new MotorControllerGroup(frontLeftMotor.getSparkMax(), backLeftMotor.getSparkMax());
-        this.backLeftMotor = backLeftMotor; 
-        this.backRightMotor = backRightMotor;
         rightMotors = new MotorControllerGroup(frontRightMotor.getSparkMax(), backRightMotor.getSparkMax());
 
         diffDrive = new DifferentialDrive(leftMotors, rightMotors);
@@ -40,21 +50,41 @@ public class Drive extends DreadbotSubsystem {
         diffDrive.curvatureDrive(xSpeed, rot, true);
     }
 
-    public void TankDrive(double ySpeed, double wSpeed ) { //WUMBO SPEED
+    public void TankDrive(double ySpeed, double wSpeed) { // WUMBO SPEED
         diffDrive.tankDrive(ySpeed, wSpeed);
+    }
+
+    public void TankDriveVoltage(double yVolts, double wVolts) {
+        leftMotors.setVoltage(yVolts);
+        rightMotors.setVoltage(wVolts);
+        diffDrive.feed();
+    }
+
+    public RelativeEncoder getMotorEncoder(int wheel) {
+        switch(wheel) {
+            case 1:
+                return frontLeftMotor.getEncoder();
+            case 2:
+                return frontRightMotor.getEncoder();
+            case 3:
+                return backLeftMotor.getEncoder();
+            case 4:
+                return backRightMotor.getEncoder();
+            default:
+                return frontLeftMotor.getEncoder();
+        }
     }
 
     @Override
     public void close() throws Exception {
         // TODO Auto-generated method stub
-        
+
     }
 
     @Override
     public void stopMotors() {
-        // TODO Auto-generated method stub
-        
+        leftMotors.stopMotor();
+        rightMotors.stopMotor();
     }
 
-    
 }

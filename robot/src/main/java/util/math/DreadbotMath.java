@@ -112,4 +112,16 @@ public interface DreadbotMath {
 
         return inputValue;
     }
+    /**
+     * Linear Interpolation Function
+     * <p>
+     * Linear interpolates from startValue to endValue, given percent.
+     * @param startValue given value to start at.
+     * @param endValue given value to end at.
+     * @param percent given percent.
+     * @return The double inbetween startValue and endValue
+     */
+    static double linearInterpolation(final double startValue, final double endValue, final double percent) {
+        return startValue + (endValue - startValue) * percent;
+    }
 }

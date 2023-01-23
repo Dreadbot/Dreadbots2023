@@ -9,8 +9,21 @@ public abstract class Constants {
     public static class OperatorConstants {
       public static final int PRIMARY_JOYSTICK_PORT   = 0;
       public static final int SECONDARY_JOYSTICK_PORT = 1;
+      public static final double TURBO_CONTROLLER_DEADBAND = 0.43;
     }
-
+    public static class DriveConstants {
+      public static final double FORWARD_SPEED_LIMITER = 0.75;
+      public static final double ROT_SPEED_LIMITER = 0.75;
+      public static final double WHEEL_CIRCUMFRENCE = 0.5985;
+      public static final double GEAR_RATIO = 70.0 / 14.0;
+      public static final double AUTON_DRIVE_SPEED = 0.25;
+    }
+    public static class MotorConstants {
+      public static final int FRONT_LEFT_MOTOR_PORT = 10;
+      public static final int FRONT_RIGHT_MOTOR_PORT = 1;
+      public static final int BACK_LEFT_MOTOR_PORT = 2;
+      public static final int BACK_RIGHT_MOTOR_PORT = 3;
+    }
     private Constants() throws IllegalStateException {
         throw new IllegalStateException("Constants is a utility class. It should not be instantiated.");
     }
