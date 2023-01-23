@@ -5,6 +5,7 @@ import argparse
 import os
 import util
 import math
+import numpy as np
 
 def main():
     parser = argparse.ArgumentParser()
@@ -63,6 +64,7 @@ def main():
             cv2.line(frame, (int(original[0]), int(original[1])), (int(to[0]), int(to[1])), (0, 255, 0), 2)
 
         
+    previous_pos = None
     while True:
         _, frame = cap.read()
 
@@ -117,6 +119,13 @@ def main():
             true_pos = sum / dividend
 
         if true_pos is not None:
+            if previous_pos is not None:
+                previous_pos = util.lerp(previous_pos, true_pos, 0.6) # Turn this down to increase smoothing, must be between 0 and 1
+            else:
+                previous_pos = true_pos
+
+            true_pos = previous_pos
+
             cv2.putText(frame, str([round(true_pos[0][0] * 100) / 100, round(true_pos[1][0] * 100) / 100, round(true_pos[2][0] * 100) / 100]), (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (255, 0, 255), 2)
 
         cv2.imshow("frame", frame)

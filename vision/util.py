@@ -2,6 +2,17 @@ import json
 import math
 import numpy as np
 
+def lerp(a: float, b: float, t: float) -> float:
+    """
+    Linear interpolate on the scale given by a to b, using t as the point on that scale.
+
+    :param a: point 1
+    :param b: point 2
+    :param t: scale value
+    :rtype: float
+    """
+    return (1 - t) * a + t * b
+
 def getYawRotation(rotation_matrix):
     """
     Returns the yaw rotation (around the camera Y-axis) of a given combined rotation matrix
