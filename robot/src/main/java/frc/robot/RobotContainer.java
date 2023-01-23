@@ -10,7 +10,6 @@ import frc.robot.commands.Autos;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.TurboCommand;
 import frc.robot.subsystems.Drive;
-import frc.robot.subsystems.ExampleSubsystem;
 import util.controls.DreadbotController;
 
 /**
@@ -22,9 +21,7 @@ import util.controls.DreadbotController;
 public class RobotContainer {
 
 
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
-  
- private final Drive drive = new Drive();
+  private final Drive drive = new Drive();
   private final DreadbotController primaryController = new DreadbotController(OperatorConstants.PRIMARY_JOYSTICK_PORT);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
