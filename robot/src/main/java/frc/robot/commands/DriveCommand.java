@@ -36,7 +36,7 @@ public class DriveCommand extends CommandBase {
             joystickForward = DreadbotMath.linearInterpolation(0, 0.4, joystickForwardAxis.getAsDouble());
             joystickRotation = DreadbotMath.linearInterpolation(0, 0.4, joystickRotationalAxis.getAsDouble());
         }
-        drive.ArcadeDrive(joystickRotation, joystickForward);
+        drive.ArcadeDrive(joystickForward, joystickRotation);
     }
     public void enableTurbo() {
         this.turboMode = true;

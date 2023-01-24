@@ -10,7 +10,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.DriveCommand;
-import frc.robot.commands.RobotBalanceCommand;
+import frc.robot.commands.BalanceCommand;
 import frc.robot.commands.TurboCommand;
 import frc.robot.commands.TurtleCommand;
 import frc.robot.subsystems.Drive;
@@ -38,9 +38,9 @@ public class RobotContainer {
     }
 
   private void configureBindings() {
-    DriveCommand driveCommand = new DriveCommand(drive, primaryController::getWAxis, primaryController::getZAxis);
+    DriveCommand driveCommand = new DriveCommand(drive, primaryController::getYAxis, primaryController::getXAxis);
     drive.setDefaultCommand(driveCommand); 
-    primaryController.getXButton().whileTrue(new RobotBalanceCommand(drive, primaryController::getWAxis, primaryController::getZAxis,gyro));
+    primaryController.getXButton().whileTrue(new BalanceCommand(drive, gyro));
     primaryController.getLeftBumper().whileTrue(new TurtleCommand(driveCommand));
     primaryController.getRightBumper().whileTrue(new TurboCommand(driveCommand));
    // if button x is pressed

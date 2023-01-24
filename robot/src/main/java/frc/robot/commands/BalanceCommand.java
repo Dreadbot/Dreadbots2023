@@ -1,17 +1,16 @@
 package frc.robot.commands;
 
-import java.util.function.DoubleSupplier;
-
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.BalanceConstants;
 import frc.robot.subsystems.Drive;
 
-public class RobotBalanceCommand extends CommandBase {
+public class BalanceCommand extends CommandBase {
     private final Drive drive;
     private final AHRS gyro;
-    public RobotBalanceCommand(Drive drive, DoubleSupplier joystickForwardAxis, DoubleSupplier joystickRotationalAxis, AHRS gyro) {
+    public BalanceCommand(Drive drive, AHRS gyro) {
         this.drive = drive;
         this.gyro = gyro;
         addRequirements(drive);
@@ -19,21 +18,19 @@ public class RobotBalanceCommand extends CommandBase {
 
     @Override
     public void execute() {
-        double maxspeed = 0.3;
         double pitch = gyro.getPitch(); 
-        double scale = -0.5;
-        double speed = pitch * scale;
-        speed = MathUtil.clamp(speed, -maxspeed, maxspeed);
+        double speed = pitch * BalanceConstants.SCALE;
+        speed = MathUtil.clamp(speed, -BalanceConstants.MAX_SPEED, BalanceConstants.MAX_SPEED);
 
         System.out.println(Math.abs(gyro.getPitch()));
 
-        if(Math.abs(pitch) < 1.25) {
+        if(Math.abs(pitch) < BalanceConstants.LEVEL_DEGREES) {
           speed = 0;
         }
-        drive.ArcadeDrive(speed, 0);
+        drive.ArcadeDrive(speed, 0, false);
     }
     @Override
     public boolean isFinished() {
-      return Math.abs(gyro.getPitch()) < 1.25;
+      return Math.abs(gyro.getPitch()) < BalanceConstants.LEVEL_DEGREES;
     }
 }

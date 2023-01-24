@@ -34,8 +34,10 @@ public class Drive extends DreadbotSubsystem {
         backLeftMotor.setIdleMode(IdleMode.kBrake);
         backRightMotor.setIdleMode(IdleMode.kBrake);
 
-        frontLeftMotor.setInverted(true);
-        backLeftMotor.setInverted(true);
+        frontLeftMotor.setInverted(false);
+        backLeftMotor.setInverted(false);
+        frontRightMotor.setInverted(true);
+        backRightMotor.setInverted(true);
 
         leftMotors = new MotorControllerGroup(frontLeftMotor.getSparkMax(), backLeftMotor.getSparkMax());
         rightMotors = new MotorControllerGroup(frontRightMotor.getSparkMax(), backRightMotor.getSparkMax());
@@ -45,6 +47,10 @@ public class Drive extends DreadbotSubsystem {
 
     public void ArcadeDrive(double xSpeed, double rot) {
         diffDrive.arcadeDrive(xSpeed, rot, true);
+    }
+
+    public void ArcadeDrive(double xSpeed, double rot, boolean squareSpeed) {
+        diffDrive.arcadeDrive(xSpeed, rot, squareSpeed);
     }
 
     public void CurvatureDrive(double xSpeed, double rot) {
