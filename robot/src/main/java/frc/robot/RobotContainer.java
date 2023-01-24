@@ -9,6 +9,7 @@ import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.DriveCommand;
 import frc.robot.commands.TurboCommand;
+import frc.robot.commands.TurtleCommand;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.ExampleSubsystem;
 import util.controls.DreadbotController;
@@ -38,6 +39,7 @@ public class RobotContainer {
         DriveCommand driveCommand = new DriveCommand(drive, primaryController::getYAxis, primaryController::getZAxis);
         drive.setDefaultCommand(driveCommand);
         primaryController.getRightBumper().whileTrue(new TurboCommand(driveCommand));
+        primaryController.getLeftBumper().whileTrue(new TurtleCommand(driveCommand));
     }
 
     /**
