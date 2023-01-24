@@ -3,6 +3,7 @@ package frc.robot.commands;
 import java.util.function.DoubleSupplier;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.Drive;
 import util.math.DreadbotMath;
 
@@ -26,7 +27,7 @@ public class DriveCommand extends CommandBase {
 
         if(this.turboMode) {
             joystickForward = DreadbotMath.linearInterpolation(0.4f, 1f, joystickForwardAxis.getAsDouble());
-            if(joystickForward <= 0.43f) {
+            if(joystickForward <= OperatorConstants.TURBO_CONTROLLER_DEADBAND) {
                 joystickForward = 0;
             }
         }
