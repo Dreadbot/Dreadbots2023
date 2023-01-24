@@ -4,13 +4,19 @@
 
 package frc.robot;
 
+import com.kauailabs.navx.frc.AHRS;
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
+
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.DriveCommand;
-import frc.robot.commands.TurboCommand;
+import frc.robot.commands.RobotBalanceCommand;
 import frc.robot.subsystems.Drive;
 import util.controls.DreadbotController;
+import edu.wpi.first.wpilibj.SerialPort;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -20,8 +26,8 @@ import util.controls.DreadbotController;
  */
 public class RobotContainer {
 
-  private final Drive drive = new Drive();
-  
+  private final AHRS gyro = new AHRS(SerialPort.Port.kMXP);
+ private final Drive drive = new Drive();
   private final DreadbotController primaryController = new DreadbotController(OperatorConstants.PRIMARY_JOYSTICK_PORT);
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
@@ -31,9 +37,11 @@ public class RobotContainer {
   }
 
   private void configureBindings() {
-    DriveCommand driveCommand = new DriveCommand(drive, primaryController::getYAxis, primaryController::getZAxis);
+    DriveCommand driveCommand = new DriveCommand(drive, primaryController::getWAxis, primaryController::getZAxis);
     drive.setDefaultCommand(driveCommand); 
-    primaryController.getRightBumper().whileTrue(new TurboCommand(driveCommand));
+   primaryController.getXButton().whileTrue(new RobotBalanceCommand(drive, primaryController::getWAxis, primaryController::getZAxis,gyro));
+    // if button x is pressed
+    // drive.setCommand(RobotBalancCommand)
   }
   /**
    * Use this to pass the autonomous command to the main {@link Robot} class.
