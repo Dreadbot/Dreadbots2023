@@ -12,11 +12,13 @@ public class DriveCommand extends CommandBase {
     private final DoubleSupplier joystickForwardAxis;
     private final DoubleSupplier joystickRotationalAxis;
     private boolean turboMode;
+    private boolean turtleMode;
     public DriveCommand(Drive drive, DoubleSupplier joystickForwardAxis, DoubleSupplier joystickRotationalAxis) {
         this.drive = drive;
         this.joystickForwardAxis = joystickForwardAxis;
         this.joystickRotationalAxis = joystickRotationalAxis;
         this.turboMode = false;
+        this.turtleMode = false;
         addRequirements(drive);
     }
 
@@ -26,10 +28,13 @@ public class DriveCommand extends CommandBase {
         double joystickRotation = (joystickRotationalAxis.getAsDouble() * DriveConstants.ROT_SPEED_LIMITER);
 
         if(this.turboMode) {
-            joystickForward = DreadbotMath.linearInterpolation(0.4f, 1f, joystickForwardAxis.getAsDouble());
+            joystickForward = DreadbotMath.linearInterpolation(0.4, 1, joystickForwardAxis.getAsDouble());
             if(joystickForward <= OperatorConstants.TURBO_CONTROLLER_DEADBAND) {
                 joystickForward = 0;
             }
+        } else if(this.turtleMode) {
+            joystickForward = DreadbotMath.linearInterpolation(0, 0.4, joystickForwardAxis.getAsDouble());
+            joystickRotation = DreadbotMath.linearInterpolation(0, 0.4, joystickRotationalAxis.getAsDouble());
         }
         drive.ArcadeDrive(joystickRotation, joystickForward);
     }
@@ -39,5 +44,10 @@ public class DriveCommand extends CommandBase {
     public void disableTurbo() {
         this.turboMode = false;
     }
-
+    public void enableTurtle() {
+        this.turtleMode = true;
+    }
+    public void disableTurtle() {
+        this.turtleMode = false;
+    }
 }

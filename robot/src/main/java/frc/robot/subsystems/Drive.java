@@ -12,15 +12,16 @@ import util.misc.DreadbotMotor;
 import util.misc.DreadbotSubsystem;
 
 public class Drive extends DreadbotSubsystem {
-    private DifferentialDrive diffDrive;
+    private final DifferentialDrive diffDrive;
     
-    private DreadbotMotor frontLeftMotor;
-    private DreadbotMotor frontRightMotor;
-    private DreadbotMotor backLeftMotor;
-    private DreadbotMotor backRightMotor;
+    private final DreadbotMotor frontLeftMotor;
+    private final DreadbotMotor frontRightMotor;
+    private final DreadbotMotor backLeftMotor;
+    private final DreadbotMotor backRightMotor;
 
-    private MotorControllerGroup leftMotors;
-    private MotorControllerGroup rightMotors;
+    private final MotorControllerGroup leftMotors;
+    private final MotorControllerGroup rightMotors;
+
     public Drive() {
 
         this.frontLeftMotor = new DreadbotMotor(new CANSparkMax(MotorConstants.FRONT_LEFT_MOTOR_PORT, MotorType.kBrushless), "frontLeft");
@@ -78,7 +79,6 @@ public class Drive extends DreadbotSubsystem {
     @Override
     public void close() throws Exception {
         // TODO Auto-generated method stub
-
     }
 
     @Override

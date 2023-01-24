@@ -19,10 +19,10 @@ public abstract class Constants {
       public static final double AUTON_DRIVE_SPEED = 0.25;
     }
     public static class MotorConstants {
-      public static final int FRONT_LEFT_MOTOR_PORT = 10;
-      public static final int FRONT_RIGHT_MOTOR_PORT = 1;
-      public static final int BACK_LEFT_MOTOR_PORT = 2;
-      public static final int BACK_RIGHT_MOTOR_PORT = 3;
+      public static final int FRONT_LEFT_MOTOR_PORT = 1;
+      public static final int FRONT_RIGHT_MOTOR_PORT = 2;
+      public static final int BACK_LEFT_MOTOR_PORT = 3;
+      public static final int BACK_RIGHT_MOTOR_PORT = 4;
     }
     private Constants() throws IllegalStateException {
         throw new IllegalStateException("Constants is a utility class. It should not be instantiated.");
