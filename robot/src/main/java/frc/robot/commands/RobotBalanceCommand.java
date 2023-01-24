@@ -10,13 +10,9 @@ import frc.robot.subsystems.Drive;
 
 public class RobotBalanceCommand extends CommandBase {
     private final Drive drive;
-    private final DoubleSupplier joystickForwardAxis;
-    private final DoubleSupplier joystickRotationalAxis;
     private final AHRS gyro;
     public RobotBalanceCommand(Drive drive, DoubleSupplier joystickForwardAxis, DoubleSupplier joystickRotationalAxis, AHRS gyro) {
         this.drive = drive;
-        this.joystickForwardAxis = joystickForwardAxis;
-        this.joystickRotationalAxis = joystickRotationalAxis;
         this.gyro = gyro;
         addRequirements(drive);
     }
