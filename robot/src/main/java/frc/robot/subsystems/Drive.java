@@ -5,6 +5,7 @@ import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import frc.robot.Constants.MotorConstants;
@@ -21,6 +22,9 @@ public class Drive extends DreadbotSubsystem {
 
     private final MotorControllerGroup leftMotors;
     private final MotorControllerGroup rightMotors;
+
+    private final SlewRateLimiter slewRate;
+    private final double rateLimit = .03;
 
     public Drive() {
 
@@ -43,18 +47,20 @@ public class Drive extends DreadbotSubsystem {
         rightMotors = new MotorControllerGroup(frontRightMotor.getSparkMax(), backRightMotor.getSparkMax());
 
         diffDrive = new DifferentialDrive(leftMotors, rightMotors);
+
+        slewRate = new SlewRateLimiter(rateLimit, -rateLimit, 0);
     }
 
     public void ArcadeDrive(double xSpeed, double rot) {
-        diffDrive.arcadeDrive(xSpeed, rot, true);
+        diffDrive.arcadeDrive(AddSlewRate(xSpeed), AddSlewRate(rot), true);
     }
 
     public void ArcadeDrive(double xSpeed, double rot, boolean squareSpeed) {
-        diffDrive.arcadeDrive(xSpeed, rot, squareSpeed);
+        diffDrive.arcadeDrive(AddSlewRate(xSpeed), AddSlewRate(rot), squareSpeed);
     }
 
     public void CurvatureDrive(double xSpeed, double rot) {
-        diffDrive.curvatureDrive(xSpeed, rot, true);
+        diffDrive.curvatureDrive(AddSlewRate(xSpeed), AddSlewRate(rot), true);
     }
 
     public void TankDrive(double ySpeed, double wSpeed) { // WUMBO SPEED
@@ -80,6 +86,10 @@ public class Drive extends DreadbotSubsystem {
             default:
                 return frontLeftMotor.getEncoder();
         }
+    }
+
+    private double AddSlewRate(double joystickAxis){
+        return slewRate.calculate(joystickAxis);
     }
 
     @Override
