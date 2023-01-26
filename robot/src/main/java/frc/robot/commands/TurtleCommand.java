@@ -2,9 +2,9 @@ package frc.robot.commands;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
-public class TurboCommand extends CommandBase{
+public class TurtleCommand extends CommandBase{
     private DriveCommand driveCommand;
-    public TurboCommand(DriveCommand driveCommand) {
+    public TurtleCommand(DriveCommand driveCommand) {
         this.driveCommand = driveCommand;
     }
     
@@ -13,11 +13,11 @@ public class TurboCommand extends CommandBase{
 
     @Override
     public void execute() {
-        driveCommand.enableTurbo();
+        driveCommand.enableTurtle();
     }
 
     @Override
     public void end(boolean interrupted) {
-        driveCommand.disableTurbo();
+        driveCommand.disableTurtle();
     }
 }

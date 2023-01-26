@@ -12,15 +12,16 @@ import util.misc.DreadbotMotor;
 import util.misc.DreadbotSubsystem;
 
 public class Drive extends DreadbotSubsystem {
-    private DifferentialDrive diffDrive;
+    private final DifferentialDrive diffDrive;
     
-    private DreadbotMotor frontLeftMotor;
-    private DreadbotMotor frontRightMotor;
-    private DreadbotMotor backLeftMotor;
-    private DreadbotMotor backRightMotor;
+    private final DreadbotMotor frontLeftMotor;
+    private final DreadbotMotor frontRightMotor;
+    private final DreadbotMotor backLeftMotor;
+    private final DreadbotMotor backRightMotor;
 
-    private MotorControllerGroup leftMotors;
-    private MotorControllerGroup rightMotors;
+    private final MotorControllerGroup leftMotors;
+    private final MotorControllerGroup rightMotors;
+
     public Drive() {
 
         this.frontLeftMotor = new DreadbotMotor(new CANSparkMax(MotorConstants.FRONT_LEFT_MOTOR_PORT, MotorType.kBrushless), "frontLeft");
@@ -33,8 +34,10 @@ public class Drive extends DreadbotSubsystem {
         backLeftMotor.setIdleMode(IdleMode.kBrake);
         backRightMotor.setIdleMode(IdleMode.kBrake);
 
-        frontLeftMotor.setInverted(true);
-        backLeftMotor.setInverted(true);
+        frontLeftMotor.setInverted(false);
+        backLeftMotor.setInverted(false);
+        frontRightMotor.setInverted(true);
+        backRightMotor.setInverted(true);
 
         leftMotors = new MotorControllerGroup(frontLeftMotor.getSparkMax(), backLeftMotor.getSparkMax());
         rightMotors = new MotorControllerGroup(frontRightMotor.getSparkMax(), backRightMotor.getSparkMax());
@@ -44,6 +47,10 @@ public class Drive extends DreadbotSubsystem {
 
     public void ArcadeDrive(double xSpeed, double rot) {
         diffDrive.arcadeDrive(xSpeed, rot, true);
+    }
+
+    public void ArcadeDrive(double xSpeed, double rot, boolean squareSpeed) {
+        diffDrive.arcadeDrive(xSpeed, rot, squareSpeed);
     }
 
     public void CurvatureDrive(double xSpeed, double rot) {
@@ -78,7 +85,6 @@ public class Drive extends DreadbotSubsystem {
     @Override
     public void close() throws Exception {
         // TODO Auto-generated method stub
-
     }
 
     @Override
