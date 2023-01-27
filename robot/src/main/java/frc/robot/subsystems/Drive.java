@@ -2,12 +2,16 @@ package frc.robot.subsystems;
 
 import org.opencv.features2d.FastFeatureDetector;
 
+import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
+import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import frc.robot.Constants.DriveConstants;
@@ -27,8 +31,11 @@ public class Drive extends DreadbotSubsystem {
     private final MotorControllerGroup rightMotors;
 
     protected final SlewRateLimiter slewRate;
+    private final DifferentialDriveOdometry odometry;
 
-    public Drive() {
+    private final AHRS gryo;
+
+    public Drive(AHRS gryo) {
         this.frontLeftMotor = new DreadbotMotor(new CANSparkMax(MotorConstants.FRONT_LEFT_MOTOR_PORT, MotorType.kBrushless), "frontLeft");
         this.frontRightMotor = new DreadbotMotor(new CANSparkMax(MotorConstants.FRONT_RIGHT_MOTOR_PORT, MotorType.kBrushless), "frontRight");
         this.backLeftMotor = new DreadbotMotor(new CANSparkMax(MotorConstants.BACK_LEFT_MOTOR_PORT, MotorType.kBrushless), "backLeft");
@@ -39,16 +46,18 @@ public class Drive extends DreadbotSubsystem {
         backLeftMotor.setIdleMode(IdleMode.kBrake);
         backRightMotor.setIdleMode(IdleMode.kBrake);
 
-        frontLeftMotor.setInverted(true);
-        backLeftMotor.setInverted(true);
-        frontRightMotor.setInverted(false);
-        backRightMotor.setInverted(false);
-
         leftMotors = new MotorControllerGroup(frontLeftMotor.getSparkMax(), backLeftMotor.getSparkMax());
         rightMotors = new MotorControllerGroup(frontRightMotor.getSparkMax(), backRightMotor.getSparkMax());
 
+        leftMotors.setInverted(true);
+        rightMotors.setInverted(false);
         diffDrive = new DifferentialDrive(leftMotors, rightMotors);
-
+        this.gryo = gryo;
+        odometry = new DifferentialDriveOdometry(
+            gryo.getRotation2d(),
+            frontLeftMotor.getEncoder().getPosition() * 0.1588,
+            frontRightMotor.getEncoder().getPosition() * 0.1588
+        );
         slewRate = new SlewRateLimiter(DriveConstants.SLEW_RATE_LIMIT, -DriveConstants.SLEW_RATE_LIMIT, 0.2);
     }
 
@@ -58,7 +67,8 @@ public class Drive extends DreadbotSubsystem {
         this.frontRightMotor = fr;
         this.backLeftMotor = bl;
         this.backRightMotor = br;
-
+        this.gryo = null;
+        this.odometry = null;
         frontLeftMotor.setIdleMode(IdleMode.kBrake);
         frontRightMotor.setIdleMode(IdleMode.kBrake);
         backLeftMotor.setIdleMode(IdleMode.kBrake);
@@ -74,6 +84,14 @@ public class Drive extends DreadbotSubsystem {
 
         diffDrive = new DifferentialDrive(leftMotors, rightMotors);
         slewRate = new SlewRateLimiter(DriveConstants.SLEW_RATE_LIMIT, -DriveConstants.SLEW_RATE_LIMIT, 0.2);
+    }
+    @Override
+    public void periodic() {
+        odometry.update(
+            gryo.getRotation2d(),
+            frontLeftMotor.getEncoder().getPosition() * 0.1588,
+            frontRightMotor.getEncoder().getPosition() * 0.1588
+        );
     }
     public double ArcadeDrive(double xSpeed, double rot) {
         xSpeed = addSlewRate(xSpeed);
@@ -120,6 +138,33 @@ public class Drive extends DreadbotSubsystem {
         return slewRate.calculate(joystickAxis);
     }
 
+    public void resetOdometry(Pose2d pose) {
+        resetEncoders();
+        odometry.resetPosition(
+            gryo.getRotation2d(),
+            frontLeftMotor.getEncoder().getPosition() * 0.1588,
+            frontRightMotor.getEncoder().getPosition() * 0.1588,
+            pose
+        );
+    }
+    public DifferentialDriveWheelSpeeds getWheelSpeeds() {
+        return new DifferentialDriveWheelSpeeds(
+           ((frontLeftMotor.getEncoder().getVelocity() / 60) / 2.32) * 0.1588,
+           ((frontRightMotor.getEncoder().getVelocity() / 60) / 2.32) * 0.1588
+        );
+    }
+    public void resetEncoders() {
+        frontLeftMotor.resetEncoder();
+        frontRightMotor.resetEncoder();
+        backLeftMotor.resetEncoder();
+        backRightMotor.resetEncoder();
+    }
+    public double getHeading() {
+        return gryo.getRotation2d().getDegrees();
+    }
+    public Pose2d getPose() {
+        return odometry.getPoseMeters();
+    }
     @Override
     public void close() throws Exception {
         // TODO Auto-generated method stub
