@@ -1,5 +1,7 @@
 package frc.robot.subsystems;
 
+import org.opencv.features2d.FastFeatureDetector;
+
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -8,6 +10,7 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.MotorConstants;
 import util.misc.DreadbotMotor;
 import util.misc.DreadbotSubsystem;
@@ -24,7 +27,6 @@ public class Drive extends DreadbotSubsystem {
     private final MotorControllerGroup rightMotors;
 
     protected final SlewRateLimiter slewRate;
-    private final double rateLimit = 0.03;
 
     public Drive() {
         this.frontLeftMotor = new DreadbotMotor(new CANSparkMax(MotorConstants.FRONT_LEFT_MOTOR_PORT, MotorType.kBrushless), "frontLeft");
@@ -37,17 +39,17 @@ public class Drive extends DreadbotSubsystem {
         backLeftMotor.setIdleMode(IdleMode.kBrake);
         backRightMotor.setIdleMode(IdleMode.kBrake);
 
-        frontLeftMotor.setInverted(false);
-        backLeftMotor.setInverted(false);
-        frontRightMotor.setInverted(true);
-        backRightMotor.setInverted(true);
+        frontLeftMotor.setInverted(true);
+        backLeftMotor.setInverted(true);
+        frontRightMotor.setInverted(false);
+        backRightMotor.setInverted(false);
 
         leftMotors = new MotorControllerGroup(frontLeftMotor.getSparkMax(), backLeftMotor.getSparkMax());
         rightMotors = new MotorControllerGroup(frontRightMotor.getSparkMax(), backRightMotor.getSparkMax());
 
         diffDrive = new DifferentialDrive(leftMotors, rightMotors);
 
-        slewRate = new SlewRateLimiter(rateLimit, -rateLimit, 0);
+        slewRate = new SlewRateLimiter(DriveConstants.SLEW_RATE_LIMIT, -DriveConstants.SLEW_RATE_LIMIT, 0.2);
     }
 
     // Constructor for testing, allows injection of mock motors
@@ -71,11 +73,11 @@ public class Drive extends DreadbotSubsystem {
         rightMotors = new MotorControllerGroup(frontRightMotor.getSparkMax(), backRightMotor.getSparkMax());
 
         diffDrive = new DifferentialDrive(leftMotors, rightMotors);
-        slewRate = new SlewRateLimiter(rateLimit, -rateLimit, 0);
+        slewRate = new SlewRateLimiter(DriveConstants.SLEW_RATE_LIMIT, -DriveConstants.SLEW_RATE_LIMIT, 0.2);
     }
     public double ArcadeDrive(double xSpeed, double rot) {
         xSpeed = addSlewRate(xSpeed);
-        diffDrive.arcadeDrive(xSpeed, addSlewRate(rot), true);
+        diffDrive.arcadeDrive(xSpeed, rot, true);
         return xSpeed;
     }
 
@@ -86,7 +88,7 @@ public class Drive extends DreadbotSubsystem {
     }
 
     public void CurvatureDrive(double xSpeed, double rot) {
-        diffDrive.curvatureDrive(addSlewRate(xSpeed), addSlewRate(rot), true);
+        diffDrive.curvatureDrive(addSlewRate(xSpeed), rot, true);
     }
 
     public void TankDrive(double ySpeed, double wSpeed) { // WUMBO SPEED

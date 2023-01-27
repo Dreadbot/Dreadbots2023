@@ -17,6 +17,7 @@ public abstract class Constants {
       public static final double WHEEL_CIRCUMFRENCE = 0.5985;
       public static final double GEAR_RATIO = 70.0 / 14.0;
       public static final double AUTON_DRIVE_SPEED = 0.25;
+      public static final double SLEW_RATE_LIMIT = 0.5;
     }
     public static class MotorConstants {
       public static final int FRONT_LEFT_MOTOR_PORT = 1;

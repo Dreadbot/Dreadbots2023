@@ -2,6 +2,8 @@ package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
 
+import org.opencv.core.Mat;
+
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
@@ -37,14 +39,15 @@ public class DriveCommand extends CommandBase {
         double rotation = (joystickRotationalAxis.getAsDouble() * DriveConstants.ROT_SPEED_LIMITER);
 
         if (this.turboMode) {
-            forward = DreadbotMath.linearInterpolation(0.4, 1, joystickForwardAxis.getAsDouble());
+            forward = Math.signum(joystickForwardAxis.getAsDouble()) * DreadbotMath.linearInterpolation(0.4, 1, Math.abs(joystickForwardAxis.getAsDouble()));
             // Because this is done after the linearInterpolation, the deadband ends up being .05
-            if (forward <= OperatorConstants.TURBO_CONTROLLER_DEADBAND) {
+            System.out.println(Math.abs(forward));
+            if (Math.abs(forward) <= OperatorConstants.TURBO_CONTROLLER_DEADBAND) {
                 forward = 0;
             }
         } else if (this.turtleMode) {
-            forward = DreadbotMath.linearInterpolation(0, 0.4, joystickForwardAxis.getAsDouble());
-            rotation = DreadbotMath.linearInterpolation(0, 0.4, joystickRotationalAxis.getAsDouble());
+            forward = Math.signum(joystickForwardAxis.getAsDouble()) * DreadbotMath.linearInterpolation(0, 0.4, Math.abs(joystickForwardAxis.getAsDouble()));
+            rotation =  Math.signum(joystickRotationalAxis.getAsDouble()) * DreadbotMath.linearInterpolation(0, 0.4,  Math.abs(joystickRotationalAxis.getAsDouble()));
         }
         drive.ArcadeDrive(forward, rotation);
         // save off the values so they are available for unit tests
