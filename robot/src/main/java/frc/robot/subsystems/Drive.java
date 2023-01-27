@@ -23,11 +23,10 @@ public class Drive extends DreadbotSubsystem {
     private final MotorControllerGroup leftMotors;
     private final MotorControllerGroup rightMotors;
 
-    private final SlewRateLimiter slewRate;
-    private final double rateLimit = .03;
+    protected final SlewRateLimiter slewRate;
+    private final double rateLimit = 0.03;
 
     public Drive() {
-
         this.frontLeftMotor = new DreadbotMotor(new CANSparkMax(MotorConstants.FRONT_LEFT_MOTOR_PORT, MotorType.kBrushless), "frontLeft");
         this.frontRightMotor = new DreadbotMotor(new CANSparkMax(MotorConstants.FRONT_RIGHT_MOTOR_PORT, MotorType.kBrushless), "frontRight");
         this.backLeftMotor = new DreadbotMotor(new CANSparkMax(MotorConstants.BACK_LEFT_MOTOR_PORT, MotorType.kBrushless), "backLeft");
@@ -51,16 +50,43 @@ public class Drive extends DreadbotSubsystem {
         slewRate = new SlewRateLimiter(rateLimit, -rateLimit, 0);
     }
 
-    public void ArcadeDrive(double xSpeed, double rot) {
-        diffDrive.arcadeDrive(AddSlewRate(xSpeed), AddSlewRate(rot), true);
+    // Constructor for testing, allows injection of mock motors
+    public Drive(DreadbotMotor fl, DreadbotMotor fr, DreadbotMotor bl, DreadbotMotor br) {
+        this.frontLeftMotor = fl;
+        this.frontRightMotor = fr;
+        this.backLeftMotor = bl;
+        this.backRightMotor = br;
+
+        frontLeftMotor.setIdleMode(IdleMode.kBrake);
+        frontRightMotor.setIdleMode(IdleMode.kBrake);
+        backLeftMotor.setIdleMode(IdleMode.kBrake);
+        backRightMotor.setIdleMode(IdleMode.kBrake);
+
+        frontLeftMotor.setInverted(false);
+        backLeftMotor.setInverted(false);
+        frontRightMotor.setInverted(true);
+        backRightMotor.setInverted(true);
+
+        leftMotors = new MotorControllerGroup(frontLeftMotor.getSparkMax(), backLeftMotor.getSparkMax());
+        rightMotors = new MotorControllerGroup(frontRightMotor.getSparkMax(), backRightMotor.getSparkMax());
+
+        diffDrive = new DifferentialDrive(leftMotors, rightMotors);
+        slewRate = new SlewRateLimiter(rateLimit, -rateLimit, 0);
+    }
+    public double ArcadeDrive(double xSpeed, double rot) {
+        xSpeed = addSlewRate(xSpeed);
+        diffDrive.arcadeDrive(xSpeed, addSlewRate(rot), true);
+        return xSpeed;
     }
 
-    public void ArcadeDrive(double xSpeed, double rot, boolean squareSpeed) {
-        diffDrive.arcadeDrive(AddSlewRate(xSpeed), AddSlewRate(rot), squareSpeed);
+    public double ArcadeDrive(double xSpeed, double rot, boolean squareSpeed) {
+        xSpeed = addSlewRate(xSpeed);
+        diffDrive.arcadeDrive(xSpeed, rot, squareSpeed);
+        return xSpeed;
     }
 
     public void CurvatureDrive(double xSpeed, double rot) {
-        diffDrive.curvatureDrive(AddSlewRate(xSpeed), AddSlewRate(rot), true);
+        diffDrive.curvatureDrive(addSlewRate(xSpeed), addSlewRate(rot), true);
     }
 
     public void TankDrive(double ySpeed, double wSpeed) { // WUMBO SPEED
@@ -88,7 +114,7 @@ public class Drive extends DreadbotSubsystem {
         }
     }
 
-    private double AddSlewRate(double joystickAxis){
+    private double addSlewRate(double joystickAxis){
         return slewRate.calculate(joystickAxis);
     }
 

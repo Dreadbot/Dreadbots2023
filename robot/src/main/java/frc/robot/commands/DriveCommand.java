@@ -1,6 +1,8 @@
 package frc.robot.commands;
 
 import java.util.function.DoubleSupplier;
+
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
@@ -13,6 +15,9 @@ public class DriveCommand extends CommandBase {
     private final DoubleSupplier joystickRotationalAxis;
     private boolean turboMode;
     private boolean turtleMode;
+    protected double lastForward;
+    protected double lastRotation;
+
     public DriveCommand(Drive drive, DoubleSupplier joystickForwardAxis, DoubleSupplier joystickRotationalAxis) {
         this.drive = drive;
         this.joystickForwardAxis = joystickForwardAxis;
@@ -22,31 +27,43 @@ public class DriveCommand extends CommandBase {
         addRequirements(drive);
     }
 
+    /*  Normal Mode: move at 75% of joystick value (min speed = 0; max speed = .75)
+     *  Turtle Mode: move at 40% of joystick value (min speed =0; max speed = .40)
+     *  Turbo Mode: move at 60% of joystick value plus 40% (min speed = 40%, max speed = 100%)
+     */
     @Override
     public void execute() {
-        double joystickForward = (joystickForwardAxis.getAsDouble() * DriveConstants.FORWARD_SPEED_LIMITER);
-        double joystickRotation = (joystickRotationalAxis.getAsDouble() * DriveConstants.ROT_SPEED_LIMITER);
+        double forward = (joystickForwardAxis.getAsDouble() * DriveConstants.FORWARD_SPEED_LIMITER);
+        double rotation = (joystickRotationalAxis.getAsDouble() * DriveConstants.ROT_SPEED_LIMITER);
 
-        if(this.turboMode) {
-            joystickForward = DreadbotMath.linearInterpolation(0.4, 1, joystickForwardAxis.getAsDouble());
-            if(joystickForward <= OperatorConstants.TURBO_CONTROLLER_DEADBAND) {
-                joystickForward = 0;
+        if (this.turboMode) {
+            forward = DreadbotMath.linearInterpolation(0.4, 1, joystickForwardAxis.getAsDouble());
+            // Because this is done after the linearInterpolation, the deadband ends up being .05
+            if (forward <= OperatorConstants.TURBO_CONTROLLER_DEADBAND) {
+                forward = 0;
             }
-        } else if(this.turtleMode) {
-            joystickForward = DreadbotMath.linearInterpolation(0, 0.4, joystickForwardAxis.getAsDouble());
-            joystickRotation = DreadbotMath.linearInterpolation(0, 0.4, joystickRotationalAxis.getAsDouble());
+        } else if (this.turtleMode) {
+            forward = DreadbotMath.linearInterpolation(0, 0.4, joystickForwardAxis.getAsDouble());
+            rotation = DreadbotMath.linearInterpolation(0, 0.4, joystickRotationalAxis.getAsDouble());
         }
-        drive.ArcadeDrive(joystickForward, joystickRotation);
+        drive.ArcadeDrive(forward, rotation);
+        // save off the values so they are available for unit tests
+        lastForward = forward;
+        lastRotation = rotation;
     }
+
     public void enableTurbo() {
         this.turboMode = true;
     }
+
     public void disableTurbo() {
         this.turboMode = false;
     }
+
     public void enableTurtle() {
         this.turtleMode = true;
     }
+
     public void disableTurtle() {
         this.turtleMode = false;
     }

@@ -25,9 +25,9 @@ import edu.wpi.first.wpilibj.SerialPort;
  */
 public class RobotContainer {
 
-  private final AHRS gyro = new AHRS(SerialPort.Port.kMXP);
- private final Drive drive = new Drive();
-  private final DreadbotController primaryController = new DreadbotController(OperatorConstants.PRIMARY_JOYSTICK_PORT);
+    private final AHRS gyro = new AHRS(SerialPort.Port.kMXP);
+    private final Drive drive = new Drive();
+    private final DreadbotController primaryController = new DreadbotController(OperatorConstants.PRIMARY_JOYSTICK_PORT);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -37,23 +37,21 @@ public class RobotContainer {
         configureBindings();
     }
 
-  private void configureBindings() {
-    DriveCommand driveCommand = new DriveCommand(drive, primaryController::getYAxis, primaryController::getXAxis);
-    drive.setDefaultCommand(driveCommand); 
-    primaryController.getXButton().whileTrue(new BalanceCommand(drive, gyro));
-    primaryController.getLeftBumper().whileTrue(new TurtleCommand(driveCommand));
-    primaryController.getRightBumper().whileTrue(new TurboCommand(driveCommand));
-   // if button x is pressed
+    private void configureBindings() {
+        DriveCommand driveCommand = new DriveCommand(drive, primaryController::getYAxis, primaryController::getXAxis);
+        drive.setDefaultCommand(driveCommand);
+        primaryController.getXButton().whileTrue(new BalanceCommand(drive, gyro));
+        primaryController.getLeftBumper().whileTrue(new TurtleCommand(driveCommand));
+        primaryController.getRightBumper().whileTrue(new TurboCommand(driveCommand));
+    }
 
-    // drive.setCommand(RobotBalancCommand)
-  }
-  /**
-   * Use this to pass the autonomous command to the main {@link Robot} class.
-   *
-   * @return the command to run in autonomous
-   */
-  public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
-    return Autos.Auton(drive);
-  }
+    /**
+     * Use this to pass the autonomous command to the main {@link Robot} class.
+     *
+     * @return the command to run in autonomous
+     */
+    public Command getAutonomousCommand() {
+        // An example command will be run in autonomous
+        return Autos.Auton(drive);
+    }
 }
