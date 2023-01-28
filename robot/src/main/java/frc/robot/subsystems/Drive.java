@@ -1,6 +1,5 @@
 package frc.robot.subsystems;
 
-import org.opencv.features2d.FastFeatureDetector;
 
 import com.kauailabs.navx.frc.AHRS;
 import com.revrobotics.CANSparkMax;
@@ -12,6 +11,7 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
 import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
+import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
 import frc.robot.Constants.DriveConstants;
@@ -40,7 +40,6 @@ public class Drive extends DreadbotSubsystem {
         this.frontRightMotor = new DreadbotMotor(new CANSparkMax(MotorConstants.FRONT_RIGHT_MOTOR_PORT, MotorType.kBrushless), "frontRight");
         this.backLeftMotor = new DreadbotMotor(new CANSparkMax(MotorConstants.BACK_LEFT_MOTOR_PORT, MotorType.kBrushless), "backLeft");
         this.backRightMotor = new DreadbotMotor(new CANSparkMax(MotorConstants.BACK_RIGHT_MOTOR_PORT, MotorType.kBrushless), "backRight");
-        
         frontLeftMotor.setIdleMode(IdleMode.kBrake);
         frontRightMotor.setIdleMode(IdleMode.kBrake);
         backLeftMotor.setIdleMode(IdleMode.kBrake);
@@ -55,8 +54,8 @@ public class Drive extends DreadbotSubsystem {
         this.gryo = gryo;
         odometry = new DifferentialDriveOdometry(
             gryo.getRotation2d(),
-            frontLeftMotor.getEncoder().getPosition() * 0.1588,
-            frontRightMotor.getEncoder().getPosition() * 0.1588
+            (frontLeftMotor.getEncoder().getPosition() / 2.32) * 0.1588,
+            (frontRightMotor.getEncoder().getPosition() / 2.32) * 0.1588
         );
         slewRate = new SlewRateLimiter(DriveConstants.SLEW_RATE_LIMIT, -DriveConstants.SLEW_RATE_LIMIT, 0.2);
     }
@@ -89,8 +88,8 @@ public class Drive extends DreadbotSubsystem {
     public void periodic() {
         odometry.update(
             gryo.getRotation2d(),
-            frontLeftMotor.getEncoder().getPosition() * 0.1588,
-            frontRightMotor.getEncoder().getPosition() * 0.1588
+            (frontLeftMotor.getEncoder().getPosition() / 2.32) * 0.1588,
+            (frontRightMotor.getEncoder().getPosition() / 2.32) * 0.1588
         );
     }
     public double ArcadeDrive(double xSpeed, double rot) {
@@ -142,8 +141,8 @@ public class Drive extends DreadbotSubsystem {
         resetEncoders();
         odometry.resetPosition(
             gryo.getRotation2d(),
-            frontLeftMotor.getEncoder().getPosition() * 0.1588,
-            frontRightMotor.getEncoder().getPosition() * 0.1588,
+            (frontLeftMotor.getEncoder().getPosition() / 2.32) * 0.1588,
+            (frontRightMotor.getEncoder().getPosition() / 2.32) * 0.1588,
             pose
         );
     }
@@ -160,7 +159,7 @@ public class Drive extends DreadbotSubsystem {
         backRightMotor.resetEncoder();
     }
     public double getHeading() {
-        return gryo.getRotation2d().getDegrees();
+        return -gryo.getRotation2d().getDegrees();
     }
     public Pose2d getPose() {
         return odometry.getPoseMeters();

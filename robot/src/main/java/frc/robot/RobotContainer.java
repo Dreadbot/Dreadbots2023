@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj.SerialPort;
  */
 public class RobotContainer {
 
-    private final AHRS gyro = new AHRS(SerialPort.Port.kMXP);
+    private final AHRS gyro = new AHRS(SerialPort.Port.kUSB);
     private final Drive drive = new Drive(gyro);
     private final DreadbotController primaryController = new DreadbotController(OperatorConstants.PRIMARY_JOYSTICK_PORT);
 
@@ -53,5 +53,9 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         // An example command will be run in autonomous
         return Autos.FollowPath(drive);
+    }
+    public void autonPeriodic() {
+      System.out.println("Heading: " + drive.getHeading() + " Distance: " + (drive.getMotorEncoder(0).getPosition()/ 2.32) * 0.1588);
+      System.out.println("X: " + drive.getPose().getX() + "Y: " + drive.getPose().getY());
     }
 }

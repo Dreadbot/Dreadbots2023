@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import edu.wpi.first.math.util.Units;
+
 @SuppressWarnings("SpellCheckingInspection")
 public abstract class Constants {
     public static class OperatorConstants {
@@ -31,15 +33,15 @@ public abstract class Constants {
       public static final double LEVEL_DEGREES = 1.25; //Angle where considered level
     }
     public static class AutonomousConstants {
-      public static final double KS_VOLTS = 0.27038;
-      public static final double KV_VOLT_SECONDS_PER_METER = 1.8425;
-      public static final double KA_VOLT_SECONDS_SQUARED_PER_METER = 0.61532;
-      public static final double KP_DRIVE_VELOCITY = 2.7049;
+      public static final double KS_VOLTS = 0.164; // Original Value: 0.27038
+      public static final double KV_VOLT_SECONDS_PER_METER = 0.0467; // Original Value: 1.8425
+      public static final double KA_VOLT_SECONDS_SQUARED_PER_METER = 0.0784; // Original Value: 0.61532
+      public static final double KP_DRIVE_VELOCITY = 0.366; // Original Value: 2.7049
       public static final double MAX_SPEED_METERS_PER_SECOND = 1;
       public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = .5;
       public static final double RAMSETE_B = 2;
       public static final double RAMSETE_ZETA = 0.7;
-      public static final double TRACK_WIDTH = 0.685;
+      public static final double TRACK_WIDTH = Units.inchesToMeters(27.737); // Original Value: 0.685
     }
     private Constants() throws IllegalStateException {
         throw new IllegalStateException("Constants is a utility class. It should not be instantiated.");

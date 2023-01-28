@@ -37,12 +37,11 @@ public final class Autos {
         AutonomousConstants.KV_VOLT_SECONDS_PER_METER ,
         AutonomousConstants.KA_VOLT_SECONDS_SQUARED_PER_METER 
       );
-
       drive.resetGyro();
       final DifferentialDriveVoltageConstraint autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
         feedforward,
         kinematics,
-        10/4
+        10 / 2
         );
       final TrajectoryConfig config = new TrajectoryConfig(
         AutonomousConstants.MAX_SPEED_METERS_PER_SECOND,
@@ -51,21 +50,30 @@ public final class Autos {
       config.setKinematics(kinematics);
       config.addConstraint(autoVoltageConstraint);
 
+      // Trajectory exampleTrajectory =
+      //   TrajectoryGenerator.generateTrajectory(
+      //       // Start at the origin facing the +X direction
+      //       new Pose2d(0, 0, new Rotation2d(0)),
+      //       // Pass through these two interior waypoints, making an 's' curve path
+      //       List.of(new Translation2d(0, .5)),
+      //       // End 3 meters straight ahead of where we started, facing forward
+      //       new Pose2d(0, 1, new Rotation2d(0)),
+      //       // Pass config
+      //       config);
       Trajectory exampleTrajectory =
-        TrajectoryGenerator.generateTrajectory(
-            // Start at the origin facing the +X direction
-            new Pose2d(0, 0, new Rotation2d(0)),
-            // Pass through these two interior waypoints, making an 's' curve path
-            List.of(new Translation2d(0, .5)),
-            // End 3 meters straight ahead of where we started, facing forward
-            new Pose2d(0, 1, new Rotation2d(0)),
-            // Pass config
-            config);
-
+      TrajectoryGenerator.generateTrajectory(
+          // Start at the origin facing the +X direction
+          new Pose2d(0, 0, new Rotation2d(0)),
+          // Pass through these two interior waypoints, making an 's' curve path
+          List.of(new Translation2d(2, 0), new Translation2d(4, 0)),
+          // End 3 meters straight ahead of where we started, facing forward
+          new Pose2d(6, 0, new Rotation2d(0)),
+          // Pass config
+          config);
       RamseteCommand ramseteCommand = 
         new RamseteCommand(
           exampleTrajectory,
-          drive::getPose, 
+          drive::getPose,
           new RamseteController(AutonomousConstants.RAMSETE_B, AutonomousConstants.RAMSETE_ZETA),
           feedforward,
           kinematics,
@@ -74,13 +82,11 @@ public final class Autos {
           new PIDController(AutonomousConstants.KP_DRIVE_VELOCITY, 0, 0),
           drive::TankDriveVoltage,
           drive);
-
-
-      drive.resetOdometry(drive.getPose());
+      drive.resetOdometry(exampleTrajectory.getInitialPose());
 
       return ramseteCommand.andThen(() -> drive.TankDriveVoltage(0, 0));
     }
-    private Autos() {
+    private Autos() throws UnsupportedOperationException {
         throw new UnsupportedOperationException("This is a utility class!");
     }
 }
