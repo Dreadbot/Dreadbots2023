@@ -6,11 +6,22 @@ package frc.robot.commands;
 
 import frc.robot.Constants.AutonomousConstants;
 import frc.robot.subsystems.Drive;
+
+import java.util.List;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
 import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 
 public final class Autos {
     /**
@@ -37,6 +48,35 @@ public final class Autos {
       );
       config.setKinematics(kinematics);
       config.addConstraint(autoVoltageConstraint);
+
+      Trajectory exampleTrajectory =
+        TrajectoryGenerator.generateTrajectory(
+            // Start at the origin facing the +X direction
+            new Pose2d(0, 0, new Rotation2d(0)),
+            // Pass through these two interior waypoints, making an 's' curve path
+            List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+            // End 3 meters straight ahead of where we started, facing forward
+            new Pose2d(3, 0, new Rotation2d(0)),
+            // Pass config
+            config);
+
+      RamseteCommand ramseteCommand = 
+        new RamseteCommand(
+          exampleTrajectory,
+          drive::getPose, 
+          new RamseteController(AutonomousConstants.RAMSETE_B, AutonomousConstants.RAMSETE_ZETA),
+          feedforward,
+          kinematics,
+          drive::getWheelSpeeds, 
+          new PIDController(AutonomousConstants.KP_DRIVE_VELOCITY, 0, 0),
+          new PIDController(AutonomousConstants.KP_DRIVE_VELOCITY, 0, 0),
+          drive::TankDriveVoltage,
+          drive);
+
+
+      drive.resetOdometry(drive.getPose());
+
+      return ramseteCommand.andThen(() -> drive.TankDriveVoltage(0, 0));
     }
     private Autos() {
         throw new UnsupportedOperationException("This is a utility class!");
