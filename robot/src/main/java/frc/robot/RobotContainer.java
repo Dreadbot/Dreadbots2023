@@ -38,7 +38,7 @@ public class RobotContainer {
     }
 
     private void configureBindings() {
-        DriveCommand driveCommand = new DriveCommand(drive, primaryController::getYAxis, primaryController::getXAxis);
+        DriveCommand driveCommand = new DriveCommand(drive, primaryController::getYAxis, primaryController::getZAxis);
         drive.setDefaultCommand(driveCommand);
         primaryController.getXButton().whileTrue(new BalanceCommand(drive, gyro));
         primaryController.getLeftBumper().whileTrue(new TurtleCommand(driveCommand));
