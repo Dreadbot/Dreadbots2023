@@ -1,7 +1,5 @@
 package frc.robot.subsystems;
 
-import org.opencv.features2d.FastFeatureDetector;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMax.IdleMode;
@@ -76,9 +74,7 @@ public class Drive extends DreadbotSubsystem {
         slewRate = new SlewRateLimiter(DriveConstants.SLEW_RATE_LIMIT, -DriveConstants.SLEW_RATE_LIMIT, 0.2);
     }
     public double ArcadeDrive(double xSpeed, double rot) {
-        xSpeed = addSlewRate(xSpeed);
-        diffDrive.arcadeDrive(xSpeed, rot, true);
-        return xSpeed;
+        return ArcadeDrive(xSpeed, rot, true);
     }
 
     public double ArcadeDrive(double xSpeed, double rot, boolean squareSpeed) {
@@ -122,7 +118,11 @@ public class Drive extends DreadbotSubsystem {
 
     @Override
     public void close() throws Exception {
-        // TODO Auto-generated method stub
+        stopMotors();
+        frontLeftMotor.close();
+        frontRightMotor.close();
+        backLeftMotor.close();
+        backRightMotor.close();
     }
 
     @Override
