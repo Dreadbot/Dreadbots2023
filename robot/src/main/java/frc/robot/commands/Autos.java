@@ -33,14 +33,16 @@ public final class Autos {
     public static CommandBase FollowPath(Drive drive) {
       final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(AutonomousConstants.TRACK_WIDTH);
       final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(
-        AutonomousConstants.KS_VOLTS,
-        AutonomousConstants.KV_VOLT_SECONDS_PER_METER,
-        AutonomousConstants.KA_VOLT_SECONDS_SQUARED_PER_METER
+        AutonomousConstants.KS_VOLTS ,
+        AutonomousConstants.KV_VOLT_SECONDS_PER_METER ,
+        AutonomousConstants.KA_VOLT_SECONDS_SQUARED_PER_METER 
       );
+
+      drive.resetGyro();
       final DifferentialDriveVoltageConstraint autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
         feedforward,
         kinematics,
-        10
+        10/4
         );
       final TrajectoryConfig config = new TrajectoryConfig(
         AutonomousConstants.MAX_SPEED_METERS_PER_SECOND,
@@ -54,9 +56,9 @@ public final class Autos {
             // Start at the origin facing the +X direction
             new Pose2d(0, 0, new Rotation2d(0)),
             // Pass through these two interior waypoints, making an 's' curve path
-            List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+            List.of(new Translation2d(0, .5)),
             // End 3 meters straight ahead of where we started, facing forward
-            new Pose2d(3, 0, new Rotation2d(0)),
+            new Pose2d(0, 1, new Rotation2d(0)),
             // Pass config
             config);
 

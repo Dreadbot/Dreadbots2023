@@ -165,6 +165,10 @@ public class Drive extends DreadbotSubsystem {
     public Pose2d getPose() {
         return odometry.getPoseMeters();
     }
+
+    public void resetGyro() {
+        gryo.reset();
+    }
     @Override
     public void close() throws Exception {
         // TODO Auto-generated method stub

@@ -35,8 +35,8 @@ public abstract class Constants {
       public static final double KV_VOLT_SECONDS_PER_METER = 1.8425;
       public static final double KA_VOLT_SECONDS_SQUARED_PER_METER = 0.61532;
       public static final double KP_DRIVE_VELOCITY = 2.7049;
-      public static final double MAX_SPEED_METERS_PER_SECOND = 5;
-      public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 1;
+      public static final double MAX_SPEED_METERS_PER_SECOND = 1;
+      public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = .5;
       public static final double RAMSETE_B = 2;
       public static final double RAMSETE_ZETA = 0.7;
       public static final double TRACK_WIDTH = 0.685;
