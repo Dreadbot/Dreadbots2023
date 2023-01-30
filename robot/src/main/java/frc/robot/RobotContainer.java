@@ -7,6 +7,7 @@ package frc.robot;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.AutonomousConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.DriveCommand;
@@ -54,8 +55,12 @@ public class RobotContainer {
         // An example command will be run in autonomous
         return Autos.FollowPath(drive);
     }
+    int i = 0;
     public void autonPeriodic() {
-      System.out.println("Heading: " + drive.getHeading() + " Distance: " + (drive.getMotorEncoder(0).getPosition()/ 2.32) * 0.1588);
-      System.out.println("X: " + drive.getPose().getX() + "Y: " + drive.getPose().getY());
+        if(i % 25 == 0) {
+            System.out.println("Heading: " + drive.getHeading() + " Distance: " + (drive.getMotorEncoder(1).getPosition() / AutonomousConstants.ROTATIONS_PER_METER));
+            System.out.println("X: " + drive.getPose().getX() + "Y: " + drive.getPose().getY());
+        }
+        i++;
     }
 }
