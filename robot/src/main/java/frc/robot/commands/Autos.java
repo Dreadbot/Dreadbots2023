@@ -60,7 +60,7 @@ public final class Autos {
       //       new Pose2d(0, 1, new Rotation2d(0)),
       //       // Pass config
       //       config);
-      Trajectory exampleTrajectory =
+      Trajectory forwardTrajectory =
       TrajectoryGenerator.generateTrajectory(
           // Start at the origin facing the +X direction
           new Pose2d(0, 0, new Rotation2d(0)),
@@ -70,9 +70,22 @@ public final class Autos {
           new Pose2d(3, 0, new Rotation2d(0)),
           // Pass config
           config);
+
+        Trajectory sCurveTrajectory =
+        TrajectoryGenerator.generateTrajectory(
+            // Start at the origin facing the +X direction
+            new Pose2d(0, 0, new Rotation2d(0)),
+            // Pass through these two interior waypoints, making an 's' curve path
+            List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+            // End 3 meters straight ahead of where we started, facing forward
+            new Pose2d(3, 0, new Rotation2d(0)),
+
+            // Pass config
+            config);
+
       RamseteCommand ramseteCommand = 
         new RamseteCommand(
-          exampleTrajectory,
+          forwardTrajectory,
           drive::getPose,
           new RamseteController(AutonomousConstants.RAMSETE_B, AutonomousConstants.RAMSETE_ZETA),
           feedforward,
@@ -82,7 +95,7 @@ public final class Autos {
           new PIDController(AutonomousConstants.KP_DRIVE_VELOCITY, 0, 0),
           drive::TankDriveVoltage,
           drive);
-      drive.resetOdometry(exampleTrajectory.getInitialPose());
+      drive.resetOdometry(forwardTrajectory.getInitialPose());
 
       return ramseteCommand.andThen(() -> drive.TankDriveVoltage(0, 0));
     }
