@@ -4,6 +4,7 @@
 
 package frc.robot.commands;
 
+import frc.robot.Robot;
 import frc.robot.Constants.AutonomousConstants;
 import frc.robot.subsystems.Drive;
 
@@ -85,7 +86,7 @@ public final class Autos {
 
       RamseteCommand ramseteCommand = 
         new RamseteCommand(
-          forwardTrajectory,
+          Robot.trajectory,
           drive::getPose,
           new RamseteController(AutonomousConstants.RAMSETE_B, AutonomousConstants.RAMSETE_ZETA),
           feedforward,
@@ -95,7 +96,7 @@ public final class Autos {
           new PIDController(AutonomousConstants.KP_DRIVE_VELOCITY, 0, 0),
           drive::TankDriveVoltage,
           drive);
-      drive.resetOdometry(forwardTrajectory.getInitialPose());
+      drive.resetOdometry(Robot.trajectory.getInitialPose());
 
       return ramseteCommand.andThen(() -> drive.TankDriveVoltage(0, 0));
     }
