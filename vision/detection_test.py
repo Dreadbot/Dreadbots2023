@@ -4,13 +4,21 @@ import yaml
 import argparse
 import os
 import util
+import nt_util
 import math
 import numpy as np
+import ntcore
 
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("filename")
     args = parser.parse_args()
+
+    nt_inst = ntcore.NetworkTableInstance.getDefault()
+    table = nt_inst.getTable("SmartDashboard")
+
+    x_distance_pub = nt_util.DoublePublisher(table, "ApriltagDistanceX")
+    z_distance_pub = nt_util.DoublePublisher(table, "ApriltagDistanceZ")
 
     if not os.path.exists(args.filename):
         print("Invalid camera parameter file.")
@@ -70,11 +78,15 @@ def main():
 
         image = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-        tags = at_detector.detect(image, estimate_tag_pose=True, camera_params=camera_params, tag_size=0.1397)
+        tags = filter(lambda tag: tag.hamming < 1, at_detector.detect(image, estimate_tag_pose=True, camera_params=camera_params, tag_size=0.1397))
+
+        # For now, we're just going to get the distance to the first tag found and publish that
+        first_tag = tags[0]
+        x_distance_pub.publish(first_tag.pose_t[0])
+        z_distance_pub.publish(first_tag.pose_t[2])
+
         abs_pos_possible = []
         for tag in tags:
-            if tag.hamming >= 1: continue
-
             if int(tag.tag_id) < 1 or int(tag.tag_id) > 8:
                 continue
 
@@ -145,6 +157,9 @@ def main():
 
     cap.release()
     cv2.destroyAllWindows()
+
+    x_distance_pub.close()
+    z_distance_pub.close()
 
 
 if __name__ == "__main__":
