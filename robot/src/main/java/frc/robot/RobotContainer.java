@@ -25,7 +25,7 @@ import edu.wpi.first.wpilibj.SerialPort;
  */
 public class RobotContainer {
 
-    private final AHRS gyro = new AHRS(SerialPort.Port.kMXP);
+    private final AHRS gyro = new AHRS(SerialPort.Port.kUSB);
     private final Drive drive = new Drive();
     private final DreadbotController primaryController = new DreadbotController(OperatorConstants.PRIMARY_JOYSTICK_PORT);
 

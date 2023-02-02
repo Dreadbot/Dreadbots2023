@@ -74,11 +74,13 @@ public class Drive extends DreadbotSubsystem {
         slewRate = new SlewRateLimiter(DriveConstants.SLEW_RATE_LIMIT, -DriveConstants.SLEW_RATE_LIMIT, 0.2);
     }
     public double ArcadeDrive(double xSpeed, double rot) {
-        return ArcadeDrive(xSpeed, rot, true);
+        return ArcadeDrive(xSpeed, rot, true, true);
     }
 
-    public double ArcadeDrive(double xSpeed, double rot, boolean squareSpeed) {
-        xSpeed = addSlewRate(xSpeed);
+    public double ArcadeDrive(double xSpeed, double rot, boolean squareSpeed, boolean addSlew) {
+        if(addSlew) {
+            xSpeed = addSlewRate(xSpeed);
+        }
         diffDrive.arcadeDrive(xSpeed, rot, squareSpeed);
         return xSpeed;
     }

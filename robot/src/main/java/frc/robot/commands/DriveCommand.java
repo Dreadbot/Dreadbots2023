@@ -30,7 +30,7 @@ public class DriveCommand extends CommandBase {
     }
 
     /*  Normal Mode: move at 75% of joystick value (min speed = 0; max speed = .75)
-     *  Turtle Mode: move at 40% of joystick value (min speed =0; max speed = .40)
+     *  Turtle Mode: move at 40% of joystick value (min speed = 0; max speed = .40)
      *  Turbo Mode: move at 60% of joystick value plus 40% (min speed = 40%, max speed = 100%)
      */
     @Override

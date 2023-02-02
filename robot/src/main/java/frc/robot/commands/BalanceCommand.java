@@ -26,7 +26,7 @@ public class BalanceCommand extends CommandBase {
         if (Math.abs(pitch) < BalanceConstants.LEVEL_DEGREES) {
             speed = 0;
         }
-        drive.ArcadeDrive(speed, 0, false);
+        drive.ArcadeDrive(speed, 0, false, false);
     }
 
     @Override
