@@ -4,18 +4,16 @@
 
 package frc.robot;
 
-import com.kauailabs.navx.frc.AHRS;
+
+import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
 import frc.robot.commands.DriveCommand;
-import frc.robot.commands.BalanceCommand;
-import frc.robot.commands.TurboCommand;
-import frc.robot.commands.TurtleCommand;
 import frc.robot.subsystems.Drive;
 import util.controls.DreadbotController;
-import edu.wpi.first.wpilibj.SerialPort;
+import util.misc.DreadbotMotor;
+
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -24,11 +22,14 @@ import edu.wpi.first.wpilibj.SerialPort;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
+    private DreadbotMotor frontLeftMotor = new DreadbotMotor(new CANSparkMax(1, MotorType.kBrushless), "frontLeft");
+    private DreadbotMotor frontRightMotor = new DreadbotMotor(new CANSparkMax(2, MotorType.kBrushless), "frontRight");
+    private DreadbotMotor backLeftMotor = new DreadbotMotor(new CANSparkMax(3, MotorType.kBrushless), "backLeft");
+    private DreadbotMotor backRightMotor = new DreadbotMotor(new CANSparkMax(4, MotorType.kBrushless), "backRight");
 
-    private final AHRS gyro = new AHRS(SerialPort.Port.kMXP);
-    private final Drive drive = new Drive();
-    private final DreadbotController primaryController = new DreadbotController(OperatorConstants.PRIMARY_JOYSTICK_PORT);
+    private Drive drive = new Drive(frontLeftMotor, frontRightMotor, backLeftMotor, backRightMotor);
 
+    private DreadbotController primaryController = new DreadbotController(0);
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
@@ -37,12 +38,9 @@ public class RobotContainer {
         configureBindings();
     }
 
-    private void configureBindings() {
+    private void configureBindings() { 
         DriveCommand driveCommand = new DriveCommand(drive, primaryController::getYAxis, primaryController::getZAxis);
         drive.setDefaultCommand(driveCommand);
-        primaryController.getXButton().whileTrue(new BalanceCommand(drive, gyro));
-        primaryController.getLeftBumper().whileTrue(new TurtleCommand(driveCommand));
-        primaryController.getRightBumper().whileTrue(new TurboCommand(driveCommand));
     }
 
     /**
@@ -52,6 +50,6 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An example command will be run in autonomous
-        return Autos.Auton(drive);
+        return null;
     }
 }
