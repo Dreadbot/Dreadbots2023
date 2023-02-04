@@ -4,8 +4,25 @@
 
 package frc.robot.commands;
 
+import frc.robot.Robot;
+import frc.robot.Constants.AutonomousConstants;
 import frc.robot.subsystems.Drive;
+
+import java.util.List;
+
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.controller.RamseteController;
+import edu.wpi.first.math.controller.SimpleMotorFeedforward;
+import edu.wpi.first.math.geometry.Pose2d;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.math.trajectory.Trajectory;
+import edu.wpi.first.math.trajectory.TrajectoryConfig;
+import edu.wpi.first.math.trajectory.TrajectoryGenerator;
+import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.RamseteCommand;
 
 public final class Autos {
     /**
@@ -14,8 +31,76 @@ public final class Autos {
     public static CommandBase Auton(Drive drive) {
         return new AutonDriveStraightCommand(drive, 3);
     }
+    public static CommandBase FollowPath(Drive drive) {
+      final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(AutonomousConstants.TRACK_WIDTH);
+      final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(
+        AutonomousConstants.KS_VOLTS ,
+        AutonomousConstants.KV_VOLT_SECONDS_PER_METER ,
+        AutonomousConstants.KA_VOLT_SECONDS_SQUARED_PER_METER 
+      );
+      drive.resetGyro();
+      final DifferentialDriveVoltageConstraint autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
+        feedforward,
+        kinematics,
+        10 / 2
+        );
+      final TrajectoryConfig config = new TrajectoryConfig(
+        AutonomousConstants.MAX_SPEED_METERS_PER_SECOND,
+        AutonomousConstants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED
+      );
+      config.setKinematics(kinematics);
+      config.addConstraint(autoVoltageConstraint);
 
-    private Autos() {
+      // Trajectory exampleTrajectory =
+      //   TrajectoryGenerator.generateTrajectory(
+      //       // Start at the origin facing the +X direction
+      //       new Pose2d(0, 0, new Rotation2d(0)),
+      //       // Pass through these two interior waypoints, making an 's' curve path
+      //       List.of(new Translation2d(0, .5)),
+      //       // End 3 meters straight ahead of where we started, facing forward
+      //       new Pose2d(0, 1, new Rotation2d(0)),
+      //       // Pass config
+      //       config);
+      Trajectory forwardTrajectory =
+      TrajectoryGenerator.generateTrajectory(
+          // Start at the origin facing the +X direction
+          new Pose2d(0, 0, new Rotation2d(0)),
+          // Pass through these two interior waypoints, making an 's' curve path
+          List.of(new Translation2d(1, 0), new Translation2d(2, 0)),
+          // End 3 meters straight ahead of where we started, facing forward
+          new Pose2d(3, 0, new Rotation2d(0)),
+          // Pass config
+          config);
+
+        Trajectory sCurveTrajectory =
+        TrajectoryGenerator.generateTrajectory(
+            // Start at the origin facing the +X direction
+            new Pose2d(0, 0, new Rotation2d(0)),
+            // Pass through these two interior waypoints, making an 's' curve path
+            List.of(new Translation2d(1, 1), new Translation2d(2, -1)),
+            // End 3 meters straight ahead of where we started, facing forward
+            new Pose2d(3, 0, new Rotation2d(0)),
+
+            // Pass config
+            config);
+
+      RamseteCommand ramseteCommand = 
+        new RamseteCommand(
+          Robot.trajectory,
+          drive::getPose,
+          new RamseteController(AutonomousConstants.RAMSETE_B, AutonomousConstants.RAMSETE_ZETA),
+          feedforward,
+          kinematics,
+          drive::getWheelSpeeds, 
+          new PIDController(AutonomousConstants.KP_DRIVE_VELOCITY, 0, 0),
+          new PIDController(AutonomousConstants.KP_DRIVE_VELOCITY, 0, 0),
+          drive::TankDriveVoltage,
+          drive);
+      drive.resetOdometry(Robot.trajectory.getInitialPose());
+
+      return ramseteCommand.andThen(() -> drive.TankDriveVoltage(0, 0));
+    }
+    private Autos() throws UnsupportedOperationException {
         throw new UnsupportedOperationException("This is a utility class!");
     }
 }

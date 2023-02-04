@@ -7,6 +7,7 @@ package frc.robot;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.AutonomousConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.DriveCommand;
@@ -26,7 +27,7 @@ import edu.wpi.first.wpilibj.SerialPort;
 public class RobotContainer {
 
     private final AHRS gyro = new AHRS(SerialPort.Port.kUSB);
-    private final Drive drive = new Drive();
+    private final Drive drive = new Drive(gyro);
     private final DreadbotController primaryController = new DreadbotController(OperatorConstants.PRIMARY_JOYSTICK_PORT);
 
     /**
@@ -52,6 +53,14 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An example command will be run in autonomous
-        return Autos.Auton(drive);
+        return Autos.FollowPath(drive);
+    }
+    int i = 0;
+    public void autonPeriodic() {
+        if(i % 25 == 0) {
+            System.out.println("Heading: " + drive.getHeading() + " Distance: " + (drive.getMotorEncoder(1).getPosition() / AutonomousConstants.ROTATIONS_PER_METER));
+            System.out.println("X: " + drive.getPose().getX() + "Y: " + drive.getPose().getY());
+        }
+        i++;
     }
 }
