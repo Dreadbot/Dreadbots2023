@@ -37,7 +37,8 @@ public class DriveCommand extends CommandBase {
     public void execute() {
         double forward = (joystickForwardAxis.getAsDouble() * DriveConstants.FORWARD_SPEED_LIMITER);
         double rotation = (joystickRotationalAxis.getAsDouble() * DriveConstants.ROT_SPEED_LIMITER);
-
+        boolean squareSpeed = true;
+        boolean addSlew = true;
         if (this.turboMode) {
             forward = Math.signum(joystickForwardAxis.getAsDouble()) * DreadbotMath.linearInterpolation(0.4, 1, Math.abs(joystickForwardAxis.getAsDouble()));
             // Because this is done after the linearInterpolation, the deadband ends up being .05
@@ -48,8 +49,9 @@ public class DriveCommand extends CommandBase {
         } else if (this.turtleMode) {
             forward = Math.signum(joystickForwardAxis.getAsDouble()) * DreadbotMath.linearInterpolation(0, 0.4, Math.abs(joystickForwardAxis.getAsDouble()));
             rotation =  Math.signum(joystickRotationalAxis.getAsDouble()) * DreadbotMath.linearInterpolation(0, 0.4,  Math.abs(joystickRotationalAxis.getAsDouble()));
+            addSlew = false;
         }
-        drive.ArcadeDrive(forward, rotation);
+        drive.ArcadeDrive(forward, rotation, squareSpeed, addSlew);
         // save off the values so they are available for unit tests
         lastForward = forward;
         lastRotation = rotation;
