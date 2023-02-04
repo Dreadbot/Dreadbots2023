@@ -26,7 +26,7 @@ public abstract class Constants {
       public static final int BACK_RIGHT_MOTOR_PORT = 4;
     }
     public static class BalanceConstants {
-      public static final double MAX_SPEED = 0.2;
+      public static final double MAX_SPEED = 0.115;
       public static final double SCALE = -0.3;
       public static final double LEVEL_DEGREES = 1.25; //Angle where considered level
 
