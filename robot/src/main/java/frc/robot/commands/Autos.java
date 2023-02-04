@@ -8,12 +8,14 @@ import frc.robot.subsystems.Drive;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 public final class Autos {
-  /** Example static factory for an autonomous command. */
-  public static CommandBase Auton(Drive drive) {
-    return new AutonDriveStraightCommand(drive, 3);
-  }
+    /**
+     * Example static factory for an autonomous command.
+     */
+    public static CommandBase Auton(Drive drive) {
+        return new AutonDriveStraightCommand(drive, 3);
+    }
 
-  private Autos() {
-    throw new UnsupportedOperationException("This is a utility class!");
-  }
+    private Autos() {
+        throw new UnsupportedOperationException("This is a utility class!");
+    }
 }
