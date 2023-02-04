@@ -48,16 +48,16 @@ public class Drive extends DreadbotSubsystem {
         backRightMotor.setIdleMode(IdleMode.kBrake);
 
         frontLeftMotor.setInverted(false);
-        frontRightMotor.setInverted(false);
+        frontRightMotor.setInverted(true);
         backLeftMotor.setInverted(false);
-        backRightMotor.setInverted(false);
+        backRightMotor.setInverted(true);
         
 
         leftMotors = new MotorControllerGroup(frontLeftMotor.getSparkMax(), backLeftMotor.getSparkMax());
         rightMotors = new MotorControllerGroup(frontRightMotor.getSparkMax(), backRightMotor.getSparkMax());
 
         leftMotors.setInverted(false);
-        rightMotors.setInverted(true);
+        rightMotors.setInverted(false);
         diffDrive = new DifferentialDrive(leftMotors, rightMotors);
         this.gryo = gryo;
         odometry = new DifferentialDriveOdometry(
@@ -68,30 +68,6 @@ public class Drive extends DreadbotSubsystem {
         slewRate = new SlewRateLimiter(DriveConstants.SLEW_RATE_LIMIT, -DriveConstants.SLEW_RATE_LIMIT, 0.2);
     }
 
-    // Constructor for testing, allows injection of mock motors
-    public Drive(DreadbotMotor fl, DreadbotMotor fr, DreadbotMotor bl, DreadbotMotor br) {
-        this.frontLeftMotor = fl;
-        this.frontRightMotor = fr;
-        this.backLeftMotor = bl;
-        this.backRightMotor = br;
-        this.gryo = null;
-        this.odometry = null;
-        frontLeftMotor.setIdleMode(IdleMode.kBrake);
-        frontRightMotor.setIdleMode(IdleMode.kBrake);
-        backLeftMotor.setIdleMode(IdleMode.kBrake);
-        backRightMotor.setIdleMode(IdleMode.kBrake);
-
-        frontLeftMotor.setInverted(false);
-        backLeftMotor.setInverted(false);
-        frontRightMotor.setInverted(true);
-        backRightMotor.setInverted(true);
-
-        leftMotors = new MotorControllerGroup(frontLeftMotor.getSparkMax(), backLeftMotor.getSparkMax());
-        rightMotors = new MotorControllerGroup(frontRightMotor.getSparkMax(), backRightMotor.getSparkMax());
-
-        diffDrive = new DifferentialDrive(leftMotors, rightMotors);
-        slewRate = new SlewRateLimiter(DriveConstants.SLEW_RATE_LIMIT, -DriveConstants.SLEW_RATE_LIMIT, 0.2);
-    }
     @Override
     public void periodic() {
         odometry.update(
@@ -161,7 +137,7 @@ public class Drive extends DreadbotSubsystem {
     }
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
         return new DifferentialDriveWheelSpeeds(
-           ((-frontLeftMotor.getEncoder().getVelocity() / 60) / AutonomousConstants.ROTATIONS_PER_METER),
+           ((frontLeftMotor.getEncoder().getVelocity() / 60) / AutonomousConstants.ROTATIONS_PER_METER),
            ((frontRightMotor.getEncoder().getVelocity() / 60) / AutonomousConstants.ROTATIONS_PER_METER)
         );
     }
@@ -192,4 +168,28 @@ public class Drive extends DreadbotSubsystem {
         rightMotors.stopMotor();
     }
 
+    // Constructor for testing, allows injection of mock motors
+    public Drive(DreadbotMotor fl, DreadbotMotor fr, DreadbotMotor bl, DreadbotMotor br) {
+        this.frontLeftMotor = fl;
+        this.frontRightMotor = fr;
+        this.backLeftMotor = bl;
+        this.backRightMotor = br;
+        this.gryo = null;
+        this.odometry = null;
+        frontLeftMotor.setIdleMode(IdleMode.kBrake);
+        frontRightMotor.setIdleMode(IdleMode.kBrake);
+        backLeftMotor.setIdleMode(IdleMode.kBrake);
+        backRightMotor.setIdleMode(IdleMode.kBrake);
+
+        frontLeftMotor.setInverted(false);
+        backLeftMotor.setInverted(false);
+        frontRightMotor.setInverted(true);
+        backRightMotor.setInverted(true);
+
+        leftMotors = new MotorControllerGroup(frontLeftMotor.getSparkMax(), backLeftMotor.getSparkMax());
+        rightMotors = new MotorControllerGroup(frontRightMotor.getSparkMax(), backRightMotor.getSparkMax());
+
+        diffDrive = new DifferentialDrive(leftMotors, rightMotors);
+        slewRate = new SlewRateLimiter(DriveConstants.SLEW_RATE_LIMIT, -DriveConstants.SLEW_RATE_LIMIT, 0.2);
+    }
 }
