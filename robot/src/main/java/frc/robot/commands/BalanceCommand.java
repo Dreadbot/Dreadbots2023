@@ -10,6 +10,8 @@ import frc.robot.subsystems.Drive;
 public class BalanceCommand extends CommandBase {
     private final Drive drive;
     private final AHRS gyro;
+    private double previousPitch = 15;
+    private double pitch;
 
     public BalanceCommand(Drive drive, AHRS gyro) {
         this.drive = drive;
@@ -19,19 +21,30 @@ public class BalanceCommand extends CommandBase {
 
     @Override
     public void execute() {
-        double pitch = gyro.getPitch();
+        pitch = gyro.getPitch();
         double speed = pitch * BalanceConstants.SCALE;
         speed = MathUtil.clamp(speed, -BalanceConstants.MAX_SPEED, BalanceConstants.MAX_SPEED);
 
         if (Math.abs(pitch) < BalanceConstants.LEVEL_DEGREES) {
-            speed = 0;
+             speed = 0;
         }
+
+        else if (previousPitch - Math.abs(pitch) > 1 && Math.abs(pitch) > BalanceConstants.LEVEL_DEGREES){
+            speed = -speed;
+        }
+     
         drive.ArcadeDrive(speed, 0, false, false);
     }
 
     @Override
-    public boolean isFinished() {
+    public boolean isFinished() { 
+        
         System.out.println("Current Pitch: " + Math.abs(gyro.getPitch()));
-        return Math.abs(gyro.getPitch()) < BalanceConstants.LEVEL_DEGREES;
+        boolean retval = previousPitch - Math.abs(pitch) > 1;
+        previousPitch = Math.abs(pitch);
+        //return retval;
+        return false;
+        //
+        //return Math.abs(gyro.getPitch()) < BalanceConstants.LEVEL_DEGREES;
     }
 }
