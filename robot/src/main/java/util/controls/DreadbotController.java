@@ -31,28 +31,28 @@ public final class DreadbotController {
      * @return The value of the side-to-side motion on the left joystick.
      */
     public double getXAxis() {
-        return joystick.getRawAxis(0);
+        return -joystick.getRawAxis(0);
     }
 
     /**
      * @return The value of the forward/backward motion on the left joystick.
      */
     public double getYAxis() {
-        return joystick.getRawAxis(1);
+        return -joystick.getRawAxis(1);
     }
 
     /**
      * @return The value of the side-to-side motion on the right joystick.
      */
     public double getZAxis() {
-        return joystick.getRawAxis(2);
+        return -joystick.getRawAxis(2);
     }
 
     /**
      * @return The value of the forward/backward motion on the right joystick.
      */
     public double getWAxis() {
-        return joystick.getRawAxis(3);
+        return -joystick.getRawAxis(3);
     }
 
     /**
