@@ -44,6 +44,9 @@ public abstract class Constants {
       public static final double TRACK_WIDTH = Units.inchesToMeters(27.737); // Original Value: 0.685
       public static final double ROTATIONS_PER_METER = 14.4685;
     }
+    public static class GrabberConstants {
+      public static final int GRABBER_PORT = 20; // change this to real CAN ID later
+    }
     private Constants() throws IllegalStateException {
         throw new IllegalStateException("Constants is a utility class. It should not be instantiated.");
     }

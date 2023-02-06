@@ -11,10 +11,13 @@ import frc.robot.Constants.AutonomousConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.Autos;
 import frc.robot.commands.DriveCommand;
+import frc.robot.commands.GrabberCloseCommand;
+import frc.robot.commands.GrabberOpenCommand;
 import frc.robot.commands.BalanceCommand;
 import frc.robot.commands.TurboCommand;
 import frc.robot.commands.TurtleCommand;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Grabber;
 import util.controls.DreadbotController;
 import edu.wpi.first.wpilibj.SerialPort;
 
@@ -28,6 +31,7 @@ public class RobotContainer {
 
     private final AHRS gyro = new AHRS(SerialPort.Port.kUSB);
     private final Drive drive = new Drive(gyro);
+    private final Grabber grabber = new Grabber();
     private final DreadbotController primaryController = new DreadbotController(OperatorConstants.PRIMARY_JOYSTICK_PORT);
 
     /**
@@ -44,6 +48,8 @@ public class RobotContainer {
         primaryController.getXButton().whileTrue(new BalanceCommand(drive, gyro));
         primaryController.getLeftBumper().whileTrue(new TurtleCommand(driveCommand));
         primaryController.getRightBumper().whileTrue(new TurboCommand(driveCommand));
+        primaryController.getAButton().onTrue(new GrabberOpenCommand(grabber));
+        primaryController.getBButton().onTrue(new GrabberCloseCommand(grabber));
     }
 
     /**
