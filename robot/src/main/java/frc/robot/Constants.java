@@ -52,7 +52,6 @@ public abstract class Constants {
     public static class ArmConstants {
       public static final int ELEVATOR_MOTOR_PORT = 7; // 6
       public static final int MAX_ELEVATOR_POSITION = 500;
-      public static final int MIN_ELEVATOR_POSITION = 0;
       public static final double ELEVATOR_MOTOR_SPEED = 0.1;
     }
     private Constants() throws IllegalStateException {

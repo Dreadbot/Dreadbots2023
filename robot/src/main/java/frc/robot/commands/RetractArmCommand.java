@@ -19,7 +19,7 @@ public class RetractArmCommand extends CommandBase {
     }
     @Override
     public boolean isFinished() {
-        return arm.getElevatorPosition() <= ArmConstants.MIN_ELEVATOR_POSITION;
+        return arm.getElevatorPosition() <= arm.getMinVal();
     }
 
     @Override

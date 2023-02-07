@@ -19,7 +19,7 @@ public class ExtendArmCommand extends CommandBase {
     }
     @Override
     public boolean isFinished() {
-        return arm.getElevatorPosition() >= ArmConstants.MAX_ELEVATOR_POSITION;
+        return arm.getElevatorPosition() >= arm.getMaxVal();
     }
 
     @Override
