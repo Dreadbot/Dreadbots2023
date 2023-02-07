@@ -32,8 +32,8 @@ public class DriveCommand extends CommandBase {
      */
     @Override
     public void execute() {
-        double forward = (joystickForwardAxis.getAsDouble() * DriveConstants.FORWARD_SPEED_LIMITER);
-        double rotation = (joystickRotationalAxis.getAsDouble() * DriveConstants.ROT_SPEED_LIMITER);
+        double forward = -(joystickForwardAxis.getAsDouble() * DriveConstants.FORWARD_SPEED_LIMITER);
+        double rotation = -(joystickRotationalAxis.getAsDouble() * DriveConstants.ROT_SPEED_LIMITER);
 
         boolean squareSpeed = true;
         boolean addSlew = true;
