@@ -17,7 +17,7 @@ public class Arm extends DreadbotSubsystem {
     public void elevate(double speed) {
         if(elevatorMotor.getPosition() >= ArmConstants.MAX_ELEVATOR_POSITION) speed = 0;
         if(elevatorMotor.getPosition() <= ArmConstants.MIN_ELEVATOR_POSITION) speed = 0;
-        elevatorMotor.set(speed);
+        elevatorMotor.set(speed * .2);
     }
 
     public double getElevatorPosition() {

@@ -87,7 +87,7 @@ public class Drive extends DreadbotSubsystem {
             if(turboMode)
                 xSpeed = addTurboSlewRate(xSpeed);
         }
-        diffDrive.arcadeDrive(xSpeed, rot, squareSpeed);
+        diffDrive.arcadeDrive(xSpeed *.2, rot * .2, squareSpeed);
         return xSpeed;
     }
 
