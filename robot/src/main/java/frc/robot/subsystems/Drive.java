@@ -31,6 +31,7 @@ public class Drive extends DreadbotSubsystem {
     private final MotorControllerGroup rightMotors;
 
     protected final SlewRateLimiter slewRate;
+    protected final SlewRateLimiter turboSlewRate;
     private final DifferentialDriveOdometry odometry;
 
     private final AHRS gryo;
@@ -65,6 +66,7 @@ public class Drive extends DreadbotSubsystem {
             (frontRightMotor.getEncoder().getPosition() / AutonomousConstants.ROTATIONS_PER_METER)
         );
         slewRate = new SlewRateLimiter(DriveConstants.SLEW_RATE_LIMIT, -DriveConstants.SLEW_RATE_LIMIT, 0.2);
+        turboSlewRate = new SlewRateLimiter(DriveConstants.TURBO_FORWARD_SPEED_LIMITER, -DriveConstants.TURBO_FORWARD_SPEED_LIMITER, .4);
     }
 
     @Override
@@ -76,12 +78,14 @@ public class Drive extends DreadbotSubsystem {
         );
     }
     public double ArcadeDrive(double xSpeed, double rot) {
-        return ArcadeDrive(xSpeed, rot, true, true);
+        return ArcadeDrive(xSpeed, rot, true, true, false);
     }
 
-    public double ArcadeDrive(double xSpeed, double rot, boolean squareSpeed, boolean addSlew) {
+    public double ArcadeDrive(double xSpeed, double rot, boolean squareSpeed, boolean addSlew, boolean turboMode) {
         if(addSlew) {
             xSpeed = addSlewRate(xSpeed);
+            if(turboMode)
+                xSpeed = addTurboSlewRate(xSpeed);
         }
         diffDrive.arcadeDrive(xSpeed, rot, squareSpeed);
         return xSpeed;
@@ -123,6 +127,10 @@ public class Drive extends DreadbotSubsystem {
 
     private double addSlewRate(double joystickAxis){
         return slewRate.calculate(joystickAxis);
+    }
+
+    private double addTurboSlewRate(double joystickAxis){
+        return turboSlewRate.calculate(joystickAxis);
     }
 
     public void resetOdometry(Pose2d pose) {
@@ -194,5 +202,6 @@ public class Drive extends DreadbotSubsystem {
 
         diffDrive = new DifferentialDrive(leftMotors, rightMotors);
         slewRate = new SlewRateLimiter(DriveConstants.SLEW_RATE_LIMIT, -DriveConstants.SLEW_RATE_LIMIT, 0.2);
+        turboSlewRate = new SlewRateLimiter(DriveConstants.TURBO_FORWARD_SPEED_LIMITER, -DriveConstants.TURBO_FORWARD_SPEED_LIMITER, .4);
     }
 }
