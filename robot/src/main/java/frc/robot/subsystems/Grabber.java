@@ -20,7 +20,7 @@ public class Grabber extends DreadbotSubsystem {
     }
     @Override
     public void close() throws Exception {
-       stopMotors(); 
+        stopMotors();
     }
 
     @Override
