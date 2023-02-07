@@ -27,7 +27,7 @@ public class Intake extends DreadbotSubsystem {
     @Override
     public void stopMotors() {
         // TODO Auto-generated method stub
-        
+        motor.set(0);
     }
     
 }

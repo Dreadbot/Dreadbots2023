@@ -47,10 +47,10 @@ public abstract class Constants {
       public static final double ROTATIONS_PER_METER = 14.4685;
     }
     public static class GrabberConstants {
-      public static final int GRABBER_PORT = 1; // change this to real CAN ID later
+      public static final int GRABBER_PORT = 0; // change this to real CAN ID later
     }
     public static class IntakeConstants {
-      public static final double INTAKE_PORT = 5;
+      public static final double INTAKE_PORT = 5; // is 5
       public static final double INTAKE_SPEED = .5;
     }
     private Constants() throws IllegalStateException {

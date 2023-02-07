@@ -11,4 +11,8 @@ public class OuttakeCommand extends CommandBase{
     public void execute() {
         outtake.outtake();
     }
+    @Override
+    public void end(boolean interrupted) {
+        outtake.stopMotors();
+    }
 }

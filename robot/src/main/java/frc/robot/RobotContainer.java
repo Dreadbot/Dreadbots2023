@@ -55,8 +55,8 @@ public class RobotContainer {
         primaryController.getRightBumper().whileTrue(new TurboCommand(driveCommand));
         primaryController.getAButton().onTrue(new GrabberOpenCommand(grabber));
         primaryController.getBButton().onTrue(new GrabberCloseCommand(grabber));
-        secondaryController.getAButton().onTrue(new IntakeCommand(intake));
-        secondaryController.getBButton().onTrue(new OuttakeCommand(intake));
+        secondaryController.getAButton().whileTrue(new IntakeCommand(intake));
+        secondaryController.getBButton().whileTrue(new OuttakeCommand(intake));
     }
 
     /**
