@@ -49,6 +49,12 @@ public abstract class Constants {
     public static class GrabberConstants {
       public static final int GRABBER_PORT = 1; // change this to real CAN ID later
     }
+    public static class ArmConstants {
+      public static final int ELEVATOR_MOTOR_PORT = 7; // 6
+      public static final int MAX_ELEVATOR_POSITION = 500;
+      public static final int MIN_ELEVATOR_POSITION = 0;
+      public static final double ELEVATOR_MOTOR_SPEED = 0.1;
+    }
     private Constants() throws IllegalStateException {
         throw new IllegalStateException("Constants is a utility class. It should not be instantiated.");
     }
