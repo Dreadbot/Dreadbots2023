@@ -14,6 +14,8 @@ import frc.robot.commands.DriveCommand;
 import frc.robot.commands.ExtendArmCommand;
 import frc.robot.commands.GrabberCloseCommand;
 import frc.robot.commands.GrabberOpenCommand;
+import frc.robot.commands.IntakeCommand;
+import frc.robot.commands.OuttakeCommand;
 import frc.robot.commands.RetractArmCommand;
 import frc.robot.commands.BalanceCommand;
 import frc.robot.commands.TurboCommand;
@@ -21,6 +23,7 @@ import frc.robot.commands.TurtleCommand;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Grabber;
+import frc.robot.subsystems.Intake;
 import util.controls.DreadbotController;
 import edu.wpi.first.wpilibj.SerialPort;
 
@@ -35,6 +38,7 @@ public class RobotContainer {
     private final AHRS gyro = new AHRS(SerialPort.Port.kUSB1);
     private final Drive drive = new Drive(gyro);
     private final Grabber grabber = new Grabber();
+    private final Intake intake = new Intake();
     private final Arm arm = new Arm();
     private final DreadbotController primaryController = new DreadbotController(OperatorConstants.PRIMARY_JOYSTICK_PORT);
     private final DreadbotController secondaryController = new DreadbotController(OperatorConstants.SECONDARY_JOYSTICK_PORT);
@@ -55,6 +59,8 @@ public class RobotContainer {
         primaryController.getRightBumper().whileTrue(new TurboCommand(driveCommand));
         primaryController.getAButton().onTrue(new GrabberOpenCommand(grabber));
         primaryController.getBButton().onTrue(new GrabberCloseCommand(grabber));
+        secondaryController.getAButton().whileTrue(new IntakeCommand(intake));
+        secondaryController.getBButton().whileTrue(new OuttakeCommand(intake));
         secondaryController.getXButton().whileTrue(new ExtendArmCommand(arm));
         secondaryController.getYButton().whileTrue(new RetractArmCommand(arm));
     }
