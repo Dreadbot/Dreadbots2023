@@ -32,8 +32,8 @@ public class DriveCommand extends CommandBase {
      */
     @Override
     public void execute() {
-        double forward = -(joystickForwardAxis.getAsDouble() * DriveConstants.FORWARD_SPEED_LIMITER);
-        double rotation = -(joystickRotationalAxis.getAsDouble() * DriveConstants.ROT_SPEED_LIMITER);
+        double forward = (joystickForwardAxis.getAsDouble() * DriveConstants.FORWARD_SPEED_LIMITER);
+        double rotation = (joystickRotationalAxis.getAsDouble() * DriveConstants.ROT_SPEED_LIMITER);
 
         boolean squareSpeed = true;
         boolean addSlew = true;
@@ -41,7 +41,6 @@ public class DriveCommand extends CommandBase {
             // make forward negative right here and test
             forward = Math.signum(joystickForwardAxis.getAsDouble()) * DreadbotMath.linearInterpolation(0.4, 1, Math.abs(joystickForwardAxis.getAsDouble()));
             // Because this is done after the linearInterpolation, the deadband ends up being .05
-            System.out.println(Math.abs(forward));
             if (Math.abs(forward) <= OperatorConstants.TURBO_CONTROLLER_DEADBAND) {
                 forward = 0;
             }
@@ -51,7 +50,7 @@ public class DriveCommand extends CommandBase {
             rotation =  Math.signum(joystickRotationalAxis.getAsDouble()) * DreadbotMath.linearInterpolation(0, 0.4,  Math.abs(joystickRotationalAxis.getAsDouble()));
             addSlew = false;
         }
-        drive.ArcadeDrive(forward, rotation, squareSpeed, addSlew, turboMode);
+        drive.ArcadeDrive(-forward, -rotation, squareSpeed, addSlew, turboMode); //invert forward and rotation axis
         // save off the values so they are available for unit tests
         lastForward = forward;
         lastRotation = rotation;

@@ -32,7 +32,7 @@ import edu.wpi.first.wpilibj.SerialPort;
  */
 public class RobotContainer {
 
-    private final AHRS gyro = new AHRS(SerialPort.Port.kUSB);
+    private final AHRS gyro = new AHRS(SerialPort.Port.kUSB1);
     private final Drive drive = new Drive(gyro);
     private final Grabber grabber = new Grabber();
     private final Arm arm = new Arm();
@@ -75,5 +75,8 @@ public class RobotContainer {
             System.out.println("X: " + drive.getPose().getX() + "Y: " + drive.getPose().getY());
         }
         i++;
+    }
+    public void teleopPeriodic() {
+        System.out.println(arm.getElevatorPosition());
     }
 }
