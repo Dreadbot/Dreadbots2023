@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.driveCommands;
 
 import java.util.function.DoubleSupplier;
 
@@ -50,7 +50,7 @@ public class DriveCommand extends CommandBase {
             rotation =  Math.signum(joystickRotationalAxis.getAsDouble()) * DreadbotMath.linearInterpolation(0, 0.4,  Math.abs(joystickRotationalAxis.getAsDouble()));
             addSlew = false;
         }
-        drive.ArcadeDrive(-forward, -rotation, squareSpeed, addSlew, turboMode); //invert forward and rotation axis
+        drive.ArcadeDrive(forward, rotation, squareSpeed, addSlew, turboMode); //invert forward and rotation axis
         // save off the values so they are available for unit tests
         lastForward = forward;
         lastRotation = rotation;

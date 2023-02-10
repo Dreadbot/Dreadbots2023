@@ -1,4 +1,4 @@
-package frc.robot.commands;
+package frc.robot.commands.autonCommands;
 
 import com.revrobotics.RelativeEncoder;
 
