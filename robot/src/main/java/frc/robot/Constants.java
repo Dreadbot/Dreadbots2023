@@ -54,10 +54,10 @@ public abstract class Constants {
       public static final double INTAKE_SPEED = .5;
     }
     public static class ArmConstants {
-      public static final int ELEVATOR_MOTOR_PORT = 7; // 6
-      public static final int MAX_ELEVATOR_POSITION = 500;
+      public static final int ELEVATOR_MOTOR_PORT = 6;
+      public static final int MAX_ELEVATOR_POSITION = 287;
       public static final int MIN_ELEVATOR_POSITION = 0;
-      public static final double ELEVATOR_MOTOR_SPEED = 0.1;
+      public static final double ELEVATOR_MOTOR_SPEED = 0.3;
     }
     private Constants() throws IllegalStateException {
         throw new IllegalStateException("Constants is a utility class. It should not be instantiated.");

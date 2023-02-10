@@ -98,15 +98,9 @@ public class Drive extends DreadbotSubsystem {
     public void TankDrive(double ySpeed, double wSpeed) { // WUMBO SPEED
         diffDrive.tankDrive(ySpeed, wSpeed);
     }
-    int j = 0;
     public void TankDriveVoltage(double yVolts, double wVolts) {
         leftMotors.setVoltage(yVolts);
         rightMotors.setVoltage(wVolts);
-        if(j % 10 == 0) {
-            System.out.println("left volts: " + yVolts);
-            System.out.println("right volts: " + wVolts);
-        }
-        j++;
         diffDrive.feed();
     }
 

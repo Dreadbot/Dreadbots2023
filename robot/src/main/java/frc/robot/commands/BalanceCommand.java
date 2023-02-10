@@ -38,8 +38,6 @@ public class BalanceCommand extends CommandBase {
 
     @Override
     public boolean isFinished() { 
-        
-        System.out.println("Current Pitch: " + Math.abs(gyro.getPitch()));
         boolean retval = previousPitch - Math.abs(pitch) > 1;
         previousPitch = Math.abs(pitch);
         //return retval;
