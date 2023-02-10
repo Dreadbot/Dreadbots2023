@@ -43,7 +43,7 @@ import edu.wpi.first.wpilibj.SerialPort;
  */
 public class RobotContainer {
 
-    private final AHRS gyro = new AHRS(SerialPort.Port.kUSB1);
+    private final AHRS gyro = new AHRS(SerialPort.Port.kUSB);
     private final Drive drive = new Drive(gyro);
     private final Grabber grabber = new Grabber();
     private final Intake intake = new Intake();
@@ -55,6 +55,8 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
+        //gyro.reset();
+        gyro.calibrate();
         // Configure the trigger bindings
         configureBindings();
     }
@@ -99,6 +101,6 @@ public class RobotContainer {
         i++;
     }
     public void teleopPeriodic() {
-        //System.out.println(arm.getElevatorPosition());
+        System.out.println(gyro.getPitch());
     }
 }

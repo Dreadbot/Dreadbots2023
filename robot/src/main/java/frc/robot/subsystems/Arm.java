@@ -27,14 +27,7 @@ public class Arm extends DreadbotSubsystem {
         this.lowerSwitch = new DigitalInput(ArmConstants.LOWER_LIMIT_SWITCH_PORT);
     }
 
-    int i = 0; 
     public void elevate(double speed) {
-        if(i % 25 == 0){
-            System.out.println("Top switch " + getTopSwitch());
-            System.out.println("Lower Switch " + getLowerSwitch());
-        }
-
-        i++;
         if(getTopSwitch() == true && speed > 0) speed = 0;
         else if(getLowerSwitch() == true && speed < 0) speed = 0;
         // if(elevatorMotor.getPosition() > maxVal && Math.signum(speed) == 1) speed = 0;
