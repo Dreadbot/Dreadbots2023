@@ -78,6 +78,7 @@ public class Drive extends DreadbotSubsystem {
         );
     }
     public double ArcadeDrive(double xSpeed, double rot) {
+
         return ArcadeDrive(xSpeed, rot, true, true, false);
     }
 
@@ -86,6 +87,10 @@ public class Drive extends DreadbotSubsystem {
             xSpeed = addSlewRate(xSpeed);
             if(turboMode)
                 xSpeed = addTurboSlewRate(xSpeed);
+        }
+        if(DriveConstants.IsBotRed5){
+            xSpeed = -xSpeed;
+            rot = -rot;
         }
         diffDrive.arcadeDrive(xSpeed, rot, squareSpeed);
         return xSpeed;
