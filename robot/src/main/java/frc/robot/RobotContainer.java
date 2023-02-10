@@ -9,17 +9,24 @@ import com.kauailabs.navx.frc.AHRS;
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.AutonomousConstants;
 import frc.robot.Constants.OperatorConstants;
-import frc.robot.commands.Autos;
-import frc.robot.commands.DriveCommand;
-import frc.robot.commands.ExtendArmCommand;
-import frc.robot.commands.GrabberCloseCommand;
-import frc.robot.commands.GrabberOpenCommand;
-import frc.robot.commands.IntakeCommand;
-import frc.robot.commands.OuttakeCommand;
-import frc.robot.commands.RetractArmCommand;
-import frc.robot.commands.BalanceCommand;
-import frc.robot.commands.TurboCommand;
-import frc.robot.commands.TurtleCommand;
+import frc.robot.commands.armCommands.ArmCommand;
+import frc.robot.commands.armCommands.ExtendArmCommand;
+import frc.robot.commands.armCommands.HighPostCommand;
+import frc.robot.commands.armCommands.LowPostCommand;
+import frc.robot.commands.armCommands.MediumPostCommand;
+import frc.robot.commands.armCommands.PickupCommand;
+import frc.robot.commands.armCommands.RetractArmCommand;
+import frc.robot.commands.autonCommands.AutoAlignConeCommand;
+import frc.robot.commands.autonCommands.AutoAlignCubeCommand;
+import frc.robot.commands.autonCommands.Autos;
+import frc.robot.commands.autonCommands.BalanceCommand;
+import frc.robot.commands.driveCommands.DriveCommand;
+import frc.robot.commands.driveCommands.TurboCommand;
+import frc.robot.commands.driveCommands.TurtleCommand;
+import frc.robot.commands.grabberCommands.GrabberCloseCommand;
+import frc.robot.commands.grabberCommands.GrabberOpenCommand;
+import frc.robot.commands.intakeCommands.IntakeCommand;
+import frc.robot.commands.intakeCommands.OuttakeCommand;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Grabber;
@@ -53,16 +60,22 @@ public class RobotContainer {
 
     private void configureBindings() {
         DriveCommand driveCommand = new DriveCommand(drive, primaryController::getYAxis, primaryController::getZAxis);
+        ArmCommand armCommand = new ArmCommand(arm, secondaryController::getYAxis);
         drive.setDefaultCommand(driveCommand);
+        arm.setDefaultCommand(armCommand);
         primaryController.getXButton().whileTrue(new BalanceCommand(drive, gyro));
         primaryController.getLeftBumper().whileTrue(new TurtleCommand(driveCommand));
         primaryController.getRightBumper().whileTrue(new TurboCommand(driveCommand));
-        primaryController.getAButton().onTrue(new GrabberOpenCommand(grabber));
-        primaryController.getBButton().onTrue(new GrabberCloseCommand(grabber));
-        secondaryController.getAButton().whileTrue(new IntakeCommand(intake));
-        secondaryController.getBButton().whileTrue(new OuttakeCommand(intake));
-        secondaryController.getXButton().whileTrue(new ExtendArmCommand(arm));
-        secondaryController.getYButton().whileTrue(new RetractArmCommand(arm));
+        primaryController.getLeftTrigger().whileTrue(new OuttakeCommand(intake));
+        primaryController.getRightTrigger().whileTrue(new IntakeCommand(intake));
+        primaryController.getAButton().onTrue(new AutoAlignConeCommand(drive));
+        primaryController.getBButton().onTrue(new AutoAlignCubeCommand(drive));
+        secondaryController.getLeftTrigger().onTrue(new GrabberCloseCommand(grabber));
+        secondaryController.getRightTrigger().onTrue(new GrabberOpenCommand(grabber));
+        secondaryController.getAButton().onTrue(new PickupCommand(arm));
+        secondaryController.getBButton().onTrue(new LowPostCommand(arm));
+        secondaryController.getXButton().onTrue(new MediumPostCommand(arm));
+        secondaryController.getYButton().onTrue(new HighPostCommand(arm));
     }
 
     /**
