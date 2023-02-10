@@ -23,6 +23,7 @@ import frc.robot.commands.autonCommands.BalanceCommand;
 import frc.robot.commands.driveCommands.DriveCommand;
 import frc.robot.commands.driveCommands.TurboCommand;
 import frc.robot.commands.driveCommands.TurtleCommand;
+import frc.robot.commands.grabberCommands.DefaultGrabberOpenCommand;
 import frc.robot.commands.grabberCommands.GrabberCloseCommand;
 import frc.robot.commands.grabberCommands.GrabberOpenCommand;
 import frc.robot.commands.intakeCommands.IntakeCommand;
@@ -60,9 +61,11 @@ public class RobotContainer {
 
     private void configureBindings() {
         DriveCommand driveCommand = new DriveCommand(drive, primaryController::getYAxis, primaryController::getZAxis);
-        ArmCommand armCommand = new ArmCommand(arm, secondaryController::getYAxis);
+        ArmCommand armCommand = new ArmCommand(arm,grabber, secondaryController::getYAxis);
+        DefaultGrabberOpenCommand grabberOpenCommand = new DefaultGrabberOpenCommand(grabber, arm);
         drive.setDefaultCommand(driveCommand);
         arm.setDefaultCommand(armCommand);
+        grabber.setDefaultCommand(grabberOpenCommand);
         primaryController.getXButton().whileTrue(new BalanceCommand(drive, gyro));
         primaryController.getLeftBumper().whileTrue(new TurtleCommand(driveCommand));
         primaryController.getRightBumper().whileTrue(new TurboCommand(driveCommand));
