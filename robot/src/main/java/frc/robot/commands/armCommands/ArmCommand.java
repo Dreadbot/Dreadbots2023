@@ -12,6 +12,7 @@ public class ArmCommand extends CommandBase {
     public ArmCommand(Arm arm, DoubleSupplier joystickValue) {
         this.arm = arm;
         this.joystickValue = joystickValue;
+        addRequirements(arm);
     }
     @Override
     public void execute() {

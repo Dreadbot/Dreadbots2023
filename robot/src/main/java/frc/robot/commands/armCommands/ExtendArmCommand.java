@@ -15,7 +15,7 @@ public class ExtendArmCommand extends CommandBase {
     @Override
     public void execute() {
         arm.elevate(ArmConstants.ELEVATOR_MOTOR_SPEED);
-        System.out.println(arm.getElevatorPosition());
+        //System.out.println(arm.getElevatorPosition());
     }
     @Override
     public boolean isFinished() {

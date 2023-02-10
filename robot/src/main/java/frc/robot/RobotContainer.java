@@ -96,6 +96,6 @@ public class RobotContainer {
         i++;
     }
     public void teleopPeriodic() {
-        System.out.println(arm.getElevatorPosition());
+        //System.out.println(arm.getElevatorPosition());
     }
 }
