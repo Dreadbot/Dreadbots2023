@@ -66,14 +66,6 @@ public class RobotContainer {
         primaryController.getXButton().whileTrue(new BalanceCommand(drive, gyro));
         primaryController.getLeftBumper().whileTrue(new TurtleCommand(driveCommand));
         primaryController.getRightBumper().whileTrue(new TurboCommand(driveCommand));
-<<<<<<< HEAD
-        primaryController.getAButton().onTrue(new GrabberOpenCommand(grabber));
-        primaryController.getBButton().onTrue(new GrabberCloseCommand(grabber));
-        primaryController.getRightTrigger().whileTrue(new IntakeCommand(intake));
-        primaryController.getLeftTrigger().whileTrue(new OuttakeCommand(intake));
-        secondaryController.getXButton().whileTrue(new ExtendArmCommand(arm));
-        secondaryController.getYButton().whileTrue(new RetractArmCommand(arm));
-=======
         primaryController.getLeftTrigger().whileTrue(new OuttakeCommand(intake));
         primaryController.getRightTrigger().whileTrue(new IntakeCommand(intake));
         primaryController.getAButton().onTrue(new AutoAlignConeCommand(drive));
@@ -84,7 +76,6 @@ public class RobotContainer {
         secondaryController.getBButton().onTrue(new LowPostCommand(arm));
         secondaryController.getXButton().onTrue(new MediumPostCommand(arm));
         secondaryController.getYButton().onTrue(new HighPostCommand(arm));
->>>>>>> ee5bc628486ea29bf94b20800466487ed8fe9b66
     }
 
     /**
