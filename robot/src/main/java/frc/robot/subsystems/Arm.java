@@ -1,13 +1,11 @@
 package frc.robot.subsystems;
 
-import javax.imageio.plugins.tiff.TIFFDirectory;
-
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.util.concurrent.Event;
 import edu.wpi.first.wpilibj.DigitalInput;
 import frc.robot.Constants.ArmConstants;
-import frc.robot.commands.armCommands.ArmCommand;
 import util.misc.DreadbotMotor;
 import util.misc.DreadbotSubsystem;
 
@@ -28,8 +26,8 @@ public class Arm extends DreadbotSubsystem {
     }
 
     public void elevate(double speed) {
-        if(getTopSwitch() == true && speed > 0) speed = 0;
-        else if(getLowerSwitch() == true && speed < 0) speed = 0;
+        if(getTopSwitch() && speed > 0) speed = 0;
+        else if(getLowerSwitch() && speed < 0) speed = 0;
         // if(elevatorMotor.getPosition() > maxVal && Math.signum(speed) == 1) speed = 0;
         //  if(elevatorMotor.getPosition() < minVal && Math.signum(speed) == -1) speed = 0;
         elevatorMotor.set(speed);
@@ -47,14 +45,19 @@ public class Arm extends DreadbotSubsystem {
         return maxVal;
     }
 
-    public boolean getTopSwitch(){
+    public boolean getTopSwitch() {
         return !topSwitch.get();
     }
 
-    public boolean getLowerSwitch(){
+    public boolean getLowerSwitch() {
+        zeroEncoder();
         return !lowerSwitch.get();
     }
-
+    public void zeroEncoder() {
+        if(!lowerSwitch.get() && getElevatorPosition() != 0) {
+            elevatorMotor.resetEncoder();
+        }
+    }
     @Override
     public void close() throws Exception {
         stopMotors();
