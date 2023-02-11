@@ -34,9 +34,9 @@ public class Drive extends DreadbotSubsystem {
     protected final SlewRateLimiter turboSlewRate;
     private final DifferentialDriveOdometry odometry;
 
-    private final AHRS gryo;
+    private final AHRS gyro;
 
-    public Drive(AHRS gryo) {
+    public Drive(AHRS gyro) {
         this.frontLeftMotor = new DreadbotMotor(new CANSparkMax(MotorConstants.FRONT_LEFT_MOTOR_PORT, MotorType.kBrushless), "frontLeft");
         this.frontRightMotor = new DreadbotMotor(new CANSparkMax(MotorConstants.FRONT_RIGHT_MOTOR_PORT, MotorType.kBrushless), "frontRight");
         this.backLeftMotor = new DreadbotMotor(new CANSparkMax(MotorConstants.BACK_LEFT_MOTOR_PORT, MotorType.kBrushless), "backLeft");
@@ -59,9 +59,10 @@ public class Drive extends DreadbotSubsystem {
         leftMotors.setInverted(false);
         rightMotors.setInverted(false);
         diffDrive = new DifferentialDrive(leftMotors, rightMotors);
-        this.gryo = gryo;
+        this.gyro = gyro;
+
         odometry = new DifferentialDriveOdometry(
-            gryo.getRotation2d(),
+            gyro.getRotation2d(),
             (frontLeftMotor.getEncoder().getPosition() / AutonomousConstants.ROTATIONS_PER_METER),
             (frontRightMotor.getEncoder().getPosition() / AutonomousConstants.ROTATIONS_PER_METER)
         );
@@ -72,7 +73,7 @@ public class Drive extends DreadbotSubsystem {
     @Override
     public void periodic() {
         odometry.update(
-            gryo.getRotation2d(),
+            gyro.getRotation2d(),
             (frontLeftMotor.getEncoder().getPosition() / AutonomousConstants.ROTATIONS_PER_METER),
             (frontRightMotor.getEncoder().getPosition() / AutonomousConstants.ROTATIONS_PER_METER)
         );
@@ -135,7 +136,7 @@ public class Drive extends DreadbotSubsystem {
     public void resetOdometry(Pose2d pose) {
         resetEncoders();
         odometry.resetPosition(
-            gryo.getRotation2d(),
+            gyro.getRotation2d(),
             (frontLeftMotor.getEncoder().getPosition() / AutonomousConstants.ROTATIONS_PER_METER),
             (frontRightMotor.getEncoder().getPosition() / AutonomousConstants.ROTATIONS_PER_METER),
             pose
@@ -154,14 +155,14 @@ public class Drive extends DreadbotSubsystem {
         backRightMotor.resetEncoder();
     }
     public double getHeading() {
-        return gryo.getRotation2d().getDegrees();
+        return gyro.getRotation2d().getDegrees();
     }
     public Pose2d getPose() {
         return odometry.getPoseMeters();
     }
 
     public void resetGyro() {
-        gryo.reset();
+        gyro.reset();
     }
     @Override
     public void close() throws Exception {
@@ -184,7 +185,7 @@ public class Drive extends DreadbotSubsystem {
         this.frontRightMotor = fr;
         this.backLeftMotor = bl;
         this.backRightMotor = br;
-        this.gryo = null;
+        this.gyro = null;
         this.odometry = null;
         frontLeftMotor.setIdleMode(IdleMode.kBrake);
         frontRightMotor.setIdleMode(IdleMode.kBrake);
