@@ -22,6 +22,7 @@ import frc.robot.commands.autonCommands.AutoAlignConeCommand;
 import frc.robot.commands.autonCommands.AutoAlignCubeCommand;
 import frc.robot.commands.autonCommands.Autos;
 import frc.robot.commands.autonCommands.BalanceCommand;
+import frc.robot.commands.autonCommands.BrakeCommand;
 import frc.robot.commands.driveCommands.DriveCommand;
 import frc.robot.commands.driveCommands.TurboCommand;
 import frc.robot.commands.driveCommands.TurtleCommand;
@@ -68,7 +69,7 @@ public class RobotContainer {
         drive.setDefaultCommand(driveCommand);
         arm.setDefaultCommand(armCommand);
         grabber.setDefaultCommand(grabberOpenCommand);
-        primaryController.getXButton().whileTrue(new BalanceCommand(drive, gyro).repeatedly());
+        primaryController.getXButton().whileTrue(new BalanceCommand(drive, gyro).andThen(new BrakeCommand(drive, gyro)));
         primaryController.getLeftBumper().whileTrue(new TurtleCommand(driveCommand));
         primaryController.getRightBumper().whileTrue(new TurboCommand(driveCommand));
         primaryController.getLeftTrigger().whileTrue(new OuttakeCommand(intake));
