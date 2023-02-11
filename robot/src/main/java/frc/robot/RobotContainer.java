@@ -68,7 +68,7 @@ public class RobotContainer {
         drive.setDefaultCommand(driveCommand);
         arm.setDefaultCommand(armCommand);
         grabber.setDefaultCommand(grabberOpenCommand);
-        primaryController.getXButton().whileTrue(new BalanceCommand(drive, gyro));
+        primaryController.getXButton().whileTrue(new BalanceCommand(drive, gyro).repeatedly());
         primaryController.getLeftBumper().whileTrue(new TurtleCommand(driveCommand));
         primaryController.getRightBumper().whileTrue(new TurboCommand(driveCommand));
         primaryController.getLeftTrigger().whileTrue(new OuttakeCommand(intake));
@@ -101,7 +101,7 @@ public class RobotContainer {
         // }
         // i++;
     }
-    // int j = 0;
+    // int j =oipfd 0;
     public void teleopPeriodic() {
         // if(j % 25 == 0) {
         //     System.out.println(gyro.getPitch());

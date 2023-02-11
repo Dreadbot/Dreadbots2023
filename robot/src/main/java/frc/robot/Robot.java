@@ -44,7 +44,7 @@ public class Robot extends TimedRobot {
          } catch (IOException ex) {
             DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
          }
-         CameraServer.startAutomaticCapture();
+         //CameraServer.startAutomaticCapture();
     }
 
     /**
