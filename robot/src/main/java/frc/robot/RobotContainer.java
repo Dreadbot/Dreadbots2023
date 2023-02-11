@@ -43,7 +43,7 @@ import edu.wpi.first.wpilibj.SerialPort;
  */
 public class RobotContainer {
 
-    private final AHRS gyro = new AHRS(SerialPort.Port.kUSB);
+    private final AHRS gyro = new AHRS(SerialPort.Port.kUSB1);
     private final Drive drive = new Drive(gyro);
     private final Grabber grabber = new Grabber();
     private final Intake intake = new Intake();
@@ -98,7 +98,12 @@ public class RobotContainer {
         }
         i++;
     }
+    int j = 0;
     public void teleopPeriodic() {
-        System.out.println(gyro.getPitch());
+        if(j % 25 == 0) {
+            //System.out.println(gyro.getPitch());
+        }
+
+        j++;
     }
 }

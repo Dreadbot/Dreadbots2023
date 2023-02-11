@@ -32,7 +32,7 @@ public abstract class Constants {
     }
     public static class BalanceConstants {
       public static final double MAX_SPEED = 0.115;
-      public static final double SCALE = -0.3;
+      public static final double SCALE = 0.3;
       public static final double LEVEL_DEGREES = 1.25; //Angle where considered level
     }
     public static class AutonomousConstants {

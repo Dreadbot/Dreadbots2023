@@ -35,6 +35,7 @@ public class Drive extends DreadbotSubsystem {
     private final DifferentialDriveOdometry odometry;
 
     private final AHRS gyro;
+    public final double InitialPitch;
 
     public Drive(AHRS gyro) {
         this.frontLeftMotor = new DreadbotMotor(new CANSparkMax(MotorConstants.FRONT_LEFT_MOTOR_PORT, MotorType.kBrushless), "frontLeft");
@@ -60,6 +61,7 @@ public class Drive extends DreadbotSubsystem {
         rightMotors.setInverted(false);
         diffDrive = new DifferentialDrive(leftMotors, rightMotors);
         this.gyro = gyro;
+        InitialPitch = gyro.getPitch();
 
         odometry = new DifferentialDriveOdometry(
             gyro.getRotation2d(),
@@ -68,6 +70,10 @@ public class Drive extends DreadbotSubsystem {
         );
         slewRate = new SlewRateLimiter(DriveConstants.SLEW_RATE_LIMIT, -DriveConstants.SLEW_RATE_LIMIT, 0.2);
         turboSlewRate = new SlewRateLimiter(DriveConstants.TURBO_FORWARD_SPEED_LIMITER, -DriveConstants.TURBO_FORWARD_SPEED_LIMITER, .4);
+    }
+
+    public double getPitch() {
+        return gyro.getPitch() - InitialPitch;
     }
 
     @Override
@@ -187,6 +193,7 @@ public class Drive extends DreadbotSubsystem {
         this.backRightMotor = br;
         this.gyro = null;
         this.odometry = null;
+        this.InitialPitch = 0;
         frontLeftMotor.setIdleMode(IdleMode.kBrake);
         frontRightMotor.setIdleMode(IdleMode.kBrake);
         backLeftMotor.setIdleMode(IdleMode.kBrake);

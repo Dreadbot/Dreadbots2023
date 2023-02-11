@@ -12,6 +12,7 @@ public class BalanceCommand extends CommandBase {
     private final AHRS gyro;
     private double previousPitch = 15;
     private double pitch;
+    int i = 0;
 
     public BalanceCommand(Drive drive, AHRS gyro) {
         this.drive = drive;
@@ -21,7 +22,10 @@ public class BalanceCommand extends CommandBase {
 
     @Override
     public void execute() {
-        pitch = gyro.getPitch();
+        pitch = drive.getPitch();
+        if(i % 25 == 0)
+            System.out.println(pitch);
+        i++;
         double speed = pitch * BalanceConstants.SCALE;
         speed = MathUtil.clamp(speed, -BalanceConstants.MAX_SPEED, BalanceConstants.MAX_SPEED);
 
