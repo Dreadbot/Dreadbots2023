@@ -57,7 +57,8 @@ public abstract class Constants {
     public static class ArmConstants {
       public static final int ELEVATOR_MOTOR_PORT = 6;
       public static final int MAX_ELEVATOR_POSITION = 287;
-      public static final int MIN_ELEVATOR_POSITION = 0;
+      public static final double LOW_POST_POSITION = 154.433;
+      public static final double MEDIUM_POST_POSITION = 219.463;
       public static final double ELEVATOR_MOTOR_SPEED = 0.3;
       public static final double ELEVATOR_SPEED_LIMITER = 0.4;
       public static final int TOP_LIMIT_SWITCH_PORT = 1;

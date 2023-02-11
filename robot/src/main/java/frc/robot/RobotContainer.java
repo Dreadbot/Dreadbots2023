@@ -7,9 +7,11 @@ package frc.robot;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.AutonomousConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.armCommands.ArmCommand;
+import frc.robot.commands.armCommands.ArmToPositionCommand;
 import frc.robot.commands.armCommands.ExtendArmCommand;
 import frc.robot.commands.armCommands.HighPostCommand;
 import frc.robot.commands.armCommands.LowPostCommand;
@@ -74,11 +76,12 @@ public class RobotContainer {
         primaryController.getAButton().onTrue(new AutoAlignConeCommand(drive));
         primaryController.getBButton().onTrue(new AutoAlignCubeCommand(drive));
         secondaryController.getLeftTrigger().onTrue(new GrabberCloseCommand(grabber));
-        secondaryController.getRightTrigger().onTrue(new GrabberOpenCommand(grabber));
+        secondaryController.getRightTrigger().onTrue(new GrabberOpenCommand(grabber)
+            .andThen(new ArmToPositionCommand(arm, grabber, -10, secondaryController::getYAxis)));
         secondaryController.getAButton().onTrue(new PickupCommand(arm));
-        secondaryController.getBButton().onTrue(new LowPostCommand(arm));
-        secondaryController.getXButton().onTrue(new MediumPostCommand(arm));
-        secondaryController.getYButton().onTrue(new HighPostCommand(arm));
+        secondaryController.getBButton().onTrue(new ArmToPositionCommand(arm, grabber, ArmConstants.LOW_POST_POSITION, secondaryController::getYAxis));
+        secondaryController.getXButton().onTrue(new ArmToPositionCommand(arm, grabber, ArmConstants.MEDIUM_POST_POSITION, secondaryController::getYAxis));
+        secondaryController.getYButton().onTrue(new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, secondaryController::getYAxis));
     }
 
     /**
@@ -92,18 +95,18 @@ public class RobotContainer {
     }
     int i = 0;
     public void autonPeriodic() {
-        if(i % 25 == 0) {
-            System.out.println("Heading: " + drive.getHeading() + " Distance: " + (drive.getMotorEncoder(1).getPosition() / AutonomousConstants.ROTATIONS_PER_METER));
-            System.out.println("X: " + drive.getPose().getX() + "Y: " + drive.getPose().getY());
-        }
-        i++;
+        // if(i % 25 == 0) {
+        //     System.out.println("Heading: " + drive.getHeading() + " Distance: " + (drive.getMotorEncoder(1).getPosition() / AutonomousConstants.ROTATIONS_PER_METER));
+        //     System.out.println("X: " + drive.getPose().getX() + "Y: " + drive.getPose().getY());
+        // }
+        // i++;
     }
-    int j = 0;
+    // int j = 0;
     public void teleopPeriodic() {
-        if(j % 25 == 0) {
-            //System.out.println(gyro.getPitch());
-        }
+        // if(j % 25 == 0) {
+        //     System.out.println(gyro.getPitch());
+        // }
 
-        j++;
+        // j++;
     }
 }
