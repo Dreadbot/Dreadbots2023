@@ -19,7 +19,7 @@ public class ExtendArmCommand extends CommandBase {
     }
     @Override
     public boolean isFinished() {
-        return arm.getTopSwitch();
+        return arm.getUpperSwitch();
     }
 
     @Override

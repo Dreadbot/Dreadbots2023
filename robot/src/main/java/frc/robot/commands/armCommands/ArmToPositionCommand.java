@@ -34,6 +34,8 @@ public class ArmToPositionCommand extends CommandBase{
     }
     @Override
     public boolean isFinished() {
-        return DreadbotMath.inRange(arm.getElevatorPosition(), rotations - 5, rotations + 5) || Math.abs(cancelJoystick.getAsDouble()) > 0.05;
+        return DreadbotMath.inRange(arm.getElevatorPosition(), rotations - 5, rotations + 5) 
+        || Math.abs(cancelJoystick.getAsDouble()) > 0.05
+        || arm.getUpperSwitch();
     }
 }
