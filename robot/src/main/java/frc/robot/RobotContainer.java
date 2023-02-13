@@ -7,6 +7,7 @@ package frc.robot;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.AutonomousConstants;
 import frc.robot.Constants.OperatorConstants;
@@ -29,6 +30,7 @@ import frc.robot.commands.driveCommands.TurtleCommand;
 import frc.robot.commands.grabberCommands.DefaultGrabberOpenCommand;
 import frc.robot.commands.grabberCommands.GrabberCloseCommand;
 import frc.robot.commands.grabberCommands.GrabberOpenCommand;
+import frc.robot.commands.grabberCommands.GrabberWaitCommand;
 import frc.robot.commands.intakeCommands.IntakeCommand;
 import frc.robot.commands.intakeCommands.OuttakeCommand;
 import frc.robot.subsystems.Arm;
@@ -76,10 +78,10 @@ public class RobotContainer {
         primaryController.getRightTrigger().whileTrue(new IntakeCommand(intake));
         primaryController.getAButton().onTrue(new AutoAlignConeCommand(drive));
         primaryController.getBButton().onTrue(new AutoAlignCubeCommand(drive));
-        secondaryController.getLeftTrigger().onTrue(new GrabberCloseCommand(grabber));
+        secondaryController.getLeftTrigger().onTrue(new GrabberCloseCommand(grabber).andThen(new WaitCommand(.5)));
         secondaryController.getRightTrigger().onTrue(new GrabberOpenCommand(grabber)
             .andThen(new ArmToPositionCommand(arm, grabber, -10, secondaryController::getYAxis)));
-        secondaryController.getAButton().onTrue(new PickupCommand(arm));
+        secondaryController.getAButton().onTrue(new GrabberCloseCommand(grabber).andThen(new GrabberWaitCommand(1, grabber).andThen(new ArmToPositionCommand(arm, grabber, 20, secondaryController::getYAxis))));
         secondaryController.getBButton().onTrue(new ArmToPositionCommand(arm, grabber, ArmConstants.LOW_POST_POSITION, secondaryController::getYAxis));
         secondaryController.getXButton().onTrue(new ArmToPositionCommand(arm, grabber, ArmConstants.MEDIUM_POST_POSITION, secondaryController::getYAxis));
         secondaryController.getYButton().onTrue(new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, secondaryController::getYAxis));
