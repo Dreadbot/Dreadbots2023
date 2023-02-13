@@ -10,7 +10,8 @@ import util.math.DreadbotMath;
 
 public class ArmToPositionCommand extends CommandBase{
     private Arm arm;
-    private double rotations;    
+    private double rotations;
+    private double direction;
     private Grabber grabber;
     private DoubleSupplier cancelJoystick;
     public ArmToPositionCommand(Arm arm, Grabber grabber, double rotations, DoubleSupplier cancelJoystick) {
@@ -22,7 +23,7 @@ public class ArmToPositionCommand extends CommandBase{
     }
     @Override
     public void execute() {
-        double direction = Math.signum(rotations - arm.getElevatorPosition());
+        direction = Math.signum(rotations - arm.getElevatorPosition());
         if(arm.getLowerSwitch() && direction < 0) {
             grabber.openGrabber();
         } else if(direction == -1 && arm.getElevatorPosition() < ArmConstants.LOW_POST_POSITION - 10) {
@@ -34,8 +35,13 @@ public class ArmToPositionCommand extends CommandBase{
     }
     @Override
     public boolean isFinished() {
-        return DreadbotMath.inRange(arm.getElevatorPosition(), rotations - 5, rotations + 5) 
-        || Math.abs(cancelJoystick.getAsDouble()) > 0.05
-        || arm.getUpperSwitch();
+        if (Math.abs(cancelJoystick.getAsDouble()) > .05 ) {
+            return true;
+        }
+        if(direction > 0) {
+            return arm.getElevatorPosition() > rotations || arm.getUpperSwitch();
+        } else {
+            return arm.getElevatorPosition() < rotations || arm.getLowerSwitch();
+        }
     }
 }

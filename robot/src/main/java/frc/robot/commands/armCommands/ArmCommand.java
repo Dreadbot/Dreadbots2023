@@ -25,6 +25,6 @@ public class ArmCommand extends CommandBase {
         } else if (Math.abs(joystickValue.getAsDouble()) > 0.05 && arm.getElevatorPosition() < ArmConstants.LOW_POST_POSITION - 10) {
             grabber.closeGrabber(); 
         }
-        arm.elevate(joystickValue.getAsDouble() * ArmConstants.ELEVATOR_SPEED_LIMITER);
+        arm.elevate(joystickValue.getAsDouble() * ArmConstants.ELEVATOR_MANUAL_SPEED);
     }
 }

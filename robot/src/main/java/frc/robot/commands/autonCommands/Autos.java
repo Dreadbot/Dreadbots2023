@@ -5,10 +5,16 @@
 package frc.robot.commands.autonCommands;
 
 import frc.robot.Robot;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.AutonomousConstants;
+import frc.robot.commands.armCommands.ArmToPositionCommand;
+import frc.robot.commands.grabberCommands.GrabberOpenCommand;
+import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drive;
+import frc.robot.subsystems.Grabber;
 
 import java.util.List;
+import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
@@ -23,6 +29,7 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
 public final class Autos {
     /**
@@ -30,6 +37,15 @@ public final class Autos {
      */
     public static CommandBase Auton(Drive drive) {
         return new AutonDriveStraightCommand(drive, 3);
+    }
+    public static CommandBase ScoreAndBalance(Drive drive, Arm arm, Grabber grabber) {
+      DoubleSupplier nullJoyStick = () -> 0;
+      return new SequentialCommandGroup(
+        new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, nullJoyStick),
+        new GrabberOpenCommand(grabber),
+        new ArmToPositionCommand(arm, grabber, -5, nullJoyStick),
+        new AutonDriveStraightCommand(drive, 3)
+      );
     }
     public static CommandBase FollowPath(Drive drive) {
       final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(AutonomousConstants.TRACK_WIDTH);
@@ -66,9 +82,9 @@ public final class Autos {
           // Start at the origin facing the +X direction
           new Pose2d(0, 0, new Rotation2d(0)),
           // Pass through these two interior waypoints, making an 's' curve path
-          List.of(new Translation2d(1, 0), new Translation2d(2, 0)),
+          List.of(new Translation2d(0.5, 0), new Translation2d(1, 0)),
           // End 3 meters straight ahead of where we started, facing forward
-          new Pose2d(3, 0, new Rotation2d(0)),
+          new Pose2d(1.5, 0, new Rotation2d(0)),
           // Pass config
           config);
 
