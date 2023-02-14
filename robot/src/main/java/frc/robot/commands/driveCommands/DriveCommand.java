@@ -3,6 +3,7 @@ package frc.robot.commands.driveCommands;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.Drive;
@@ -12,15 +13,17 @@ public class DriveCommand extends CommandBase {
     private final Drive drive;
     private final DoubleSupplier joystickForwardAxis;
     private final DoubleSupplier joystickRotationalAxis;
+    private final DoubleSupplier elevatorPosition;
     private boolean turboMode;
     private boolean turtleMode;
     protected double lastForward;
     protected double lastRotation;
 
-    public DriveCommand(Drive drive, DoubleSupplier joystickForwardAxis, DoubleSupplier joystickRotationalAxis) {
+    public DriveCommand(Drive drive, DoubleSupplier joystickForwardAxis, DoubleSupplier joystickRotationalAxis, DoubleSupplier elevatorPosition) {
         this.drive = drive;
         this.joystickForwardAxis = joystickForwardAxis;
         this.joystickRotationalAxis = joystickRotationalAxis;
+        this.elevatorPosition = elevatorPosition;
         this.turboMode = false;
         this.turtleMode = false;
         addRequirements(drive);
@@ -44,7 +47,7 @@ public class DriveCommand extends CommandBase {
             if (Math.abs(forward) <= OperatorConstants.TURBO_CONTROLLER_DEADBAND) {
                 forward = 0;
             }
-        } else if (this.turtleMode) {
+        } else if (this.turtleMode || elevatorPosition.getAsDouble() > ArmConstants.LOW_POST_POSITION) {
             // make forward negative right here and test
             forward = Math.signum(joystickForwardAxis.getAsDouble()) * DreadbotMath.linearInterpolation(0, 0.4, Math.abs(joystickForwardAxis.getAsDouble()));
             rotation =  Math.signum(joystickRotationalAxis.getAsDouble()) * DreadbotMath.linearInterpolation(0, 0.4,  Math.abs(joystickRotationalAxis.getAsDouble()));

@@ -39,9 +39,9 @@ public class ArmToPositionCommand extends CommandBase{
             return true;
         }
         if(direction > 0) {
-            return arm.getElevatorPosition() > rotations || arm.getUpperSwitch();
+            return arm.getElevatorPosition() > rotations || Math.abs(arm.getElevatorPosition() - rotations) < 0.2 || arm.getUpperSwitch();
         } else {
-            return arm.getElevatorPosition() < rotations || arm.getLowerSwitch();
+            return arm.getElevatorPosition() < rotations || Math.abs(arm.getElevatorPosition() - rotations) < 0.2 || arm.getLowerSwitch();
         }
     }
 }
