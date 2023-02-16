@@ -66,7 +66,7 @@ public class RobotContainer {
 
     private void configureBindings() {
         DriveCommand driveCommand = new DriveCommand(drive, primaryController::getYAxis, primaryController::getZAxis, arm::getElevatorPosition);
-        ArmCommand armCommand = new ArmCommand(arm, grabber, secondaryController::getYAxis);
+        ArmCommand armCommand = new ArmCommand(arm, grabber, secondaryController::getYAxis, secondaryController.getLeftTrigger());
         DefaultGrabberOpenCommand grabberOpenCommand = new DefaultGrabberOpenCommand(grabber, arm);
         drive.setDefaultCommand(driveCommand);
         arm.setDefaultCommand(armCommand);
@@ -79,8 +79,7 @@ public class RobotContainer {
         primaryController.getAButton().onTrue(new AutoAlignConeCommand(drive));
         primaryController.getBButton().onTrue(new AutoAlignCubeCommand(drive));
         secondaryController.getLeftTrigger().onTrue(new GrabberCloseCommand(grabber).andThen(new WaitCommand(.5)));
-        secondaryController.getRightTrigger().onTrue(new GrabberOpenCommand(grabber)
-            .andThen(new ArmToPositionCommand(arm, grabber, 0, secondaryController::getYAxis)));
+        secondaryController.getRightTrigger().onTrue(new GrabberOpenCommand(grabber));
         secondaryController.getAButton().onTrue(new GrabberCloseCommand(grabber).andThen(new GrabberWaitCommand(0.25, grabber).andThen(new ArmToPositionCommand(arm, grabber, 25, secondaryController::getYAxis))));
         secondaryController.getBButton().onTrue(new ArmToPositionCommand(arm, grabber, ArmConstants.LOW_POST_POSITION, secondaryController::getYAxis));
         secondaryController.getXButton().onTrue(new ArmToPositionCommand(arm, grabber, ArmConstants.MEDIUM_POST_POSITION, secondaryController::getYAxis));
