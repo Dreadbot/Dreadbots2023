@@ -6,12 +6,12 @@ class DoublePublisher:
     Publishes values to a topic of type double.
     """
 
-    def __init__(self, table: ntcore.NetworkTable, topic_name: string):
+    def __init__(self, table: ntcore.NetworkTable, topic_name: str):
         self.topic = table.getDoubleTopic(topic_name)
         self.pub = self.topic.publish()
         self.pub.setDefault(0.0)
 
-    def publish(self, value: number):
+    def publish(self, value: int):
         """
         Publish a value.
 

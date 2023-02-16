@@ -78,7 +78,10 @@ def main():
 
         image = cv2.cvtColor(frame, cv2.COLOR_BGR2GRAY)
 
-        tags = filter(lambda tag: tag.hamming < 1, at_detector.detect(image, estimate_tag_pose=True, camera_params=camera_params, tag_size=0.1397))
+        tags = list(filter(lambda tag: tag.hamming < 1, at_detector.detect(image, estimate_tag_pose=True, camera_params=camera_params, tag_size=0.1397)))
+
+        if len(tags) == 0:
+            continue
 
         # For now, we're just going to get the distance to the first tag found and publish that
         first_tag = tags[0]
