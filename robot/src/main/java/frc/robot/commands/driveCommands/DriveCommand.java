@@ -49,8 +49,8 @@ public class DriveCommand extends CommandBase {
             }
         } else if (this.turtleMode) { // || elevatorPosition.getAsDouble() > ArmConstants.LOW_POST_POSITION --might come back to this + Fix slew rate
             // make forward negative right here and test
-            forward = Math.signum(joystickForwardAxis.getAsDouble()) * DreadbotMath.linearInterpolation(0, 0.4, Math.abs(joystickForwardAxis.getAsDouble()));
-            rotation =  Math.signum(joystickRotationalAxis.getAsDouble()) * DreadbotMath.linearInterpolation(0, 0.4,  Math.abs(joystickRotationalAxis.getAsDouble()));
+            forward = Math.signum(joystickForwardAxis.getAsDouble()) * DreadbotMath.linearInterpolation(0, 0.3, Math.abs(joystickForwardAxis.getAsDouble()));
+            rotation =  Math.signum(joystickRotationalAxis.getAsDouble()) * DreadbotMath.linearInterpolation(0, 0.3,  Math.abs(joystickRotationalAxis.getAsDouble()));
             addSlew = false;
         }
         drive.ArcadeDrive(forward, rotation, squareSpeed, addSlew, turboMode); //invert forward and rotation axis
