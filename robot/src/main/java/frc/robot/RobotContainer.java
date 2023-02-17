@@ -63,7 +63,6 @@ public class RobotContainer {
         // Configure the trigger bindings
         configureBindings();
     }
-
     private void configureBindings() {
         DriveCommand driveCommand = new DriveCommand(drive, primaryController::getYAxis, primaryController::getZAxis, arm::getElevatorPosition);
         ArmCommand armCommand = new ArmCommand(arm, grabber, secondaryController::getYAxis, secondaryController.getLeftTrigger());
