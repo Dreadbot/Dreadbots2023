@@ -16,6 +16,8 @@ import frc.robot.subsystems.Grabber;
 import java.util.List;
 import java.util.function.DoubleSupplier;
 
+import com.kauailabs.navx.frc.AHRS;
+
 import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.controller.RamseteController;
 import edu.wpi.first.math.controller.SimpleMotorFeedforward;
@@ -38,13 +40,15 @@ public final class Autos {
     public static CommandBase Auton(Drive drive) {
         return new AutonDriveStraightCommand(drive, 3);
     }
-    public static CommandBase ScoreAndBalance(Drive drive, Arm arm, Grabber grabber) {
+    public static CommandBase ScoreAndBalance(Drive drive, Arm arm, Grabber grabber, AHRS gyro) {
       DoubleSupplier nullJoyStick = () -> 0;
       return new SequentialCommandGroup(
         new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, nullJoyStick),
         new GrabberOpenCommand(grabber),
         new ArmToPositionCommand(arm, grabber, -5, nullJoyStick),
-        new AutonDriveStraightCommand(drive, 3)
+        new AutonDriveStraightCommand(drive, 3),
+        new BalanceCommand(drive, gyro),
+        new BrakeCommand(drive, gyro)
       );
     }
     public static CommandBase FollowPath(Drive drive) {

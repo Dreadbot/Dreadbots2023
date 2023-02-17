@@ -10,7 +10,7 @@ import frc.robot.subsystems.Drive;
 public class BrakeCommand extends CommandBase {
     private final Drive drive;
     private final AHRS gyro;
-    public double targetPosition;
+    public  double brake;
 
     public BrakeCommand(Drive drive, AHRS gyro) {
         this.drive = drive;
@@ -21,26 +21,24 @@ public class BrakeCommand extends CommandBase {
     int i = 0;
     @Override
     public void execute() {
-
-        if (i % 25 == 0) {
-            System.out.println(" Brake = " + targetPosition);
-        }
+    
+        if( i % 25 ==0) {
+            System.out.println(" brake = " + brake);
+        } 
         i++;
-        double speed = BalanceConstants.MAX_SPEED;
-        double currentPosition = drive.getMotorEncoder(1).getPosition();
-        double difference = targetPosition - currentPosition;
-
-        if (difference > 0.5) {
-            drive.ArcadeDrive(BalanceConstants.MAX_SPEED, 0.0, false, false, false);
-        } else if (difference < -0.5) {
+        if(Math.abs(brake -  drive.getMotorEncoder(1).getPosition()) > 0.5) {
             drive.ArcadeDrive(-BalanceConstants.MAX_SPEED, 0.0, false, false, false);
-        } else {
+        }
+        else if (Math.abs(brake - drive.getMotorEncoder(1).getPosition()) < -0.5) {
+            drive.ArcadeDrive(BalanceConstants.MAX_SPEED, 0.0, false, false, false);
+        }
+        else {
             drive.ArcadeDrive(0, 0.00d, false, false, false);
         }
     }
 
     @Override
     public void initialize() {
-        this.targetPosition = drive.getMotorEncoder(1).getPosition();
+        this.brake = drive.getMotorEncoder(1).getPosition();
     }
 }

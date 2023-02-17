@@ -93,7 +93,7 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         // An example command will be run in autonomous
-        return Autos.ScoreAndBalance(drive, arm, grabber);
+        return Autos.ScoreAndBalance(drive, arm, grabber, gyro);
     }
     int i = 0;
     public void autonPeriodic() {
