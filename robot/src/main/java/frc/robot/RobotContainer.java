@@ -33,11 +33,14 @@ import frc.robot.commands.grabberCommands.GrabberOpenCommand;
 import frc.robot.commands.grabberCommands.GrabberWaitCommand;
 import frc.robot.commands.intakeCommands.IntakeCommand;
 import frc.robot.commands.intakeCommands.OuttakeCommand;
+import frc.robot.commands.virtualCommands.CameraCommand;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Grabber;
 import frc.robot.subsystems.Intake;
 import util.controls.DreadbotController;
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.SerialPort;
 
 /**
@@ -55,6 +58,8 @@ public class RobotContainer {
     private final Arm arm = new Arm();
     private final DreadbotController primaryController = new DreadbotController(OperatorConstants.PRIMARY_JOYSTICK_PORT);
     private final DreadbotController secondaryController = new DreadbotController(OperatorConstants.SECONDARY_JOYSTICK_PORT);
+    private final NetworkTableInstance ntInstance = NetworkTableInstance.getDefault();
+    private final NetworkTable smartDashboard = ntInstance.getTable("SmartDashboard");
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -79,6 +84,7 @@ public class RobotContainer {
         primaryController.getBButton().onTrue(new AutoAlignCubeCommand(drive));
         secondaryController.getLeftTrigger().onTrue(new GrabberCloseCommand(grabber).andThen(new WaitCommand(.5)));
         secondaryController.getRightTrigger().onTrue(new GrabberOpenCommand(grabber));
+        secondaryController.getStartButton().onTrue(new CameraCommand(smartDashboard));
         secondaryController.getAButton().onTrue(new GrabberCloseCommand(grabber).andThen(new GrabberWaitCommand(0.25, grabber).andThen(new ArmToPositionCommand(arm, grabber, 25, secondaryController::getYAxis))));
         secondaryController.getBButton().onTrue(new ArmToPositionCommand(arm, grabber, ArmConstants.LOW_POST_POSITION, secondaryController::getYAxis));
         secondaryController.getXButton().onTrue(new ArmToPositionCommand(arm, grabber, ArmConstants.MEDIUM_POST_POSITION, secondaryController::getYAxis));
