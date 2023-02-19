@@ -80,8 +80,8 @@ public class RobotContainer {
         primaryController.getRightBumper().whileTrue(new TurboCommand(driveCommand));
         primaryController.getLeftTrigger().whileTrue(new OuttakeCommand(intake));
         primaryController.getRightTrigger().whileTrue(new IntakeCommand(intake));
-        primaryController.getAButton().onTrue(new AutoAlignConeCommand(drive, smartDashboard));
-        primaryController.getBButton().onTrue(new AutoAlignCubeCommand(drive, smartDashboard));
+        // primaryController.getAButton().onTrue(new AutoAlignConeCommand(drive, smartDashboard));
+        // primaryController.getBButton().onTrue(new AutoAlignCubeCommand(drive, smartDashboard));
         secondaryController.getLeftTrigger().onTrue(new GrabberCloseCommand(grabber).andThen(new WaitCommand(.5)));
         secondaryController.getRightTrigger().onTrue(new GrabberOpenCommand(grabber).andThen(new ArmToPositionCommand(arm, grabber, 0, secondaryController::getYAxis)));
         secondaryController.getStartButton().onTrue(new CameraCommand(smartDashboard));
