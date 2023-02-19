@@ -3,6 +3,7 @@ package frc.robot.commands.autonCommands;
 import edu.wpi.first.networktables.DoubleSubscriber;
 import edu.wpi.first.networktables.DoubleTopic;
 import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.AutoAlignConstants;
 import frc.robot.Constants.NetworkTableConstants;
@@ -14,13 +15,20 @@ public class AutoAlignCubeCommand extends CommandBase {
     private DoubleSubscriber distanceToTagX;
     private DoubleTopic distanceToTagZTopic;
     private DoubleSubscriber distanceToTagZ;
+    private PowerDistribution pdh;
 
-    public AutoAlignCubeCommand(Drive drive, NetworkTable table) {
+    public AutoAlignCubeCommand(Drive drive, PowerDistribution pdh, NetworkTable table) {
         this.drive = drive;
         this.distanceToTagXTopic = table.getDoubleTopic(NetworkTableConstants.APRIL_TAG_X_DISTANCE);
         this.distanceToTagX = this.distanceToTagXTopic.subscribe(0.0);
         this.distanceToTagZTopic = table.getDoubleTopic(NetworkTableConstants.APRIL_TAG_Z_DISTANCE);
         this.distanceToTagZ = this.distanceToTagZTopic.subscribe(0.0);
+        this.pdh = pdh;
+    }
+
+    @Override
+    public void initialize() {
+        pdh.setSwitchableChannel(false);
     }
 
     @Override

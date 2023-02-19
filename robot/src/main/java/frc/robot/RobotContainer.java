@@ -41,6 +41,7 @@ import frc.robot.subsystems.Intake;
 import util.controls.DreadbotController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.SerialPort;
 
 /**
@@ -64,11 +65,11 @@ public class RobotContainer {
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
-    public RobotContainer() {
+    public RobotContainer(PowerDistribution pdh) {
         // Configure the trigger bindings
-        configureBindings();
+        configureBindings(pdh);
     }
-    private void configureBindings() {
+    private void configureBindings(PowerDistribution pdh) {
         DriveCommand driveCommand = new DriveCommand(drive, primaryController::getYAxis, primaryController::getZAxis, arm::getElevatorPosition);
         ArmCommand armCommand = new ArmCommand(arm, grabber, secondaryController::getYAxis, secondaryController.getLeftTrigger(), secondaryController.getLeftBumper());
         DefaultGrabberOpenCommand grabberOpenCommand = new DefaultGrabberOpenCommand(grabber, arm);
@@ -80,8 +81,8 @@ public class RobotContainer {
         primaryController.getRightBumper().whileTrue(new TurboCommand(driveCommand));
         primaryController.getLeftTrigger().whileTrue(new OuttakeCommand(intake));
         primaryController.getRightTrigger().whileTrue(new IntakeCommand(intake));
-        // primaryController.getAButton().onTrue(new AutoAlignConeCommand(drive, smartDashboard));
-        // primaryController.getBButton().onTrue(new AutoAlignCubeCommand(drive, smartDashboard));
+        // primaryController.getAButton().onTrue(new AutoAlignConeCommand(drive, pdh, smartDashboard));
+        // primaryController.getBButton().onTrue(new AutoAlignCubeCommand(drive, pdh, smartDashboard));
         secondaryController.getLeftTrigger().onTrue(new GrabberCloseCommand(grabber).andThen(new WaitCommand(.5)));
         secondaryController.getRightTrigger().onTrue(new GrabberOpenCommand(grabber).andThen(new ArmToPositionCommand(arm, grabber, 0, secondaryController::getYAxis)));
         secondaryController.getStartButton().onTrue(new CameraCommand(smartDashboard));
