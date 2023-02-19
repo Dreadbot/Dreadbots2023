@@ -21,4 +21,9 @@ public class CameraCommand extends CommandBase {
         intakeCamActive = !intakeCamActive;
         this.selectionPub.set(intakeCamActive ? 1 : 0);
     }
+
+    @Override
+    public boolean isFinished() {
+        return true;
+    }
 }
