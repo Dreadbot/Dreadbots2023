@@ -13,11 +13,13 @@ public class ArmCommand extends CommandBase {
     private Grabber grabber;
     private DoubleSupplier joystickValue;
     private JoystickButton overideClose;
-    public ArmCommand(Arm arm, Grabber grabber,  DoubleSupplier joystickValue, JoystickButton overideClose) {
+    private JoystickButton turtleMode;
+    public ArmCommand(Arm arm, Grabber grabber,  DoubleSupplier joystickValue, JoystickButton overideClose, JoystickButton turtleMode) {
         this.arm = arm;
         this.grabber = grabber;
         this.joystickValue = joystickValue;
         this.overideClose = overideClose;
+        this.turtleMode = turtleMode;
         addRequirements(arm);
     }
     int i = 0;
@@ -30,6 +32,6 @@ public class ArmCommand extends CommandBase {
         } else if (Math.abs(joystickValue.getAsDouble()) > 0.05 && arm.getElevatorPosition() < ArmConstants.LOW_POST_POSITION - 10) {
             grabber.closeGrabber(); 
         }
-        arm.elevate(joystickValue.getAsDouble() * ArmConstants.ELEVATOR_MANUAL_SPEED);
+        arm.elevate(joystickValue.getAsDouble() * (turtleMode.getAsBoolean() ? ArmConstants.ELEVATOR_MANUAL_TURTLE_SPEED : ArmConstants.ELEVATOR_MANUAL_SPEED));
     }
 }

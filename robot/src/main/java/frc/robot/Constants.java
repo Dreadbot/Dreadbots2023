@@ -61,6 +61,7 @@ public abstract class Constants {
       public static final double MEDIUM_POST_POSITION = 219.463;
       public static final double ELEVATOR_MOTOR_SPEED = 0.8;
       public static final double ELEVATOR_MANUAL_SPEED = 0.8;
+      public static final double ELEVATOR_MANUAL_TURTLE_SPEED = 0.5;
       public static final int TOP_LIMIT_SWITCH_PORT = 1;
       public static final int LOWER_LIMIT_SWITCH_PORT = 0;
     }

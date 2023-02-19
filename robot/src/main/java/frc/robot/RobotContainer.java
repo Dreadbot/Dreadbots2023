@@ -70,7 +70,7 @@ public class RobotContainer {
     }
     private void configureBindings() {
         DriveCommand driveCommand = new DriveCommand(drive, primaryController::getYAxis, primaryController::getZAxis, arm::getElevatorPosition);
-        ArmCommand armCommand = new ArmCommand(arm, grabber, secondaryController::getYAxis, secondaryController.getLeftTrigger());
+        ArmCommand armCommand = new ArmCommand(arm, grabber, secondaryController::getYAxis, secondaryController.getLeftTrigger(), secondaryController.getLeftBumper());
         DefaultGrabberOpenCommand grabberOpenCommand = new DefaultGrabberOpenCommand(grabber, arm);
         drive.setDefaultCommand(driveCommand);
         arm.setDefaultCommand(armCommand);
