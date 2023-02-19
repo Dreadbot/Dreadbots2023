@@ -35,6 +35,12 @@ public abstract class Constants {
       public static final double SCALE = -0.3; //invert sign when we replaced Nav-X
       public static final double LEVEL_DEGREES = 1.25; //Angle where considered level
     }
+    public static class AutoAlignConstants {
+      public static final double CONE_ANGLE_MARGIN_OF_ERROR = 5.0;
+      public static final double CUBE_X_DISTANCE_MARGIN_OF_ERROR = 5.0;
+      public static final double CONE_ROTATION_SPEED = 0.1;
+      public static final double CUBE_ROTATION_SPEED = 0.1;
+    }
     public static class AutonomousConstants {
       public static final double KS_VOLTS = 0.164; // Original Value: 0.27038
       public static final double KV_VOLT_SECONDS_PER_METER = 0.0467; // Original Value: 1.8425
@@ -64,6 +70,12 @@ public abstract class Constants {
       public static final double ELEVATOR_MANUAL_TURTLE_SPEED = 0.5;
       public static final int TOP_LIMIT_SWITCH_PORT = 1;
       public static final int LOWER_LIMIT_SWITCH_PORT = 0;
+    }
+    public static class NetworkTableConstants {
+      public static final String APRIL_TAG_X_DISTANCE = "TagXDistance";
+      public static final String APRIL_TAG_Z_DISTANCE = "TagZDistance";
+      public static final String ANGLE_TO_CONE_NODE = "AngleToConeNode";
+      public static final String DISTANCE_TO_CONE_NODE = "DistanceToConeNode";
     }
     private Constants() throws IllegalStateException {
         throw new IllegalStateException("Constants is a utility class. It should not be instantiated.");
