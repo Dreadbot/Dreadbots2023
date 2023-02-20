@@ -21,9 +21,14 @@ public class ArmToPositionCommand extends CommandBase{
         this.cancelJoystick = cancelJoystick;
         addRequirements(arm, grabber);
     }
+
+    @Override
+    public void initialize(){
+        direction = Math.signum(rotations - arm.getElevatorPosition());
+    }
+
     @Override
     public void execute() {
-        direction = Math.signum(rotations - arm.getElevatorPosition());
         if(arm.getLowerSwitch() && direction < 0) {
             grabber.openGrabber();
         } else if(direction == -1 && arm.getElevatorPosition() < ArmConstants.LOW_POST_POSITION - 10) {

@@ -31,7 +31,7 @@ public abstract class Constants {
       public static final int BACK_RIGHT_MOTOR_PORT = 4;
     }
     public static class BalanceConstants {
-      public static final double MAX_SPEED = 0.115;
+      public static final double MAX_SPEED = 0.125;
       public static final double SCALE = -0.3; //invert sign when we replaced Nav-X
       public static final double LEVEL_DEGREES = 1.25; //Angle where considered level
     }
@@ -58,7 +58,7 @@ public abstract class Constants {
       public static final int ELEVATOR_MOTOR_PORT = 6;
       public static final double MAX_ELEVATOR_POSITION = 287 * 1.5;
       public static final double LOW_POST_POSITION = 154.433;
-      public static final double MEDIUM_POST_POSITION = 219.463;
+      public static final double MEDIUM_POST_POSITION = 221.463;
       public static final double ELEVATOR_MOTOR_SPEED = 0.9;
       public static final double ELEVATOR_MANUAL_SPEED = 0.9;
       public static final double ELEVATOR_MANUAL_TURTLE_SPEED = 0.3;
