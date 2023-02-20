@@ -51,7 +51,7 @@ public final class Autos {
         new BrakeCommand(drive, gyro)
       );
     }
-    public static CommandBase FollowPath(Drive drive) {
+    public static CommandBase FollowPath(Drive drive, Trajectory trajectory) {
       final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(AutonomousConstants.TRACK_WIDTH);
       final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(
         AutonomousConstants.KS_VOLTS ,
@@ -106,7 +106,7 @@ public final class Autos {
 
       RamseteCommand ramseteCommand = 
         new RamseteCommand(
-          Robot.trajectory,
+          trajectory,
           drive::getPose,
           new RamseteController(AutonomousConstants.RAMSETE_B, AutonomousConstants.RAMSETE_ZETA),
           feedforward,

@@ -42,6 +42,8 @@ import util.controls.DreadbotController;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.SerialPort;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -60,11 +62,17 @@ public class RobotContainer {
     private final DreadbotController secondaryController = new DreadbotController(OperatorConstants.SECONDARY_JOYSTICK_PORT);
     private final NetworkTableInstance ntInstance = NetworkTableInstance.getDefault();
     private final NetworkTable smartDashboard = ntInstance.getTable("SmartDashboard");
+    SendableChooser<Integer> autonChooser = new SendableChooser<>();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
+        
+        autonChooser.setDefaultOption("Score and Balance", 1);
+        autonChooser.addOption("Score and Leave", 2);
+        autonChooser.addOption("Score, Leave, Balance", 3);
+        SmartDashboard.putData(autonChooser);
         // Configure the trigger bindings
         configureBindings();
     }
@@ -97,7 +105,19 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
+        int chosenAuton = autonChooser.getSelected();
         // An example command will be run in autonomous
+        if(chosenAuton == 1){
+            return Autos.ScoreAndBalance(drive, arm, grabber, gyro);
+        }
+        else if(chosenAuton == 2){
+            return new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, () -> 0).andThen(
+            new GrabberOpenCommand(grabber)).andThen(
+            new ArmToPositionCommand(arm, grabber, -5, () -> 0)).andThen(Autos.FollowPath(drive, Robot.trajectory));
+        }
+        else if (chosenAuton == 3){
+            return null;
+        }
         return Autos.ScoreAndBalance(drive, arm, grabber, gyro);
     }
     int i = 0;
