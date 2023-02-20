@@ -85,7 +85,7 @@ public class RobotContainer {
         secondaryController.getLeftTrigger().onTrue(new GrabberCloseCommand(grabber).andThen(new WaitCommand(.5)));
         secondaryController.getRightTrigger().onTrue(new GrabberOpenCommand(grabber).andThen(new ArmToPositionCommand(arm, grabber, 0, secondaryController::getYAxis)));
         secondaryController.getStartButton().onTrue(new CameraCommand(smartDashboard));
-        secondaryController.getAButton().onTrue(new GrabberCloseCommand(grabber).andThen(new GrabberWaitCommand(0.25, grabber).andThen(new ArmToPositionCommand(arm, grabber, 25, secondaryController::getYAxis))));
+        secondaryController.getAButton().onTrue(new GrabberCloseCommand(grabber).andThen(new GrabberWaitCommand(0.25, grabber).andThen(new ArmToPositionCommand(arm, grabber, 30, secondaryController::getYAxis))));
         secondaryController.getBButton().onTrue(new ArmToPositionCommand(arm, grabber, ArmConstants.LOW_POST_POSITION, secondaryController::getYAxis));
         secondaryController.getXButton().onTrue(new ArmToPositionCommand(arm, grabber, ArmConstants.MEDIUM_POST_POSITION, secondaryController::getYAxis));
         secondaryController.getYButton().onTrue(new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, secondaryController::getYAxis));
