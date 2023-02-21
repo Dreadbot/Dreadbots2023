@@ -28,8 +28,11 @@ public class Robot extends TimedRobot {
     private Command autonomousCommand;
     private RobotContainer robotContainer;
 
-    String trajectoryJSON = "paths/output/ExitAndBalance.wpilib.json";
-    public static Trajectory trajectory = new Trajectory();
+    String driveStraightTrajectoryJSON = "paths/output/DriveStraight.wpilib.json";
+    String reverseTrajectoryJSON = "paths/output/ReverseTest.wpilib.json";
+    public static Trajectory driveStraightTrajectory = new Trajectory();
+    public static Trajectory reverseTrajectory = new Trajectory();
+    public static Trajectory comboTrajectory = new Trajectory();
 
     private final PowerDistribution pdh = new PowerDistribution(10, ModuleType.kRev);
     /**
@@ -44,10 +47,16 @@ public class Robot extends TimedRobot {
         pdh.setSwitchableChannel(false);
 
         try {
-            Path trajectoryPath = Filesystem.getDeployDirectory().toPath().resolve(trajectoryJSON);
-            trajectory =  TrajectoryUtil.fromPathweaverJson(trajectoryPath);
+            Path driveStraightPath = Filesystem.getDeployDirectory().toPath().resolve(driveStraightTrajectoryJSON);
+            Path reversePath = Filesystem.getDeployDirectory().toPath().resolve(reverseTrajectoryJSON);
+            driveStraightTrajectory =  TrajectoryUtil.fromPathweaverJson(driveStraightPath);
+            reverseTrajectory =  TrajectoryUtil.fromPathweaverJson(reversePath);
+            comboTrajectory =  TrajectoryUtil.fromPathweaverJson(driveStraightPath);
+
+
+            comboTrajectory.concatenate(reverseTrajectory);
          } catch (IOException ex) {
-            DriverStation.reportError("Unable to open trajectory: " + trajectoryJSON, ex.getStackTrace());
+            DriverStation.reportError("Unable to open trajectory: ", ex.getStackTrace());
          }
         //CameraServer.startAutomaticCapture();
     }

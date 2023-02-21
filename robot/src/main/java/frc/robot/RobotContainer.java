@@ -115,7 +115,7 @@ public class RobotContainer {
             case 2:
                 return new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, () -> 0).andThen(
                     new GrabberOpenCommand(grabber)).andThen(
-                    new ArmToPositionCommand(arm, grabber, -5, () -> 0)).andThen(Autos.FollowPath(drive, Robot.trajectory));
+                    new ArmToPositionCommand(arm, grabber, -5, () -> 0)).andThen(Autos.FollowPath(drive, Robot.comboTrajectory));
             case 3:
                 return null;
             default:

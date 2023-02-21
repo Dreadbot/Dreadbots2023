@@ -116,7 +116,7 @@ public final class Autos {
           new PIDController(AutonomousConstants.KP_DRIVE_VELOCITY, 0, 0),
           drive::TankDriveVoltage,
           drive);
-      drive.resetOdometry(Robot.trajectory.getInitialPose());
+      drive.resetOdometry(Robot.comboTrajectory.getInitialPose());
 
       return ramseteCommand.andThen(() -> drive.TankDriveVoltage(0, 0));
     }
