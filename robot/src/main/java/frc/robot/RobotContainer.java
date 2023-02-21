@@ -4,6 +4,8 @@
 
 package frc.robot;
 
+import java.util.function.DoubleSupplier;
+
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj2.command.Command;
@@ -62,7 +64,7 @@ public class RobotContainer {
     private final DreadbotController secondaryController = new DreadbotController(OperatorConstants.SECONDARY_JOYSTICK_PORT);
     private final NetworkTableInstance ntInstance = NetworkTableInstance.getDefault();
     private final NetworkTable smartDashboard = ntInstance.getTable("SmartDashboard");
-    SendableChooser<Integer> autonChooser = new SendableChooser<>();
+    SendableChooser<Integer> autonChooser = new SendableChooser<Integer>();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -107,18 +109,18 @@ public class RobotContainer {
     public Command getAutonomousCommand() {
         int chosenAuton = autonChooser.getSelected();
         // An example command will be run in autonomous
-        if(chosenAuton == 1){
-            return Autos.ScoreAndBalance(drive, arm, grabber, gyro);
+        switch(chosenAuton) {
+            case 1:
+                return Autos.ScoreAndBalance(drive, arm, grabber, gyro);
+            case 2:
+                return new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, () -> 0).andThen(
+                    new GrabberOpenCommand(grabber)).andThen(
+                    new ArmToPositionCommand(arm, grabber, -5, () -> 0)).andThen(Autos.FollowPath(drive, Robot.trajectory));
+            case 3:
+                return null;
+            default:
+                return Autos.ScoreAndBalance(drive, arm, grabber, gyro);
         }
-        else if(chosenAuton == 2){
-            return new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, () -> 0).andThen(
-            new GrabberOpenCommand(grabber)).andThen(
-            new ArmToPositionCommand(arm, grabber, -5, () -> 0)).andThen(Autos.FollowPath(drive, Robot.trajectory));
-        }
-        else if (chosenAuton == 3){
-            return null;
-        }
-        return Autos.ScoreAndBalance(drive, arm, grabber, gyro);
     }
     int i = 0;
     public void autonPeriodic() {

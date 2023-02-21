@@ -26,7 +26,7 @@ public class AutonDriveStraightCommand extends CommandBase {
 
     @Override
     public void execute() {
-        drive.ArcadeDrive(DriveConstants.AUTON_DRIVE_SPEED, 0);
+        drive.ArcadeDrive(DriveConstants.AUTON_DRIVE_SPEED, 0, false, false, false);
     }
 
     @Override

@@ -28,7 +28,7 @@ public class Robot extends TimedRobot {
     private Command autonomousCommand;
     private RobotContainer robotContainer;
 
-    String trajectoryJSON = "paths/output/DriveStraight.wpilib.json";
+    String trajectoryJSON = "paths/output/ExitAndBalance.wpilib.json";
     public static Trajectory trajectory = new Trajectory();
 
     private final PowerDistribution pdh = new PowerDistribution(10, ModuleType.kRev);
@@ -73,7 +73,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void disabledInit() {
-        pdh.setSwitchableChannel(false);
+        pdh.setSwitchableChannel(true);
     }
 
     @Override
