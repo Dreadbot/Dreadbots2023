@@ -82,7 +82,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void disabledInit() {
-        pdh.setSwitchableChannel(true);
+        //pdh.setSwitchableChannel(true);
     }
 
     @Override
@@ -121,7 +121,7 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
-        pdh.setSwitchableChannel(true);
+        //pdh.setSwitchableChannel(true);
     }
 
     /**

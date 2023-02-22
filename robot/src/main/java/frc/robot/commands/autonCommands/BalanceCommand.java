@@ -49,6 +49,6 @@ public class BalanceCommand extends CommandBase {
     @Override
     public boolean isFinished() { 
         previousPitch = Math.abs(pitch);
-        return Math.abs(gyro.getPitch()) < BalanceConstants.LEVEL_DEGREES;
+        return Math.abs(drive.getPitch()) < BalanceConstants.LEVEL_DEGREES;
     }
 }

@@ -30,10 +30,10 @@ public class BrakeCommand extends CommandBase {
         double currentPosition = drive.getMotorEncoder(1).getPosition();
         double difference = targetPosition - currentPosition;
 
-        if(difference > .5) {
-            drive.ArcadeDrive(BalanceConstants.MAX_SPEED, 0, false, false, false);
-        } else if (difference < -.5){
-            drive.ArcadeDrive(-BalanceConstants.MAX_SPEED, 0, false, false, false);
+        if(difference > 2) {
+            drive.ArcadeDrive(BalanceConstants.MAX_SPEED + 0.1, 0, false, false, false);
+        } else if (difference < -2){
+            drive.ArcadeDrive(-(BalanceConstants.MAX_SPEED + 0.1), 0, false, false, false);
         } else {
             drive.ArcadeDrive(0, 0, false, false, false);
         }

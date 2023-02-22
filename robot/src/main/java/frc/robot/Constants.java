@@ -20,7 +20,7 @@ public abstract class Constants {
       public static final double TURBO_ROT_SPEED_LIMITER = 0.75;
       public static final double WHEEL_CIRCUMFRENCE = 0.5985; // dinosaur's wheel circ: 0.498727834
       public static final double GEAR_RATIO = 7.4405 / 1;
-      public static final double AUTON_DRIVE_SPEED = 0.3;
+      public static final double AUTON_DRIVE_SPEED = 0.2;
       public static final double SLEW_RATE_LIMIT = 1;
       public static final boolean IsBotRed5 = false;
     }
@@ -31,9 +31,9 @@ public abstract class Constants {
       public static final int BACK_RIGHT_MOTOR_PORT = 4;
     }
     public static class BalanceConstants {
-      public static final double MAX_SPEED = 0.125;
+      public static final double MAX_SPEED = 0.125 * 0.95;
       public static final double SCALE = -0.3; //invert sign when we replaced Nav-X
-      public static final double LEVEL_DEGREES = 1.25; //Angle where considered level
+      public static final double LEVEL_DEGREES = 1.5; //Angle where considered level
     }
     public static class AutonomousConstants {
       public static final double KS_VOLTS = 0.14892; 

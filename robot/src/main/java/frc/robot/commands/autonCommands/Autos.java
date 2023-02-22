@@ -9,6 +9,7 @@ import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.AutonomousConstants;
 import frc.robot.commands.armCommands.ArmToPositionCommand;
 import frc.robot.commands.grabberCommands.GrabberOpenCommand;
+import frc.robot.commands.grabberCommands.GrabberWaitCommand;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Grabber;
@@ -44,9 +45,10 @@ public final class Autos {
       DoubleSupplier nullJoyStick = () -> 0;
       return new SequentialCommandGroup(
         new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, nullJoyStick),
-        new GrabberOpenCommand(grabber),
+        new GrabberOpenCommand(grabber), 
+        new GrabberWaitCommand(.2, grabber),
         new ArmToPositionCommand(arm, grabber, -5, nullJoyStick),
-        new AutonDriveStraightCommand(drive, 3),
+        new AutonDriveStraightCommand(drive, 2),
         new BalanceCommand(drive, gyro),
         new BrakeCommand(drive, gyro)
       );
