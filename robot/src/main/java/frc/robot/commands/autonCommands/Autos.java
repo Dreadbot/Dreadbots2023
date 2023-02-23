@@ -53,6 +53,16 @@ public final class Autos {
         new BrakeCommand(drive, gyro)
       );
     }
+    public static CommandBase ScoreAndLeave(Drive drive, Arm arm, Grabber grabber) {
+      DoubleSupplier nullJoyStick = () -> 0;
+      return new SequentialCommandGroup(
+        new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, nullJoyStick),
+        new GrabberOpenCommand(grabber),
+        new GrabberWaitCommand(.5, grabber),
+        new ArmToPositionCommand(arm, grabber, -5, nullJoyStick),
+        FollowPath(drive, Robot.driveStraightTrajectory)
+      );
+    }
     public static CommandBase FollowPath(Drive drive, Trajectory trajectory) {
       final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(AutonomousConstants.TRACK_WIDTH);
       final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(
@@ -118,7 +128,7 @@ public final class Autos {
           new PIDController(AutonomousConstants.KP_DRIVE_VELOCITY, 0, 0),
           drive::TankDriveVoltage,
           drive);
-      drive.resetOdometry(Robot.comboTrajectory.getInitialPose());
+      drive.resetOdometry(trajectory.getInitialPose());
 
       return ramseteCommand.andThen(() -> drive.TankDriveVoltage(0, 0));
     }

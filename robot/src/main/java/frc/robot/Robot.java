@@ -4,19 +4,13 @@
 
 package frc.robot;
 
-import java.io.IOException;
-import java.nio.file.Path;
-
-import edu.wpi.first.cameraserver.CameraServer;
 import edu.wpi.first.math.trajectory.Trajectory;
-import edu.wpi.first.math.trajectory.TrajectoryUtil;
-import edu.wpi.first.wpilibj.DriverStation;
-import edu.wpi.first.wpilibj.Filesystem;
 import edu.wpi.first.wpilibj.PowerDistribution;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import util.misc.DreadbotTrajectoryUtils.DreadbotTrajectoryLoader;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -30,9 +24,9 @@ public class Robot extends TimedRobot {
 
     String driveStraightTrajectoryJSON = "paths/output/DriveStraight.wpilib.json";
     String reverseTrajectoryJSON = "paths/output/ReverseTest.wpilib.json";
-    public static Trajectory driveStraightTrajectory = new Trajectory();
-    public static Trajectory reverseTrajectory = new Trajectory();
-    public static Trajectory comboTrajectory = new Trajectory();
+    public static Trajectory driveStraightTrajectory = DreadbotTrajectoryLoader.loadTrajectory("paths/output/DriveStraight.wpilib.json");
+    // public static Trajectory reverseTrajectory = DreadbotTrajectoryLoader.loadTrajectory("paths/output/ReverseTest.wpilib.json");
+    // public static Trajectory comboTrajectory = DreadbotTrajectoryLoader.loadTrajectory("paths/output/DriveStraight.wpilib.json").concatenate(reverseTrajectory);
 
     private final PowerDistribution pdh = new PowerDistribution(10, ModuleType.kRev);
     /**
@@ -45,19 +39,6 @@ public class Robot extends TimedRobot {
         // autonomous chooser on the dashboard.
         robotContainer = new RobotContainer();
         pdh.setSwitchableChannel(false);
-
-        try {
-            Path driveStraightPath = Filesystem.getDeployDirectory().toPath().resolve(driveStraightTrajectoryJSON);
-            Path reversePath = Filesystem.getDeployDirectory().toPath().resolve(reverseTrajectoryJSON);
-            driveStraightTrajectory =  TrajectoryUtil.fromPathweaverJson(driveStraightPath);
-            reverseTrajectory =  TrajectoryUtil.fromPathweaverJson(reversePath);
-            comboTrajectory =  TrajectoryUtil.fromPathweaverJson(driveStraightPath);
-
-
-            comboTrajectory.concatenate(reverseTrajectory);
-         } catch (IOException ex) {
-            DriverStation.reportError("Unable to open trajectory: ", ex.getStackTrace());
-         }
         //CameraServer.startAutomaticCapture();
     }
 

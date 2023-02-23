@@ -4,23 +4,15 @@
 
 package frc.robot;
 
-import java.util.function.DoubleSupplier;
-
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.ArmConstants;
-import frc.robot.Constants.AutonomousConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.armCommands.ArmCommand;
 import frc.robot.commands.armCommands.ArmToPositionCommand;
-import frc.robot.commands.armCommands.ExtendArmCommand;
-import frc.robot.commands.armCommands.HighPostCommand;
-import frc.robot.commands.armCommands.LowPostCommand;
-import frc.robot.commands.armCommands.MediumPostCommand;
-import frc.robot.commands.armCommands.PickupCommand;
-import frc.robot.commands.armCommands.RetractArmCommand;
 import frc.robot.commands.autonCommands.AutoAlignConeCommand;
 import frc.robot.commands.autonCommands.AutoAlignCubeCommand;
 import frc.robot.commands.autonCommands.Autos;
@@ -84,7 +76,7 @@ public class RobotContainer {
         DefaultGrabberOpenCommand grabberOpenCommand = new DefaultGrabberOpenCommand(grabber, arm);
         drive.setDefaultCommand(driveCommand);
         arm.setDefaultCommand(armCommand);
-        grabber.setDefaultCommand(grabberOpenCommand);
+        //grabber.setDefaultCommand(grabberOpenCommand);
         primaryController.getXButton().whileTrue(new BalanceCommand(drive, gyro).andThen(new BrakeCommand(drive, gyro)));
         primaryController.getLeftBumper().whileTrue(new TurtleCommand(driveCommand));
         primaryController.getRightBumper().whileTrue(new TurboCommand(driveCommand));
@@ -113,9 +105,7 @@ public class RobotContainer {
             case 1:
                 return Autos.ScoreAndBalance(drive, arm, grabber, gyro);
             case 2:
-                return new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, () -> 0).andThen(
-                    new GrabberOpenCommand(grabber)).andThen(
-                    new ArmToPositionCommand(arm, grabber, -5, () -> 0)).andThen(Autos.FollowPath(drive, Robot.comboTrajectory));
+                return Autos.ScoreAndLeave(drive, arm, grabber);
             case 3:
                 return null;
             default:

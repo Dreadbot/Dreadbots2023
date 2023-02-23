@@ -15,7 +15,7 @@ public class DefaultGrabberOpenCommand extends CommandBase {
 
     @Override
     public void execute(){
-        if(arm.getLowerSwitch() == true) // || arm.getTopSwitch() == true)
+        if(arm.getLowerSwitch())
             grabber.openGrabber();
     }
 }
