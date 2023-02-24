@@ -18,7 +18,7 @@ public abstract class Constants {
       public static final double ROT_SPEED_LIMITER = 0.75;
       public static final double TURBO_FORWARD_SPEED_LIMITER = 0.75;
       public static final double TURBO_ROT_SPEED_LIMITER = 0.75;
-      public static final double WHEEL_CIRCUMFRENCE = 0.5985; // dinosaur's wheel circ: 0.498727834
+      public static final double WHEEL_CIRCUMFRENCE = 0.53449; // dinosaur's wheel circ: 0.498727834
       public static final double GEAR_RATIO = 6.25 / 1;
       public static final double AUTON_DRIVE_SPEED = 0.2;
       public static final double SLEW_RATE_LIMIT = 1;
@@ -61,8 +61,8 @@ public abstract class Constants {
       public static final double MAX_ELEVATOR_POSITION = 287 * 1.5;
       public static final double LOW_POST_POSITION = 154.433;
       public static final double MEDIUM_POST_POSITION = 221.463;
-      public static final double ELEVATOR_MOTOR_SPEED = 0.9;
-      public static final double ELEVATOR_MANUAL_SPEED = 0.9;
+      public static final double ELEVATOR_MOTOR_SPEED = 1;
+      public static final double ELEVATOR_MANUAL_SPEED = 1;
       public static final double ELEVATOR_MANUAL_TURTLE_SPEED = 0.3;
       public static final int TOP_LIMIT_SWITCH_PORT = 1;
       public static final int LOWER_LIMIT_SWITCH_PORT = 0;
