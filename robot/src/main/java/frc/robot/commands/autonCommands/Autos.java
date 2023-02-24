@@ -30,6 +30,7 @@ import edu.wpi.first.math.trajectory.Trajectory;
 import edu.wpi.first.math.trajectory.TrajectoryConfig;
 import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
@@ -38,10 +39,15 @@ public final class Autos {
     /**
      * Example static factory for an autonomous command.
      */
-    public static CommandBase Auton(Drive drive) {
-        return new AutonDriveStraightCommand(drive, 3);
+    public static Command scoreAndBalanceCommand;
+    public static Command scoreAndLeaveLeftCommand;
+    public static Command scoreAndLeaveRightCommand;
+    public static void generateCommands(Drive drive, Arm arm, Grabber grabber, AHRS gryo) {
+      scoreAndBalanceCommand = scoreAndBalance(drive, arm, grabber, gryo);
+      scoreAndLeaveLeftCommand = scoreAndLeaveLeft(drive, arm, grabber);
+      scoreAndLeaveRightCommand = scoreAndLeaveRight(drive, arm, grabber);
     }
-    public static CommandBase ScoreAndBalance(Drive drive, Arm arm, Grabber grabber, AHRS gyro) {
+    public static CommandBase scoreAndBalance(Drive drive, Arm arm, Grabber grabber, AHRS gyro) {
       DoubleSupplier nullJoyStick = () -> 0;
       return new SequentialCommandGroup(
         new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, nullJoyStick),
@@ -53,14 +59,24 @@ public final class Autos {
         new BrakeCommand(drive, gyro)
       );
     }
-    public static CommandBase ScoreAndLeave(Drive drive, Arm arm, Grabber grabber) {
+    public static CommandBase scoreAndLeaveRight(Drive drive, Arm arm, Grabber grabber) {
       DoubleSupplier nullJoyStick = () -> 0;
       return new SequentialCommandGroup(
         new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, nullJoyStick),
         new GrabberOpenCommand(grabber),
         new GrabberWaitCommand(.5, grabber),
         new ArmToPositionCommand(arm, grabber, -5, nullJoyStick),
-        FollowPath(drive, Robot.driveStraightTrajectory)
+        FollowPath(drive, Robot.exitTurnRightTrajectory)
+      );
+    }
+    public static CommandBase scoreAndLeaveLeft(Drive drive, Arm arm, Grabber grabber) {
+      DoubleSupplier nullJoyStick = () -> 0;
+      return new SequentialCommandGroup(
+        new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, nullJoyStick),
+        new GrabberOpenCommand(grabber),
+        new GrabberWaitCommand(.5, grabber),
+        new ArmToPositionCommand(arm, grabber, -5, nullJoyStick),
+        FollowPath(drive, Robot.exitTurnLeftTrajectory)
       );
     }
     public static CommandBase FollowPath(Drive drive, Trajectory trajectory) {

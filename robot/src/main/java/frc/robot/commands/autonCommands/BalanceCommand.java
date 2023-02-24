@@ -35,20 +35,20 @@ public class BalanceCommand extends CommandBase {
             speed = -speed;
         }
      
-        if(i % 25 == 0) {
-            SmartDashboard.putNumber("Pitch", pitch);
-            SmartDashboard.putNumber("speed", speed);
-            System.out.println(" previous pitch" + previousPitch + " Pitch" + Math.abs(pitch));
-
-        }
+        // if(i % 25 == 0) {
+        //     SmartDashboard.putNumber("Pitch", pitch);
+        //     SmartDashboard.putNumber("speed", speed);
+        //     System.out.println(" previous pitch" + previousPitch + " Pitch" + Math.abs(pitch));
+        // }
           
-        i++;
+        // i++;
         drive.ArcadeDrive(speed, 0.00d, false, false, false);
     }
 
     @Override
     public boolean isFinished() { 
         previousPitch = Math.abs(pitch);
-        return Math.abs(drive.getPitch()) < BalanceConstants.LEVEL_DEGREES;
+        // return Math.abs(drive.getPitch()) < BalanceConstants.LEVEL_DEGREES;
+        return false;
     }
 }

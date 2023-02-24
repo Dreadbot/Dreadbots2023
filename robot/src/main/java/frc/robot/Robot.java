@@ -22,9 +22,10 @@ public class Robot extends TimedRobot {
     private Command autonomousCommand;
     private RobotContainer robotContainer;
 
-    String driveStraightTrajectoryJSON = "paths/output/DriveStraight.wpilib.json";
-    String reverseTrajectoryJSON = "paths/output/ReverseTest.wpilib.json";
-    public static Trajectory driveStraightTrajectory = DreadbotTrajectoryLoader.loadTrajectory("paths/output/DriveStraight.wpilib.json");
+    static String exitTurnRightJSON = "paths/output/ExitTurnRight.wpilib.json";
+    static String exitTurnLeftJSON = "paths/output/ExitTurnLeft.wpilib.json";
+    public static Trajectory exitTurnRightTrajectory = DreadbotTrajectoryLoader.loadTrajectory(exitTurnRightJSON);
+    public static Trajectory exitTurnLeftTrajectory = DreadbotTrajectoryLoader.loadTrajectory(exitTurnLeftJSON);
     // public static Trajectory reverseTrajectory = DreadbotTrajectoryLoader.loadTrajectory("paths/output/ReverseTest.wpilib.json");
     // public static Trajectory comboTrajectory = DreadbotTrajectoryLoader.loadTrajectory("paths/output/DriveStraight.wpilib.json").concatenate(reverseTrajectory);
 
