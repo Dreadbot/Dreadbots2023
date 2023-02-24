@@ -76,7 +76,7 @@ public class RobotContainer {
         DefaultGrabberOpenCommand grabberOpenCommand = new DefaultGrabberOpenCommand(grabber, arm);
         drive.setDefaultCommand(driveCommand);
         arm.setDefaultCommand(armCommand);
-        //grabber.setDefaultCommand(grabberOpenCommand);
+        grabber.setDefaultCommand(grabberOpenCommand);
         primaryController.getXButton().whileTrue(new BalanceCommand(drive, gyro).andThen(new BrakeCommand(drive, gyro)));
         primaryController.getLeftBumper().whileTrue(new TurtleCommand(driveCommand));
         primaryController.getRightBumper().whileTrue(new TurboCommand(driveCommand));
@@ -85,7 +85,9 @@ public class RobotContainer {
         primaryController.getAButton().onTrue(new AutoAlignConeCommand(drive));
         primaryController.getBButton().onTrue(new AutoAlignCubeCommand(drive));
         secondaryController.getLeftTrigger().onTrue(new GrabberCloseCommand(grabber).andThen(new WaitCommand(.5)));
-        secondaryController.getRightTrigger().onTrue(new GrabberOpenCommand(grabber));
+        secondaryController.getRightTrigger().onTrue((new GrabberOpenCommand(grabber, arm)
+            .andThen(new WaitCommand(.25))
+            .andThen(new ArmToPositionCommand(arm, grabber, 0, secondaryController::getYAxis))).unless(arm::isInsideBot));
         secondaryController.getStartButton().onTrue(new CameraCommand(smartDashboard));
         secondaryController.getAButton().onTrue(new GrabberCloseCommand(grabber).andThen(new GrabberWaitCommand(0.25, grabber).andThen(new ArmToPositionCommand(arm, grabber, 30, secondaryController::getYAxis))));
         secondaryController.getBButton().onTrue(new ArmToPositionCommand(arm, grabber, ArmConstants.LOW_POST_POSITION, secondaryController::getYAxis));
