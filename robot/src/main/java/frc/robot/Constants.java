@@ -22,6 +22,8 @@ public abstract class Constants {
       public static final double GEAR_RATIO = 6.25 / 1;
       public static final double AUTON_DRIVE_SPEED = 0.2;
       public static final double SLEW_RATE_LIMIT = 1;
+      public static final double TURTLE_MODE_MAX_SPEED = 0.4;
+      public static final double TURBO_MODE_MIN_SPEED = TURTLE_MODE_MAX_SPEED;
       public static final boolean IsBotRed5 = false;
     }
     public static class MotorConstants {

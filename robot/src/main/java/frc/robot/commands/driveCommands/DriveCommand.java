@@ -42,15 +42,15 @@ public class DriveCommand extends CommandBase {
         boolean addSlew = true;
         if (this.turboMode) {
             // make forward negative right here and test
-            forward = Math.signum(joystickForwardAxis.getAsDouble()) * DreadbotMath.linearInterpolation(0.4, 1, Math.abs(joystickForwardAxis.getAsDouble()));
+            forward = Math.signum(joystickForwardAxis.getAsDouble()) * DreadbotMath.linearInterpolation(DriveConstants.TURBO_MODE_MIN_SPEED, 1, Math.abs(joystickForwardAxis.getAsDouble()));
             // Because this is done after the linearInterpolation, the deadband ends up being .05
             if (Math.abs(forward) <= OperatorConstants.TURBO_CONTROLLER_DEADBAND) {
                 forward = 0;
             }
         } else if (this.turtleMode) { // || elevatorPosition.getAsDouble() > ArmConstants.LOW_POST_POSITION --might come back to this + Fix slew rate
             // make forward negative right here and test
-            forward = Math.signum(joystickForwardAxis.getAsDouble()) * DreadbotMath.linearInterpolation(0, 0.3, Math.abs(joystickForwardAxis.getAsDouble()));
-            rotation =  Math.signum(joystickRotationalAxis.getAsDouble()) * DreadbotMath.linearInterpolation(0, 0.3,  Math.abs(joystickRotationalAxis.getAsDouble()));
+            forward = Math.signum(joystickForwardAxis.getAsDouble()) * DreadbotMath.linearInterpolation(0, DriveConstants.TURTLE_MODE_MAX_SPEED, Math.abs(joystickForwardAxis.getAsDouble()));
+            rotation =  Math.signum(joystickRotationalAxis.getAsDouble()) * DreadbotMath.linearInterpolation(0, DriveConstants.TURTLE_MODE_MAX_SPEED,  Math.abs(joystickRotationalAxis.getAsDouble()));
             addSlew = false;
         }
         drive.ArcadeDrive(forward, rotation, squareSpeed, addSlew, turboMode); //invert forward and rotation axis
