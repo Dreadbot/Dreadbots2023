@@ -38,10 +38,10 @@ public abstract class Constants {
       public static final double LEVEL_DEGREES = 1.5; //Angle where considered level
     }
     public static class AutonomousConstants {
-      public static final double KS_VOLTS = 0.14892; 
-      public static final double KV_VOLT_SECONDS_PER_METER = 2.0332;
-      public static final double KA_VOLT_SECONDS_SQUARED_PER_METER = 0.57765;
-      public static final double KP_DRIVE_VELOCITY = 2.3176;
+      public static final double KS_VOLTS = 0.15117; 
+      public static final double KV_VOLT_SECONDS_PER_METER = 1.5553;
+      public static final double KA_VOLT_SECONDS_SQUARED_PER_METER = 0.40129;
+      public static final double KP_DRIVE_VELOCITY = 0.63592;
       public static final double MAX_SPEED_METERS_PER_SECOND = 1.5;
       public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = .5;
       public static final double RAMSETE_B = 2;
