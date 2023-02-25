@@ -27,8 +27,6 @@ public class Arm extends DreadbotSubsystem {
     public void elevate(double speed) {
         if(getUpperSwitch() && speed > 0) speed = 0;
         else if(getLowerSwitch() && speed < 0) speed = 0;
-        // if(elevatorMotor.getPosition() > maxVal && Math.signum(speed) == 1) speed = 0;
-        //  if(elevatorMotor.getPosition() < minVal && Math.signum(speed) == -1) speed = 0;
         elevatorMotor.set(speed);
 
     }

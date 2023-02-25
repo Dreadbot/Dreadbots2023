@@ -7,7 +7,6 @@ package frc.robot;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.OperatorConstants;
@@ -116,20 +115,12 @@ public class RobotContainer {
                 return Autos.scoreAndBalanceCommand;
         }
     }
-    int i = 0;
-    public void autonPeriodic() {
-        // if(i % 25 == 0) {
-        //     System.out.println("Heading: " + drive.getHeading() + " Distance: " + (drive.getMotorEncoder(1).getPosition() / AutonomousConstants.ROTATIONS_PER_METER));
-        //     System.out.println("X: " + drive.getPose().getX() + "Y: " + drive.getPose().getY());
-        // }
-        // i++;
-    }
-    // int j =oipfd 0;
-    public void teleopPeriodic() {
-        // if(j % 25 == 0) {
-        //     System.out.println(gyro.getPitch());
-        // }
 
-        // j++;
+    public void autonPeriodic() {
+
+    }
+   
+    public void teleopPeriodic() {
+        
     }
 }

@@ -27,10 +27,9 @@ public class Robot extends TimedRobot {
     static String exitTurnLeftJSON = "paths/output/ExitTurnLeft.wpilib.json";
     public static Trajectory exitTurnRightTrajectory = DreadbotTrajectoryLoader.loadTrajectory(exitTurnRightJSON);
     public static Trajectory exitTurnLeftTrajectory = DreadbotTrajectoryLoader.loadTrajectory(exitTurnLeftJSON);
-    // public static Trajectory reverseTrajectory = DreadbotTrajectoryLoader.loadTrajectory("paths/output/ReverseTest.wpilib.json");
-    // public static Trajectory comboTrajectory = DreadbotTrajectoryLoader.loadTrajectory("paths/output/DriveStraight.wpilib.json").concatenate(reverseTrajectory);
 
     private final PowerDistribution pdh = new PowerDistribution(10, ModuleType.kRev);
+
     /**
      * This function is run when the robot is first started up and should be used for any
      * initialization code.
@@ -41,7 +40,6 @@ public class Robot extends TimedRobot {
         // autonomous chooser on the dashboard.
         robotContainer = new RobotContainer();
         pdh.setSwitchableChannel(false);
-        //CameraServer.startAutomaticCapture();
     }
 
     /**
@@ -104,7 +102,6 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
-        //pdh.setSwitchableChannel(true);
     }
 
     /**

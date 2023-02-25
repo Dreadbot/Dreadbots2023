@@ -110,6 +110,7 @@ public class Drive extends DreadbotSubsystem {
     public void TankDrive(double ySpeed, double wSpeed) { // WUMBO SPEED
         diffDrive.tankDrive(ySpeed, wSpeed);
     }
+
     public void TankDriveVoltage(double yVolts, double wVolts) {
         leftMotors.setVoltage(yVolts);
         rightMotors.setVoltage(wVolts);
@@ -148,21 +149,25 @@ public class Drive extends DreadbotSubsystem {
             pose
         );
     }
+
     public DifferentialDriveWheelSpeeds getWheelSpeeds() {
         return new DifferentialDriveWheelSpeeds(
            ((frontLeftMotor.getEncoder().getVelocity() / 60) / AutonomousConstants.ROTATIONS_PER_METER),
            ((frontRightMotor.getEncoder().getVelocity() / 60) / AutonomousConstants.ROTATIONS_PER_METER)
         );
     }
+
     public void resetEncoders() {
         frontLeftMotor.resetEncoder();
         frontRightMotor.resetEncoder();
         backLeftMotor.resetEncoder();
         backRightMotor.resetEncoder();
     }
+
     public double getHeading() {
         return gyro.getRotation2d().getDegrees();
     }
+
     public Pose2d getPose() {
         return odometry.getPoseMeters();
     }
@@ -170,6 +175,7 @@ public class Drive extends DreadbotSubsystem {
     public void resetGyro() {
         gyro.reset();
     }
+    
     @Override
     public void close() throws Exception {
         stopMotors();
