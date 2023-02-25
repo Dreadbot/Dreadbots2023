@@ -1,17 +1,22 @@
-# Units are in inches; need to convert to meters
+# All camera positions must be combined with the offset to get the real position
+# Cameras are measured from the front right post
+# Offset is between the front right post and the front left corner
+# Y positions are ignored for now
+# X is positive to the right, Z is positive to the back
+# The front left corner should be 0, 0
 
 [cameras.front]
-x = -2
-z = 26
+x = -0.0508
+z =  0.6604
 
 [cameras.left]
-x = -22
-z = 24
+x = -0.5588
+z =  0.6096
 
 [cameras.right]
-x = 0
-z = 24
+x =  0.0000
+z =  0.6096
 
 [offset]
-x = -25
-z = 0
+x =  0.6350
+z =  0.0000
