@@ -3,7 +3,6 @@ package frc.robot.commands.autonCommands;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants.BalanceConstants;
 import frc.robot.subsystems.Drive;
@@ -28,10 +27,8 @@ public class BalanceCommand extends CommandBase {
         speed = MathUtil.clamp(speed, -BalanceConstants.MAX_SPEED, BalanceConstants.MAX_SPEED);
 
         if (Math.abs(pitch) < BalanceConstants.LEVEL_DEGREES) {
-             speed = 0;
-        }
-
-        else if (Math.abs(previousPitch) - Math.abs(pitch) > 0.5 && Math.abs(pitch) > BalanceConstants.LEVEL_DEGREES){
+            speed = 0;
+        } else if (Math.abs(previousPitch) - Math.abs(pitch) > 0.5 && Math.abs(pitch) > BalanceConstants.LEVEL_DEGREES){
             speed = -speed;
         }
      
