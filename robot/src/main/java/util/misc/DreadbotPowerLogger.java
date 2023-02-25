@@ -14,7 +14,16 @@ public class DreadbotPowerLogger {
 
     public DreadbotPowerLogger(int pdpPort) {
         pwrDistro = new PowerDistribution(pdpPort, ModuleType.kRev);
+        startPowerLogger();
+    }
 
+    public DreadbotPowerLogger(PowerDistribution pwrDistro){
+        this.pwrDistro = pwrDistro;
+        startPowerLogger();
+    }
+
+
+    private void startPowerLogger(){
         try {
             fileWriter = new FileWriter("/C/PowerLog:" + new Date() + new Date().getTime() + ".txt");
                 fileWriter.write("--PDP Power log--\n");
@@ -29,14 +38,13 @@ public class DreadbotPowerLogger {
             e.printStackTrace();
         }
     }
-
     public DreadbotPowerLogger(int pdpPort, double startingCurrent){
         this(pdpPort);
         this.startingCurrent = startingCurrent;
     }
 
     @SuppressWarnings("unused")
-    private void logCurrents(){
+    public void logCurrents(){
         if(pwrDistro.getTotalCurrent() >= startingCurrent) {
                 String powerOutput = "Power output:,";
             for(int i = 0; i < 24; i++){

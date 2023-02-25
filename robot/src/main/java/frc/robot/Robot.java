@@ -11,6 +11,7 @@ import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import util.misc.BufferedPrint;
+import util.misc.DreadbotPowerLogger;
 import util.misc.DreadbotTrajectoryUtils.DreadbotTrajectoryLoader;
 
 /**
@@ -30,6 +31,8 @@ public class Robot extends TimedRobot {
 
     private final PowerDistribution pdh = new PowerDistribution(10, ModuleType.kRev);
 
+    private final DreadbotPowerLogger powerLogger = new DreadbotPowerLogger(pdh);
+
     /**
      * This function is run when the robot is first started up and should be used for any
      * initialization code.
@@ -39,7 +42,7 @@ public class Robot extends TimedRobot {
         // Instantiate our RobotContainer.  This will perform all our button bindings, and put our
         // autonomous chooser on the dashboard.
         robotContainer = new RobotContainer();
-        pdh.setSwitchableChannel(false);
+        //pdh.setSwitchableChannel(false);
     }
 
     /**
@@ -56,6 +59,7 @@ public class Robot extends TimedRobot {
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
         // block in order for anything in the Command-based framework to work.
         CommandScheduler.getInstance().run();
+        powerLogger.logCurrents();
     }
 
     /**
@@ -64,6 +68,7 @@ public class Robot extends TimedRobot {
     @Override
     public void disabledInit() {
         //pdh.setSwitchableChannel(true);
+        powerLogger.stopLogging();
     }
 
     @Override

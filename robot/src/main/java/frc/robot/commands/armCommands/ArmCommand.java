@@ -27,9 +27,9 @@ public class ArmCommand extends CommandBase {
     public void execute() {
         if(overideClose.getAsBoolean()) {
             grabber.closeGrabber();
-        } else if(arm.getLowerSwitch() && joystickValue.getAsDouble() < 0.05){
+        } else if(arm.getLowerSwitch() && joystickValue.getAsDouble() < 0.10){
             grabber.openGrabber();
-        } else if (Math.abs(joystickValue.getAsDouble()) > 0.05 && arm.getElevatorPosition() < ArmConstants.LOW_POST_POSITION - 10) {
+        } else if (Math.abs(joystickValue.getAsDouble()) > 0.10 && arm.getElevatorPosition() < ArmConstants.LOW_POST_POSITION - 10) {
             grabber.closeGrabber(); 
         }
         arm.elevate(joystickValue.getAsDouble() * (turtleMode.getAsBoolean() ? ArmConstants.ELEVATOR_MANUAL_TURTLE_SPEED : ArmConstants.ELEVATOR_MANUAL_SPEED));
