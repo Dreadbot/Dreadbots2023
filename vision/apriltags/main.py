@@ -9,16 +9,26 @@ import math
 import numpy as np
 import ntcore
 
+# XX: xexanoth, YS: yog-sothoth
+ABSOLUTE_POSITION_X_TOPIC = "XXAbsolutePositionX" # "YSAbsolutePositionX"
+ABSOLUTE_POSITION_Y_TOPIC = "XXAbsolutePositionY" # "YSAbsolutePositionY"
+ABSOLUTE_POSITION_Z_TOPIC = "XXAbsolutePositionZ" # "YSAbsolutePositionZ"
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("filename")
     args = parser.parse_args()
 
     nt_inst = ntcore.NetworkTableInstance.getDefault()
+    nt_inst.setServer("10.36.56.2")
+    nt_inst.startClient4("xexanoth")
     table = nt_inst.getTable("SmartDashboard")
 
     x_distance_pub = nt_util.DoublePublisher(table, "ApriltagDistanceX")
     z_distance_pub = nt_util.DoublePublisher(table, "ApriltagDistanceZ")
+    x_position_pub = nt_util.DoublePublisher(table, ABSOLUTE_POSITION_X_TOPIC)
+    y_position_pub = nt_util.DoublePublisher(table, ABSOLUTE_POSITION_Y_TOPIC)
+    z_position_pub = nt_util.DoublePublisher(table, ABSOLUTE_POSITION_Z_TOPIC)
 
     if not os.path.exists(args.filename):
         print("Invalid camera parameter file.")
@@ -34,7 +44,7 @@ def main():
         camera_params[3] = params["cy"]
 
     cap = cv2.VideoCapture(0)
-    cap.set(cv2.CAP_PROP_EXPOSURE, -4) 
+    # cap2 = cv2.VideoCapture(1)"YSAbsolutePositionX"
 
     at_detector = Detector(searchpath=['apriltags'],
                 families='tag16h5',
