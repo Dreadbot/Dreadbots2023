@@ -35,7 +35,7 @@ public abstract class Constants {
     public static class BalanceConstants {
       public static final double MAX_SPEED = 0.125 * 0.95;
       public static final double SCALE = -0.3; //invert sign when we replaced Nav-X
-      public static final double LEVEL_DEGREES = 1.5; //Angle where considered level
+      public static final double LEVEL_DEGREES = 12; //Angle where considered level
     }
     public static class AutonomousConstants {
       public static final double KS_VOLTS = 0.15117; 
