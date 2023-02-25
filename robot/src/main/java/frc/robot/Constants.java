@@ -61,6 +61,7 @@ public abstract class Constants {
       public static final double MAX_ELEVATOR_POSITION = 287 * 1.5;
       public static final double LOW_POST_POSITION = 154.433;
       public static final double MEDIUM_POST_POSITION = 221.463;
+      public static final double PICKUP_ELEVATOR_POSITION = 30;
       public static final double ELEVATOR_MOTOR_SPEED = 1;
       public static final double ELEVATOR_MANUAL_SPEED = 1;
       public static final double ELEVATOR_MANUAL_TURTLE_SPEED = 0.3;
