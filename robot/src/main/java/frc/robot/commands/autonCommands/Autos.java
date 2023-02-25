@@ -51,10 +51,11 @@ public final class Autos {
       DoubleSupplier nullJoyStick = () -> 0;
       return new SequentialCommandGroup(
         new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, nullJoyStick),
+        new GrabberWaitCommand(.2, grabber),
         new GrabberOpenCommand(grabber, arm), 
         new GrabberWaitCommand(.2, grabber),
         new ArmToPositionCommand(arm, grabber, -5, nullJoyStick),
-        new AutonDriveStraightCommand(drive, 2),
+        new AutonDriveStraightCommand(drive, 2.7),
         new BalanceCommand(drive, gyro),
         new BrakeCommand(drive, gyro)
       );
