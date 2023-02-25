@@ -1,0 +1,17 @@
+# Units are in inches; need to convert to meters
+
+[cameras.front]
+x = -2
+z = 26
+
+[cameras.left]
+x = -22
+z = 24
+
+[cameras.right]
+x = 0
+z = 24
+
+[offset]
+x = -25
+z = 0
