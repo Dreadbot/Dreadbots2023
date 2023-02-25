@@ -86,14 +86,23 @@ public class RobotContainer {
             .andThen(new GrabberWaitCommand(.5, grabber)));
         secondaryController.getRightTrigger().onTrue((new GrabberOpenCommand(grabber, arm)
             .andThen(new GrabberWaitCommand(.25, grabber))
-            .andThen(new ArmToPositionCommand(arm, grabber, 0, secondaryController::getYAxis))).unless(arm::isInsideBot));
+            .andThen(new ArmToPositionCommand(arm, grabber, 0, secondaryController::getYAxis)))
+                .unless(arm::isInsideBot));
         secondaryController.getStartButton().onTrue(new CameraCommand(smartDashboard));
-        secondaryController.getAButton().onTrue(new GrabberCloseCommand(grabber).andThen(new GrabberWaitCommand(0.25, grabber).andThen(new ArmToPositionCommand(arm, grabber, 30, secondaryController::getYAxis))));
-        secondaryController.getBButton().onTrue(new ArmToPositionCommand(arm, grabber, ArmConstants.LOW_POST_POSITION, secondaryController::getYAxis));
-        secondaryController.getXButton().onTrue(new ArmToPositionCommand(arm, grabber, ArmConstants.MEDIUM_POST_POSITION, secondaryController::getYAxis));
-        secondaryController.getYButton().onTrue(new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, secondaryController::getYAxis));
+        secondaryController.getAButton().onTrue(new GrabberCloseCommand(grabber)
+            .andThen(new GrabberWaitCommand(0.25, grabber)
+            .andThen(new ArmToPositionCommand(arm, grabber, ArmConstants.PICKUP_ELEVATOR_POSITION, secondaryController::getYAxis))));
+        secondaryController.getBButton().onTrue(new GrabberCloseCommand(grabber)
+            .andThen(new GrabberWaitCommand(.25, grabber))
+            .andThen(new ArmToPositionCommand(arm, grabber, ArmConstants.LOW_POST_POSITION, secondaryController::getYAxis)));
+        secondaryController.getXButton().onTrue(new GrabberCloseCommand(grabber)
+            .andThen(new GrabberWaitCommand(.25, grabber))
+            .andThen(new ArmToPositionCommand(arm, grabber, ArmConstants.MEDIUM_POST_POSITION, secondaryController::getYAxis)));
+        secondaryController.getYButton().onTrue(new GrabberCloseCommand(grabber)
+            .andThen(new GrabberWaitCommand(.25, grabber))
+            .andThen(new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, secondaryController::getYAxis)));
 
-        Autos.generateCommands(drive, arm, grabber, gyro);
+        Autos.generateCommands(drive, arm, grabber, gyro, intake);
     }
 
     /**
