@@ -64,8 +64,8 @@ public class RobotContainer {
     public RobotContainer() {
         
         autonChooser.setDefaultOption("Score and Balance", 1);
-        autonChooser.addOption("Score and Leave", 2);
-        autonChooser.addOption("Score, Leave, Balance", 3);
+        autonChooser.addOption("Score and Leave Left", 2);
+        autonChooser.addOption("Score and Leave Right", 3);
         SmartDashboard.putData(autonChooser);
         // Configure the trigger bindings
         configureBindings();
@@ -93,6 +93,8 @@ public class RobotContainer {
         secondaryController.getBButton().onTrue(new ArmToPositionCommand(arm, grabber, ArmConstants.LOW_POST_POSITION, secondaryController::getYAxis));
         secondaryController.getXButton().onTrue(new ArmToPositionCommand(arm, grabber, ArmConstants.MEDIUM_POST_POSITION, secondaryController::getYAxis));
         secondaryController.getYButton().onTrue(new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, secondaryController::getYAxis));
+
+        Autos.generateCommands(drive, arm, grabber, gyro);
     }
 
     /**
@@ -105,13 +107,13 @@ public class RobotContainer {
         // An example command will be run in autonomous
         switch(chosenAuton) {
             case 1:
-                return Autos.ScoreAndBalance(drive, arm, grabber, gyro);
+                return Autos.scoreAndBalanceCommand;
             case 2:
-                return Autos.ScoreAndLeave(drive, arm, grabber);
+                return Autos.scoreAndLeaveLeftCommand;
             case 3:
-                return null;
+                return Autos.scoreAndLeaveRightCommand;
             default:
-                return Autos.ScoreAndBalance(drive, arm, grabber, gyro);
+                return Autos.scoreAndBalanceCommand;
         }
     }
     int i = 0;
