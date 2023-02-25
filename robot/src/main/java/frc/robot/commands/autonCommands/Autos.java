@@ -8,6 +8,7 @@ import frc.robot.Robot;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.AutonomousConstants;
 import frc.robot.commands.armCommands.ArmToPositionCommand;
+import frc.robot.commands.driveCommands.FeedMotorsCommand;
 import frc.robot.commands.grabberCommands.GrabberOpenCommand;
 import frc.robot.commands.grabberCommands.GrabberWaitCommand;
 import frc.robot.subsystems.Arm;
@@ -32,6 +33,8 @@ import edu.wpi.first.math.trajectory.TrajectoryGenerator;
 import edu.wpi.first.math.trajectory.constraint.DifferentialDriveVoltageConstraint;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 
@@ -58,7 +61,9 @@ public final class Autos {
         new AutonDriveStraightCommand(drive, 2.7),
         new BalanceCommand(drive, gyro),
         new BrakeCommand(drive, gyro)
-      );
+      ).raceWith(new FeedMotorsCommand(drive).repeatedly());
+        
+        
     }
     public static CommandBase scoreAndLeaveRight(Drive drive, Arm arm, Grabber grabber) {
       DoubleSupplier nullJoyStick = () -> 0;
@@ -68,7 +73,7 @@ public final class Autos {
         new GrabberWaitCommand(.5, grabber),
         new ArmToPositionCommand(arm, grabber, -5, nullJoyStick),
         FollowPath(drive, Robot.exitTurnRightTrajectory)
-      );
+      ).raceWith(new FeedMotorsCommand(drive).repeatedly());
     }
     public static CommandBase scoreAndLeaveLeft(Drive drive, Arm arm, Grabber grabber) {
       DoubleSupplier nullJoyStick = () -> 0;
@@ -78,7 +83,7 @@ public final class Autos {
         new GrabberWaitCommand(.5, grabber),
         new ArmToPositionCommand(arm, grabber, -5, nullJoyStick),
         FollowPath(drive, Robot.exitTurnLeftTrajectory)
-      );
+      ).raceWith(new FeedMotorsCommand(drive).repeatedly());
     }
     public static CommandBase FollowPath(Drive drive, Trajectory trajectory) {
       final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(AutonomousConstants.TRACK_WIDTH);

@@ -217,4 +217,8 @@ public class Drive extends DreadbotSubsystem {
         slewRate = new SlewRateLimiter(DriveConstants.SLEW_RATE_LIMIT, -DriveConstants.SLEW_RATE_LIMIT, 0.2);
         turboSlewRate = new SlewRateLimiter(DriveConstants.TURBO_FORWARD_SPEED_LIMITER, -DriveConstants.TURBO_FORWARD_SPEED_LIMITER, .4);
     }
+
+    public void feedMotors() {
+        diffDrive.feed();
+    }
 }
