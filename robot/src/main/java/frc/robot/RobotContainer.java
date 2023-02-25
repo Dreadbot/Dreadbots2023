@@ -7,7 +7,6 @@ package frc.robot;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.armCommands.ArmCommand;
@@ -70,7 +69,7 @@ public class RobotContainer {
         configureBindings();
     }
     private void configureBindings() {
-        DriveCommand driveCommand = new DriveCommand(drive, primaryController::getYAxis, primaryController::getZAxis, arm::getElevatorPosition);
+        DriveCommand driveCommand = new DriveCommand(drive, primaryController::getYAxis, primaryController::getZAxis);
         ArmCommand armCommand = new ArmCommand(arm, grabber, secondaryController::getYAxis, secondaryController.getLeftTrigger(), secondaryController.getLeftBumper());
         DefaultGrabberOpenCommand grabberOpenCommand = new DefaultGrabberOpenCommand(grabber, arm);
         drive.setDefaultCommand(driveCommand);
@@ -83,9 +82,10 @@ public class RobotContainer {
         primaryController.getRightTrigger().whileTrue(new IntakeCommand(intake));
         primaryController.getAButton().onTrue(new AutoAlignConeCommand(drive));
         primaryController.getBButton().onTrue(new AutoAlignCubeCommand(drive));
-        secondaryController.getLeftTrigger().onTrue(new GrabberCloseCommand(grabber).andThen(new WaitCommand(.5)));
+        secondaryController.getLeftTrigger().onTrue(new GrabberCloseCommand(grabber)
+            .andThen(new GrabberWaitCommand(.5, grabber)));
         secondaryController.getRightTrigger().onTrue((new GrabberOpenCommand(grabber, arm)
-            .andThen(new WaitCommand(.25))
+            .andThen(new GrabberWaitCommand(.25, grabber))
             .andThen(new ArmToPositionCommand(arm, grabber, 0, secondaryController::getYAxis))).unless(arm::isInsideBot));
         secondaryController.getStartButton().onTrue(new CameraCommand(smartDashboard));
         secondaryController.getAButton().onTrue(new GrabberCloseCommand(grabber).andThen(new GrabberWaitCommand(0.25, grabber).andThen(new ArmToPositionCommand(arm, grabber, 30, secondaryController::getYAxis))));
