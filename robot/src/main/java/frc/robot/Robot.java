@@ -31,7 +31,7 @@ public class Robot extends TimedRobot {
 
     private final PowerDistribution pdh = new PowerDistribution(10, ModuleType.kRev);
 
-    private final DreadbotPowerLogger powerLogger = new DreadbotPowerLogger(pdh);
+    //private final DreadbotPowerLogger powerLogger = new DreadbotPowerLogger(pdh);
 
     /**
      * This function is run when the robot is first started up and should be used for any

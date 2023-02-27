@@ -50,7 +50,6 @@ public class DreadbotPowerLogger {
             for(int i = 0; i < 24; i++){
                 powerOutput += pwrDistro.getCurrent(i) + ",";
             }  
-
             try {
                 fileWriter.write(new Timestamp(new Date().getTime()) + " " + powerOutput + "\n");
             } catch (IOException e) {

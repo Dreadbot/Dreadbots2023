@@ -8,6 +8,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import frc.robot.Constants.ArmConstants;
+import frc.robot.Constants.GrabberConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.commands.armCommands.ArmCommand;
 import frc.robot.commands.armCommands.ArmToPositionCommand;
@@ -84,21 +85,21 @@ public class RobotContainer {
         primaryController.getBButton().onTrue(new AutoAlignCubeCommand(drive));
         secondaryController.getLeftTrigger().whileTrue(new GrabberCloseCommand(grabber)); //needed for extra conditions were we want to close no matter what
         secondaryController.getRightTrigger().onTrue((new GrabberOpenCommand(grabber, arm)
-            .andThen(new GrabberWaitCommand(.25, grabber))
+            .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber))
             .andThen(new ArmToPositionCommand(arm, grabber, 0, secondaryController::getYAxis)))
                 .unless(arm::isInsideBot));
         secondaryController.getStartButton().onTrue(new CameraCommand(smartDashboard));
         secondaryController.getAButton().onTrue(new GrabberCloseCommand(grabber)
-            .andThen(new GrabberWaitCommand(0.25, grabber)
+            .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber).unless(arm::getNotLowerSwitch)//.unless(arm::getLowerSwitch)
             .andThen(new ArmToPositionCommand(arm, grabber, ArmConstants.PICKUP_ELEVATOR_POSITION, secondaryController::getYAxis))));
         secondaryController.getBButton().onTrue(new GrabberCloseCommand(grabber)
-            .andThen(new GrabberWaitCommand(.25, grabber))
+            .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber).unless(arm::getNotLowerSwitch))
             .andThen(new ArmToPositionCommand(arm, grabber, ArmConstants.LOW_POST_POSITION, secondaryController::getYAxis)));
         secondaryController.getXButton().onTrue(new GrabberCloseCommand(grabber)
-            .andThen(new GrabberWaitCommand(.25, grabber))
+            .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber).unless(arm::getNotLowerSwitch))
             .andThen(new ArmToPositionCommand(arm, grabber, ArmConstants.MEDIUM_POST_POSITION, secondaryController::getYAxis)));
         secondaryController.getYButton().onTrue(new GrabberCloseCommand(grabber)
-            .andThen(new GrabberWaitCommand(.25, grabber))
+            .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber).unless(arm::getNotLowerSwitch))
             .andThen(new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, secondaryController::getYAxis)));
 
         Autos.generateCommands(drive, arm, grabber, gyro, intake);
