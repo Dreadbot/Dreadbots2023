@@ -57,11 +57,11 @@ public final class Autos {
       DoubleSupplier nullJoyStick = () -> 0;
       return new SequentialCommandGroup(
         new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, nullJoyStick),
-        new GrabberWaitCommand(.2, grabber),
+        new GrabberWaitCommand(.35, grabber),
         new GrabberOpenCommand(grabber, arm), 
         new GrabberWaitCommand(.2, grabber),
-        new ArmToPositionCommand(arm, grabber, -5, nullJoyStick),
-        new AutonDriveStraightCommand(drive, 2.7),
+        new ArmToPositionCommand(arm, grabber, -5, nullJoyStick)
+          .alongWith(new AutonDriveStraightCommand(drive, 2.7)),
         new BalanceCommand(drive, gyro),
         new BrakeCommand(drive, gyro)
       ).raceWith(new FeedMotorsCommand(drive).repeatedly());
@@ -73,9 +73,9 @@ public final class Autos {
       return new SequentialCommandGroup(
         new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, nullJoyStick),
         new GrabberOpenCommand(grabber, arm),
-        new GrabberWaitCommand(.5, grabber),
-        new ArmToPositionCommand(arm, grabber, -5, nullJoyStick),
-        FollowPath(drive, Robot.exitTurnRightTrajectory),
+        new GrabberWaitCommand(.35, grabber),
+        new ArmToPositionCommand(arm, grabber, -5, nullJoyStick)
+          .alongWith(FollowPath(drive, Robot.exitTurnRightTrajectory)),
         new GrabberCloseCommand(grabber),
         new GrabberWaitCommand(0.25, grabber),
         new ArmToPositionCommand(arm, grabber, ArmConstants.PICKUP_ELEVATOR_POSITION, nullJoyStick)
@@ -86,9 +86,9 @@ public final class Autos {
       return new SequentialCommandGroup(
         new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, nullJoyStick),
         new GrabberOpenCommand(grabber, arm),
-        new GrabberWaitCommand(.5, grabber),
-        new ArmToPositionCommand(arm, grabber, -5, nullJoyStick),
-        FollowPath(drive, Robot.exitTurnLeftTrajectory),
+        new GrabberWaitCommand(.35, grabber),
+        new ArmToPositionCommand(arm, grabber, -5, nullJoyStick)
+          .alongWith(FollowPath(drive, Robot.exitTurnLeftTrajectory)),
         new GrabberCloseCommand(grabber),
         new GrabberWaitCommand(0.25, grabber),
         new ArmToPositionCommand(arm, grabber, ArmConstants.PICKUP_ELEVATOR_POSITION, nullJoyStick)
