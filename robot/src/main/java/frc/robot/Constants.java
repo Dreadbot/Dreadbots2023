@@ -51,7 +51,7 @@ public abstract class Constants {
     }
     public static class GrabberConstants {
       public static final int GRABBER_PORT = 0;
-      public static final double WAIT_PERIOD = 2.35;
+      public static final double WAIT_PERIOD = .35;
     }
     public static class IntakeConstants {
       public static final double INTAKE_PORT = 5;
