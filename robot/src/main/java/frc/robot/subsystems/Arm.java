@@ -1,6 +1,7 @@
 package frc.robot.subsystems;
 
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -18,6 +19,7 @@ public class Arm extends DreadbotSubsystem {
     public Arm() {
         this.elevatorMotor = new DreadbotMotor(new CANSparkMax(ArmConstants.ELEVATOR_MOTOR_PORT, MotorType.kBrushless), "Elevator");
         this.elevatorMotor.setInverted(true);
+        this.elevatorMotor.setIdleMode(IdleMode.kBrake);
         this.minVal = this.elevatorMotor.getPosition();
         this.maxVal = this.elevatorMotor.getPosition() + ArmConstants.MAX_ELEVATOR_POSITION;
         this.topSwitch = new DigitalInput(ArmConstants.TOP_LIMIT_SWITCH_PORT);
@@ -35,7 +37,7 @@ public class Arm extends DreadbotSubsystem {
     }
 
     public boolean isInsideBot(){
-        return elevatorMotor.getPosition() < ArmConstants.LOW_POST_POSITION - 10;
+        return elevatorMotor.getPosition() < ArmConstants.INSIDE_BOT_POSITION;
     }
 
     public double getMinVal() {
@@ -53,6 +55,13 @@ public class Arm extends DreadbotSubsystem {
     public boolean getLowerSwitch() {
         zeroEncoder();
         return !lowerSwitch.get();
+    }
+
+    /*
+     * <p> Why does wpi not have the opposite of an unless
+     */
+    public boolean getNotLowerSwitch(){
+        return !getLowerSwitch();
     }
     public void zeroEncoder() {
         if(!lowerSwitch.get() && getElevatorPosition() != 0) {
