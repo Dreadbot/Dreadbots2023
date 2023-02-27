@@ -83,8 +83,7 @@ public class RobotContainer {
         primaryController.getRightTrigger().whileTrue(new IntakeCommand(intake));
         primaryController.getAButton().onTrue(new AutoAlignConeCommand(drive));
         primaryController.getBButton().onTrue(new AutoAlignCubeCommand(drive));
-        secondaryController.getLeftTrigger().onTrue(new GrabberCloseCommand(grabber)
-            .andThen(new GrabberWaitCommand(.5, grabber)));
+        secondaryController.getLeftTrigger().whileTrue(new GrabberCloseCommand(grabber)); //needed for extra conditions were we want to close no matter what
         secondaryController.getRightTrigger().onTrue((new GrabberOpenCommand(grabber, arm)
             .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber))
             .andThen(new ArmToPositionCommand(arm, grabber, 0, secondaryController::getYAxis)))
