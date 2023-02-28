@@ -7,6 +7,7 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Grabber;
+import frc.robot.util.math.DreadbotMath;
 
 public class ArmCommand extends CommandBase {
     private Arm arm;
@@ -32,6 +33,7 @@ public class ArmCommand extends CommandBase {
         } else if (Math.abs(joystickValue.getAsDouble()) > 0.10 && arm.getElevatorPosition() < ArmConstants.INSIDE_BOT_POSITION) {
             grabber.closeGrabber(); 
         }
-        arm.elevate(joystickValue.getAsDouble() * (turtleMode.getAsBoolean() ? ArmConstants.ELEVATOR_MANUAL_TURTLE_SPEED : ArmConstants.ELEVATOR_MANUAL_SPEED));
+        double speed = DreadbotMath.applyDeadbandToValue(joystickValue.getAsDouble(), 0.05);
+        arm.elevate(speed * (turtleMode.getAsBoolean() ? ArmConstants.ELEVATOR_MANUAL_TURTLE_SPEED : ArmConstants.ELEVATOR_MANUAL_SPEED));
     }
 }
