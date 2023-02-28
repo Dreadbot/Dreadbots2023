@@ -40,6 +40,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.ParallelCommandGroup;
 import edu.wpi.first.wpilibj2.command.RamseteCommand;
 import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 
 public final class Autos {
     /**
@@ -48,10 +49,15 @@ public final class Autos {
     public static Command scoreAndBalanceCommand;
     public static Command scoreAndLeaveLeftCommand;
     public static Command scoreAndLeaveRightCommand;
-    public static void generateCommands(Drive drive, Arm arm, Grabber grabber, AHRS gryo, Intake intake) {
-      scoreAndBalanceCommand = scoreAndBalance(drive, arm, grabber, gryo);
+    public static Command scoreAndTurnAroundToLeftCommand;
+    public static Command scoreAndTurnAroundToRightCommand;
+
+    public static void generateCommands(Drive drive, Arm arm, Grabber grabber, AHRS gyro, Intake intake) {
+      scoreAndBalanceCommand = scoreAndBalance(drive, arm, grabber, gyro);
       scoreAndLeaveLeftCommand = scoreAndLeaveLeft(drive, arm, grabber, intake);
       scoreAndLeaveRightCommand = scoreAndLeaveRight(drive, arm, grabber, intake);
+      scoreAndTurnAroundToLeftCommand = scoreAndTurnAroundToLeft(drive, arm, grabber, gyro);
+      scoreAndTurnAroundToRightCommand = scoreAndTurnAroundToRight(drive, arm, grabber, gyro);
     }
     public static CommandBase scoreAndBalance(Drive drive, Arm arm, Grabber grabber, AHRS gyro) {
       DoubleSupplier nullJoyStick = () -> 0;
@@ -93,6 +99,32 @@ public final class Autos {
         new GrabberWaitCommand(0.25, grabber),
         new ArmToPositionCommand(arm, grabber, ArmConstants.PICKUP_ELEVATOR_POSITION, nullJoyStick)
       ).raceWith(new FeedMotorsCommand(drive).repeatedly(), new IntakeCommand(intake));
+    }
+    public static CommandBase scoreAndTurnAroundToRight(Drive drive, Arm arm, Grabber grabber, AHRS gyro) {
+      DoubleSupplier nullJoyStick = () -> 0;
+      return new SequentialCommandGroup(
+        new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, nullJoyStick),
+        new GrabberOpenCommand(grabber, arm),
+        new GrabberWaitCommand(.35, grabber),
+        new ArmToPositionCommand(arm, grabber, -5, nullJoyStick)
+          .alongWith(new WaitCommand(0.25)
+            .andThen(FollowPath(drive, Robot.exitTurnAroundToRightTrajectory))),
+        new AutonDriveStraightCommand(drive, 2.75),
+        new BalanceCommand(drive, gyro)
+      ).raceWith(new FeedMotorsCommand(drive).repeatedly());
+    }
+    public static CommandBase scoreAndTurnAroundToLeft(Drive drive, Arm arm, Grabber grabber, AHRS gyro) {
+      DoubleSupplier nullJoyStick = () -> 0;
+      return new SequentialCommandGroup(
+        new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, nullJoyStick),
+        new GrabberOpenCommand(grabber, arm),
+        new GrabberWaitCommand(.35, grabber),
+        new ArmToPositionCommand(arm, grabber, -5, nullJoyStick)
+          .alongWith(new WaitCommand(0.25)
+            .andThen(FollowPath(drive, Robot.exitTurnAroundToLeftTrajectory))),
+        new AutonDriveStraightCommand(drive, 2.75),
+        new BalanceCommand(drive, gyro)
+      ).raceWith(new FeedMotorsCommand(drive).repeatedly());
     }
     public static CommandBase FollowPath(Drive drive, Trajectory trajectory) {
       final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(AutonomousConstants.TRACK_WIDTH);
