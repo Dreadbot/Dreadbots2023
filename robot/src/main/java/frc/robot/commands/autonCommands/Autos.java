@@ -109,7 +109,7 @@ public final class Autos {
         new ArmToPositionCommand(arm, grabber, -5, nullJoyStick)
           .alongWith(new WaitCommand(0.25)
             .andThen(FollowPath(drive, Robot.exitTurnAroundToRightTrajectory))),
-        new AutonDriveStraightCommand(drive, 2.75),
+        new AutonDriveStraightCommand(drive, 2.5),
         new BalanceCommand(drive, gyro)
       ).raceWith(new FeedMotorsCommand(drive).repeatedly());
     }

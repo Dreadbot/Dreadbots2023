@@ -65,8 +65,8 @@ public class RobotContainer {
         autonChooser.setDefaultOption("Score and Balance", 1);
         autonChooser.addOption("Score and Leave Left", 2);
         autonChooser.addOption("Score and Leave Right", 3);
-        autonChooser.addOption("Score And Turn Around to Left", 4);
-        autonChooser.addOption("Score And Turn Around to Right", 5);
+        //autonChooser.addOption("Score And Turn Around to Left", 4); //Broken for what ever reason
+        autonChooser.addOption("Score And Turn Around to Right", 5);    
         SmartDashboard.putData(autonChooser);
         // Configure the trigger bindings
         configureBindings();

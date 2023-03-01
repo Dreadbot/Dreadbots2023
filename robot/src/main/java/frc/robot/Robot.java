@@ -74,6 +74,9 @@ public class Robot extends TimedRobot {
     public void disabledInit() {
         //pdh.setSwitchableChannel(true);
         //powerLogger.stopLogging();
+        if (autonomousCommand != null) {
+            autonomousCommand.cancel();
+        }
     }
 
     @Override
