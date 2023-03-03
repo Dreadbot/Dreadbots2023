@@ -119,12 +119,18 @@ public class RobotContainer {
             case 1:
                 return Autos.scoreAndBalanceCommand;
             case 2:
+                drive.resetGyro();
+                drive.resetOdometry(Robot.exitTurnLeftTrajectory.getInitialPose());
                 return Autos.scoreAndLeaveLeftCommand;
             case 3:
+                drive.resetGyro();
+                drive.resetOdometry(Robot.exitTurnRightTrajectory.getInitialPose());
                 return Autos.scoreAndLeaveRightCommand;
             case 4:
-                return Autos.scoreAndTurnAroundToLeftCommand;
+                return Autos.scoreAndTurnAroundToLeftCommand; // not using this
             case 5:
+                drive.resetGyro();
+                drive.resetOdometry(Robot.exitTurnAroundToRightTrajectory.getInitialPose());
                 return Autos.scoreAndTurnAroundToRightCommand;
             default:
                 return Autos.scoreAndBalanceCommand;
