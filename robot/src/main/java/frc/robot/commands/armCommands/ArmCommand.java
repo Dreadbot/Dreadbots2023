@@ -2,6 +2,8 @@ package frc.robot.commands.armCommands;
 
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 import frc.robot.Constants.ArmConstants;
@@ -33,7 +35,11 @@ public class ArmCommand extends CommandBase {
         } else if (Math.abs(joystickValue.getAsDouble()) > 0.10 && arm.getElevatorPosition() < ArmConstants.INSIDE_BOT_POSITION) {
             grabber.closeGrabber(); 
         }
+        
         double speed = DreadbotMath.applyDeadbandToValue(joystickValue.getAsDouble(), 0.08);
+        if(Math.signum(speed) < 0 && arm.getElevatorPosition() < ArmConstants.PICKUP_ELEVATOR_POSITION - 3) {
+            speed = speed * 0.4; //slow down bot if reaching the botton
+        }
         arm.elevate(speed * (turtleMode.getAsBoolean() ? ArmConstants.ELEVATOR_MANUAL_TURTLE_SPEED : ArmConstants.ELEVATOR_MANUAL_SPEED));
     }
 }

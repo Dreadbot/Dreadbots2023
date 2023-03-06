@@ -5,6 +5,7 @@ import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.DigitalInput;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.ArmConstants;
 import util.misc.DreadbotMotor;
 import util.misc.DreadbotSubsystem;
@@ -29,6 +30,7 @@ public class Arm extends DreadbotSubsystem {
     public void elevate(double speed) {
         if(getUpperSwitch() && speed > 0) speed = 0;
         else if(getLowerSwitch() && speed < 0) speed = 0;
+        SmartDashboard.putNumber("Arm Speed", speed);
         elevatorMotor.set(speed);
 
     }

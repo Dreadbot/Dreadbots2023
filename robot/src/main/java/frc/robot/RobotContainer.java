@@ -7,6 +7,7 @@ package frc.robot;
 import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.GrabberConstants;
 import frc.robot.Constants.OperatorConstants;
@@ -88,11 +89,11 @@ public class RobotContainer {
         secondaryController.getLeftTrigger().whileTrue(new GrabberCloseCommand(grabber)); //needed for extra conditions were we want to close no matter what
         secondaryController.getRightTrigger().onTrue((new GrabberOpenCommand(grabber, arm)
             .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber))
-            .andThen(new ArmToPositionCommand(arm, grabber, 0, secondaryController::getYAxis)))
+            .andThen(new ArmToPositionCommand(arm, grabber, -5, secondaryController::getYAxis)))
                 .unless(arm::isInsideBot));
         secondaryController.getStartButton().onTrue(new CameraCommand(smartDashboard));
         secondaryController.getAButton().onTrue(new GrabberCloseCommand(grabber)
-            .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber).unless(arm::getNotLowerSwitch)//.unless(arm::getLowerSwitch)
+            .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber)
             .andThen(new ArmToPositionCommand(arm, grabber, ArmConstants.PICKUP_ELEVATOR_POSITION, secondaryController::getYAxis))));
         secondaryController.getBButton().onTrue(new GrabberCloseCommand(grabber)
             .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber).unless(arm::getNotLowerSwitch))
@@ -142,6 +143,7 @@ public class RobotContainer {
     }
    
     public void teleopPeriodic() {
-        
+        SmartDashboard.putBoolean("Lower Limit switch", arm.getLowerSwitch());
+        SmartDashboard.putBoolean("Upper Limit switch", arm.getUpperSwitch());
     }
 }
