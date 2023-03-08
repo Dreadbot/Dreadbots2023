@@ -33,6 +33,7 @@ import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Grabber;
 import frc.robot.subsystems.Intake;
 import util.controls.DreadbotController;
+import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.SerialPort;
@@ -68,6 +69,8 @@ public class RobotContainer {
         autonChooser.addOption("Score and Leave Right", 3);
         //autonChooser.addOption("Score And Turn Around to Left", 4); //Broken for what ever reason
         autonChooser.addOption("Score And Turn Around to Right", 5);    
+        autonChooser.addOption("score (ur bad)", 6);
+        autonChooser.addOption("Two Piece Left", 7);
         SmartDashboard.putData(autonChooser);
         // Configure the trigger bindings
         configureBindings();
@@ -133,6 +136,12 @@ public class RobotContainer {
                 drive.resetGyro();
                 drive.resetOdometry(Robot.exitTurnAroundToRightTrajectory.getInitialPose());
                 return Autos.scoreAndTurnAroundToRightCommand;
+            case 6:
+                return Autos.scoreCommand;
+            case 7:
+                drive.resetGyro();
+                drive.resetOdometry(Robot.pickupCubeLeftSideTrajectory.getInitialPose());
+                return Autos.twoCubesLeftCommand;
             default:
                 return Autos.scoreAndBalanceCommand;
         }

@@ -28,10 +28,17 @@ public class Robot extends TimedRobot {
     static String exitTurnLeftJSON = "paths/output/ExitTurnLeft.wpilib.json";
     static String exitTurnAroundToRightJSON = "paths/output/ExitTurnAroundToRight.wpilib.json";
     static String exitTurnAroundToLeftJSON = "paths/output/ExitTurnAroundToLeft.wpilib.json";
+    static String pickupCubeLeftSideJSON = "paths/output/PickupCubeLeftSide.wpilib.json";
+    static String returnToGridLeftSideJSON = "paths/output/ReturnToGridLeftSide.wpilib.json";
+
     public static Trajectory exitTurnRightTrajectory = DreadbotTrajectoryLoader.loadTrajectory(exitTurnRightJSON);
     public static Trajectory exitTurnLeftTrajectory = DreadbotTrajectoryLoader.loadTrajectory(exitTurnLeftJSON);
     public static Trajectory exitTurnAroundToRightTrajectory = DreadbotTrajectoryLoader.loadTrajectory(exitTurnAroundToRightJSON);
     public static Trajectory exitTurnAroundToLeftTrajectory = DreadbotTrajectoryLoader.loadTrajectory(exitTurnAroundToLeftJSON);
+    public static Trajectory pickupCubeLeftSideTrajectory = DreadbotTrajectoryLoader.loadTrajectory(pickupCubeLeftSideJSON);
+    public static Trajectory returnToGridLeftSideTrajectory = DreadbotTrajectoryLoader.loadTrajectory(returnToGridLeftSideJSON);
+
+
 
 
     private final PowerDistribution pdh = new PowerDistribution(10, ModuleType.kRev);
