@@ -137,8 +137,8 @@ public final class Autos {
         new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, nullJoyStick),
         new GrabberOpenCommand(grabber, arm),
         new GrabberWaitCommand(.35, grabber),
-        new ArmToPositionCommand(arm, grabber, -5, nullJoyStick),
-        followPath(drive, Robot.pickupCubeLeftSideTrajectory),
+        new ArmToPositionCommand(arm, grabber, -5, nullJoyStick)
+        .alongWith(followPath(drive, Robot.pickupCubeLeftSideTrajectory)),
         new GrabberCloseCommand(grabber),
         new GrabberWaitCommand(0.25, grabber),
         new ArmToPositionCommand(arm, grabber, ArmConstants.PICKUP_ELEVATOR_POSITION, nullJoyStick),

@@ -56,4 +56,8 @@ public class ArmToPositionCommand extends CommandBase{
             return arm.getElevatorPosition() < rotations || Math.abs(arm.getElevatorPosition() - rotations) < 0.2 || arm.getLowerSwitch();
         }
     }
+    @Override
+    public void end(boolean interrupted){
+        arm.stopMotors();
+    }
 }
