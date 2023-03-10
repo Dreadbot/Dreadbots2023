@@ -16,8 +16,8 @@ public abstract class Constants {
     public static class DriveConstants {
       public static final double FORWARD_SPEED_LIMITER = 0.75;
       public static final double ROT_SPEED_LIMITER = 0.75;
-      public static final double TURBO_FORWARD_SPEED_LIMITER = 0.75;
-      public static final double TURBO_ROT_SPEED_LIMITER = 0.75;
+     // public static final double TURBO_FORWARD_SPEED_LIMITER = 0.75;
+      //public static final double TURBO_ROT_SPEED_LIMITER = 0.75;
       public static final double WHEEL_CIRCUMFRENCE = 0.53449; // dinosaur's wheel circ: 0.498727834
       public static final double GEAR_RATIO = 6.25 / 1;
       public static final double AUTON_DRIVE_SPEED = 0.2;
