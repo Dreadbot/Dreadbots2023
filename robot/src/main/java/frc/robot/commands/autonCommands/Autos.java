@@ -53,6 +53,7 @@ public final class Autos {
     public static Command scoreAndTurnAroundToRightCommand;
     public static Command twoCubesLeftCommand;
     public static Command scoreCommand;
+    public static Command scoreLeaveandBalance;
 
 
     public static void generateCommands(Drive drive, Arm arm, Grabber grabber, AHRS gyro, Intake intake) {
@@ -63,6 +64,7 @@ public final class Autos {
       scoreAndTurnAroundToRightCommand = scoreAndTurnAroundToRight(drive, arm, grabber, gyro);
       twoCubesLeftCommand = twoCubesLeft(drive, arm, grabber, intake);
       scoreCommand = score(arm, grabber);
+      scoreLeaveandBalance = scoreLeaveAndBalance(drive, arm, grabber, gyro);
     }
     public static CommandBase scoreAndBalance(Drive drive, Arm arm, Grabber grabber, AHRS gyro) {
       DoubleSupplier nullJoyStick = () -> 0;
@@ -159,6 +161,22 @@ public final class Autos {
         new ArmToPositionCommand(arm, grabber, -5, nullJoyStick)
       );
     }
+
+    public static CommandBase scoreLeaveAndBalance(Drive drive, Arm arm, Grabber grabber, AHRS gyro) {
+      DoubleSupplier nullJoyStick = () -> 0;
+      return new SequentialCommandGroup(
+        new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, nullJoyStick),
+        new GrabberWaitCommand(.35, grabber),
+        new GrabberOpenCommand(grabber, arm), 
+        new GrabberWaitCommand(.2, grabber),
+        new ArmToPositionCommand(arm, grabber, -5, nullJoyStick)
+          .alongWith((new AutonDriveStraightCommand(drive, 4.5))),
+        new AutonDriveStraightCommand(drive, -2.7),
+        new BalanceCommand(drive, gyro),
+        new BrakeCommand(drive, gyro)
+      ).raceWith(new FeedMotorsCommand(drive).repeatedly());
+               
+    }
     public static CommandBase followPath(Drive drive, Trajectory trajectory) {
       final DifferentialDriveKinematics kinematics = new DifferentialDriveKinematics(AutonomousConstants.TRACK_WIDTH);
       final SimpleMotorFeedforward feedforward = new SimpleMotorFeedforward(
@@ -170,7 +188,7 @@ public final class Autos {
       final DifferentialDriveVoltageConstraint autoVoltageConstraint = new DifferentialDriveVoltageConstraint(
         feedforward,
         kinematics,
-        10 / 2
+        10
         );
       final TrajectoryConfig config = new TrajectoryConfig(
         AutonomousConstants.MAX_SPEED_METERS_PER_SECOND,

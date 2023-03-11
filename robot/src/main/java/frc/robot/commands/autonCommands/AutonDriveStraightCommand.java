@@ -26,7 +26,8 @@ public class AutonDriveStraightCommand extends CommandBase {
 
     @Override
     public void execute() {
-        drive.ArcadeDrive(DriveConstants.AUTON_DRIVE_SPEED, 0, false, false, false);
+        double speed = DriveConstants.AUTON_DRIVE_SPEED * Math.signum(distance);
+        drive.ArcadeDrive(speed, 0, false, false, false);
     }
 
     @Override
@@ -34,6 +35,6 @@ public class AutonDriveStraightCommand extends CommandBase {
         double metersTraveled = ((encoder.getPosition() - startPosition) / DriveConstants.GEAR_RATIO) * DriveConstants.WHEEL_CIRCUMFRENCE;
         //System.out.println("Meters Travelled: " + metersTraveled);
 
-        return metersTraveled >= distance;
+        return Math.abs(metersTraveled) >= Math.abs(distance);
     }
 }

@@ -71,6 +71,7 @@ public class RobotContainer {
         autonChooser.addOption("Score And Turn Around to Right", 5);    
         autonChooser.addOption("score (ur bad)", 6);
         autonChooser.addOption("Two Piece Left", 7);
+        autonChooser.addOption("Score, Leave, and Balance", 8);
         SmartDashboard.putData(autonChooser);
         // Configure the trigger bindings
         configureBindings();
@@ -142,6 +143,10 @@ public class RobotContainer {
                 drive.resetGyro();
                 drive.resetOdometry(Robot.pickupCubeLeftSideTrajectory.getInitialPose());
                 return Autos.twoCubesLeftCommand;
+            case 8:
+                drive.resetGyro();
+                drive.resetOdometry(Robot.scoreAndLeaveTrajectory.getInitialPose());
+                return Autos.scoreLeaveandBalance;
             default:
                 return Autos.scoreAndBalanceCommand;
         }

@@ -30,6 +30,10 @@ public class Robot extends TimedRobot {
     static String exitTurnAroundToLeftJSON = "paths/output/ExitTurnAroundToLeft.wpilib.json";
     static String pickupCubeLeftSideJSON = "paths/output/PickupCubeLeftSide.wpilib.json";
     static String returnToGridLeftSideJSON = "paths/output/ReturnToGridLeftSide.wpilib.json";
+    static String scoreAndLeaveJSON = "paths/output/ScoreAndLeave.wpilib.json";
+    static String returnToBalanceJSON = "paths/output/ReturnToBalance.wpilib.json";
+
+
 
     public static Trajectory exitTurnRightTrajectory = DreadbotTrajectoryLoader.loadTrajectory(exitTurnRightJSON);
     public static Trajectory exitTurnLeftTrajectory = DreadbotTrajectoryLoader.loadTrajectory(exitTurnLeftJSON);
@@ -37,6 +41,10 @@ public class Robot extends TimedRobot {
     public static Trajectory exitTurnAroundToLeftTrajectory = DreadbotTrajectoryLoader.loadTrajectory(exitTurnAroundToLeftJSON);
     public static Trajectory pickupCubeLeftSideTrajectory = DreadbotTrajectoryLoader.loadTrajectory(pickupCubeLeftSideJSON);
     public static Trajectory returnToGridLeftSideTrajectory = DreadbotTrajectoryLoader.loadTrajectory(returnToGridLeftSideJSON);
+    public static Trajectory scoreAndLeaveTrajectory = DreadbotTrajectoryLoader.loadTrajectory(scoreAndLeaveJSON);
+    public static Trajectory returnToBalanceTrajectory = DreadbotTrajectoryLoader.loadTrajectory(returnToBalanceJSON);
+
+
 
 
 
