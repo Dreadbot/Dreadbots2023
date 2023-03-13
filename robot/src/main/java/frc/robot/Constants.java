@@ -55,7 +55,7 @@ public abstract class Constants {
     }
     public static class IntakeConstants {
       public static final double INTAKE_PORT = 5;
-      public static final double INTAKE_SPEED = .5;
+      public static final double INTAKE_SPEED = .35;
     }
     public static class ArmConstants {
       public static final int ELEVATOR_MOTOR_PORT = 6;

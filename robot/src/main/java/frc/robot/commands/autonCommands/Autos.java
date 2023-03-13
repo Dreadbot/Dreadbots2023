@@ -51,7 +51,7 @@ public final class Autos {
     public static Command scoreAndLeaveRightCommand;
     public static Command scoreAndTurnAroundToLeftCommand;
     public static Command scoreAndTurnAroundToRightCommand;
-    public static Command twoCubesLeftCommand;
+    public static Command partialLinkLeftCommand;
     public static Command scoreCommand;
     public static Command scoreLeaveandBalance;
 
@@ -62,7 +62,7 @@ public final class Autos {
       scoreAndLeaveRightCommand = scoreAndLeaveRight(drive, arm, grabber, intake);
       scoreAndTurnAroundToLeftCommand = scoreAndTurnAroundToLeft(drive, arm, grabber, gyro);
       scoreAndTurnAroundToRightCommand = scoreAndTurnAroundToRight(drive, arm, grabber, gyro);
-      twoCubesLeftCommand = twoCubesLeft(drive, arm, grabber, intake);
+      partialLinkLeftCommand = partialLinkLeft(drive, arm, grabber, intake);
       scoreCommand = score(arm, grabber);
       scoreLeaveandBalance = scoreLeaveAndBalance(drive, arm, grabber, gyro);
     }
@@ -116,7 +116,7 @@ public final class Autos {
         new ArmToPositionCommand(arm, grabber, -5, nullJoyStick)
           .alongWith(new WaitCommand(0.25)
             .andThen(followPath(drive, Robot.exitTurnAroundToRightTrajectory))),
-        new AutonDriveStraightCommand(drive, 2.5),
+        new AutonDriveStraightCommand(drive, 1.5),
         new BalanceCommand(drive, gyro)
       ).raceWith(new FeedMotorsCommand(drive).repeatedly());
     }
@@ -133,19 +133,20 @@ public final class Autos {
         new BalanceCommand(drive, gyro)
       ).raceWith(new FeedMotorsCommand(drive).repeatedly());
     }
-    public static CommandBase twoCubesLeft(Drive drive, Arm arm, Grabber grabber, Intake intake) {
+    public static CommandBase partialLinkLeft(Drive drive, Arm arm, Grabber grabber, Intake intake) {
       DoubleSupplier nullJoyStick = () -> 0;
       return new SequentialCommandGroup(
         new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, nullJoyStick),
         new GrabberOpenCommand(grabber, arm),
         new GrabberWaitCommand(.35, grabber),
         new ArmToPositionCommand(arm, grabber, -5, nullJoyStick)
-        .alongWith(followPath(drive, Robot.pickupCubeLeftSideTrajectory)),
+        .alongWith(new WaitCommand(0.25)
+          .andThen(followPath(drive, Robot.pickupCubeLeftSideTrajectory))),
         new GrabberCloseCommand(grabber),
         new GrabberWaitCommand(0.25, grabber),
-        new ArmToPositionCommand(arm, grabber, ArmConstants.PICKUP_ELEVATOR_POSITION, nullJoyStick),
-        followPath(drive, Robot.returnToGridLeftSideTrajectory),
-        new ArmToPositionCommand(arm, grabber, ArmConstants.MEDIUM_POST_POSITION, nullJoyStick),
+        new ArmToPositionCommand(arm, grabber, ArmConstants.PICKUP_ELEVATOR_POSITION, nullJoyStick)
+          .alongWith(followPath(drive, Robot.returnToGridLeftSideTrajectory)),
+        new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, nullJoyStick),
         new GrabberOpenCommand(grabber, arm),
         new GrabberWaitCommand(.35, grabber),
         new ArmToPositionCommand(arm, grabber, -5, nullJoyStick)
