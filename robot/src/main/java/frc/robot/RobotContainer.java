@@ -65,13 +65,12 @@ public class RobotContainer {
     public RobotContainer() {
         
         autonChooser.setDefaultOption("Score and Balance", 1);
-        autonChooser.addOption("Score and Leave Left", 2);
-        autonChooser.addOption("Score and Leave Right", 3);
-        //autonChooser.addOption("Score And Turn Around to Left", 4); //Broken for what ever reason
-        autonChooser.addOption("Score And Turn Around to Right", 5);    
-        autonChooser.addOption("score (ur bad)", 6);
-        autonChooser.addOption("Two Piece Left", 7);
-        autonChooser.addOption("Score, Leave, and Balance", 8);
+        autonChooser.addOption("Red Left Partial Link", 2);
+        autonChooser.addOption("Red Right Partial Link", 3);
+        autonChooser.addOption("Blue Left Partial Link", 4);
+        autonChooser.addOption("Blue Right Partial Link", 5);
+        autonChooser.addOption("Score, Leave, and Balance", 6);
+        //autonChooser.addOption("Score (ur bad)", 7) //UNCOMMENT HERE FOR SCORE AND SIT STILL!!!!!!
         SmartDashboard.putData(autonChooser);
         // Configure the trigger bindings
         configureBindings();
@@ -119,34 +118,30 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         int chosenAuton = autonChooser.getSelected();
-        // An example command will be run in autonomous
         switch(chosenAuton) {
             case 1:
                 return Autos.scoreAndBalanceCommand;
             case 2:
                 drive.resetGyro();
-                drive.resetOdometry(Robot.exitTurnLeftTrajectory.getInitialPose());
-                return Autos.scoreAndLeaveLeftCommand;
+                drive.resetOdometry(Robot.pickupCubeRedLeftSideTrajectory.getInitialPose());
+                return Autos.partialLinkRedLeftSideCommand;
             case 3:
                 drive.resetGyro();
-                drive.resetOdometry(Robot.exitTurnRightTrajectory.getInitialPose());
-                return Autos.scoreAndLeaveRightCommand;
+                drive.resetOdometry(Robot.pickupCubeRedRightSideTrajectory.getInitialPose());
+                return Autos.partialLinkRedLeftSideCommand;
             case 4:
-                return Autos.scoreAndTurnAroundToLeftCommand; // not using this
+                drive.resetGyro();
+                drive.resetOdometry(Robot.pickupCubeBlueLeftSideTrajectory.getInitialPose());
+                return Autos.partialLinkBlueLeftSideCommand;
             case 5:
                 drive.resetGyro();
-                drive.resetOdometry(Robot.exitTurnAroundToRightTrajectory.getInitialPose());
-                return Autos.scoreAndTurnAroundToRightCommand;
+                drive.resetOdometry(Robot.pickupCubeBlueRightSideTrajectory.getInitialPose());
+                return Autos.partialLinkBlueRightSideCommand;
             case 6:
-                return Autos.scoreCommand;
-            case 7:
-                drive.resetGyro();
-                drive.resetOdometry(Robot.pickupCubeLeftSideTrajectory.getInitialPose());
-                return Autos.partialLinkLeftCommand;
-            case 8:
-                drive.resetGyro();
-                drive.resetOdometry(Robot.scoreAndLeaveTrajectory.getInitialPose());
                 return Autos.scoreLeaveandBalance;
+            case 7:
+                //:Withered:
+                return Autos.scoreCommand;
             default:
                 return Autos.scoreAndBalanceCommand;
         }
