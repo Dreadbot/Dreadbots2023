@@ -7,7 +7,9 @@ package frc.robot.commands.autonCommands;
 import frc.robot.Robot;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.AutonomousConstants;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.commands.armCommands.ArmToPositionCommand;
+import frc.robot.commands.driveCommands.DriveCommand;
 import frc.robot.commands.driveCommands.FeedMotorsCommand;
 import frc.robot.commands.grabberCommands.GrabberCloseCommand;
 import frc.robot.commands.grabberCommands.GrabberOpenCommand;
@@ -48,6 +50,7 @@ public final class Autos {
     */
     public static Command partialLinkRedLeftSideCommand;
     public static Command partialLinkRedRightSideCommand;
+    public static Command singleScorePickupCommand;
     /*
      * Blue Side
     */
@@ -68,6 +71,7 @@ public final class Autos {
       partialLinkRedRightSideCommand = partialLink(drive, arm, grabber, intake, Robot.pickupCubeRedRightSideTrajectory, Robot.returnToGridRedRightSideTrajectory);
       partialLinkBlueLeftSideCommand = partialLink(drive, arm, grabber, intake, Robot.pickupCubeBlueLeftSideTrajectory, Robot.returnToGridBlueLeftSideTrajectory);
       partialLinkBlueRightSideCommand = partialLink(drive, arm, grabber, intake, Robot.pickupCubeBlueRightSideTrajectory, Robot.returnToGridBlueRightSideTrajectory);
+      singleScorePickupCommand = singleScorePickup(drive, arm, grabber, intake, Robot.scoreCubeRedRightSideTrajectory, Robot.returnToCommunityRedRightSideTrajectory);
       scoreAndBalanceCommand = scoreAndBalance(drive, arm, grabber, gyro);
       scoreCommand = score(arm, grabber);
       scoreLeaveandBalance = scoreLeaveAndBalance(drive, arm, grabber, gyro);
@@ -80,7 +84,7 @@ public final class Autos {
         new GrabberOpenCommand(grabber, arm), 
         new GrabberWaitCommand(.2, grabber),
         new ArmToPositionCommand(arm, grabber, -5, nullJoyStick)
-          .alongWith(new AutonDriveStraightCommand(drive, 2.7)),
+          .alongWith(new AutonDriveStraightCommand(drive, 2.7, 0.2)),
         new BalanceCommand(drive, gyro),
         new BrakeCommand(drive, gyro)
       ).raceWith(new FeedMotorsCommand(drive).repeatedly());
@@ -158,6 +162,21 @@ public final class Autos {
         new ArmToPositionCommand(arm, grabber, -5, nullJoyStick)
       ).raceWith(new FeedMotorsCommand(drive).repeatedly(), new IntakeCommand(intake));
     }
+    public static CommandBase singleScorePickup(Drive drive, Arm arm, Grabber grabber, Intake intake, Trajectory pickupPath, Trajectory returnPath) {
+      DoubleSupplier nullJoyStick = () -> 0;
+      return new SequentialCommandGroup(
+        new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, nullJoyStick),
+        new GrabberOpenCommand(grabber, arm),
+        new GrabberWaitCommand(.35, grabber),
+        new ArmToPositionCommand(arm, grabber, -5, nullJoyStick)
+        .alongWith(new WaitCommand(0.25)
+          .andThen(followPath(drive, pickupPath))),
+        new GrabberCloseCommand(grabber),
+        new GrabberWaitCommand(0.25, grabber),
+        new ArmToPositionCommand(arm, grabber, ArmConstants.PICKUP_ELEVATOR_POSITION, nullJoyStick)
+          .alongWith(followPath(drive, returnPath))
+      ).raceWith(new FeedMotorsCommand(drive).repeatedly(), new IntakeCommand(intake));
+    }
     public static CommandBase score(Arm arm, Grabber grabber) {
       DoubleSupplier nullJoyStick = () -> 0;
       return new SequentialCommandGroup(
@@ -177,8 +196,10 @@ public final class Autos {
         new GrabberOpenCommand(grabber, arm), 
         new GrabberWaitCommand(.2, grabber),
         new ArmToPositionCommand(arm, grabber, -5, nullJoyStick)
-          .alongWith((new AutonDriveStraightCommand(drive, 4.5))),
-        new AutonDriveStraightCommand(drive, -2.7),
+          .alongWith(new WaitCommand(.25)
+            .andThen(new AutonDriveStraightCommand(drive, 4.9, DriveConstants.AUTON_DRIVE_SPEED))),
+        new WaitCommand(0.2),
+        new AutonDriveStraightCommand(drive, -2.6, 0.2),
         new BalanceCommand(drive, gyro),
         new BrakeCommand(drive, gyro)
       ).raceWith(new FeedMotorsCommand(drive).repeatedly());

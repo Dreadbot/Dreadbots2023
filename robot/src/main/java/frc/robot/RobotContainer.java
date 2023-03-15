@@ -128,7 +128,7 @@ public class RobotContainer {
             case 3:
                 drive.resetGyro();
                 drive.resetOdometry(Robot.pickupCubeRedRightSideTrajectory.getInitialPose());
-                return Autos.partialLinkRedLeftSideCommand;
+                return Autos.partialLinkRedRightSideCommand;
             case 4:
                 drive.resetGyro();
                 drive.resetOdometry(Robot.pickupCubeBlueLeftSideTrajectory.getInitialPose());

@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import util.misc.BufferedPrint;
 import util.misc.DreadbotPowerLogger;
+import util.misc.DreadbotTrajectoryUtils;
 import util.misc.DreadbotTrajectoryUtils.DreadbotTrajectoryLoader;
 
 /**
@@ -37,6 +38,8 @@ public class Robot extends TimedRobot {
     public static Trajectory returnToGridRedRightSideTrajectory = DreadbotTrajectoryLoader.loadTrajectory("paths/output/ReturnToGridRedRightSide.wpilib.json");
     public static Trajectory exitRedRightSideTrajectory = DreadbotTrajectoryLoader.loadTrajectory("paths/output/ExitRedRightSide.wpilib.json");
     public static Trajectory exitTurnAroundRedRightSide = DreadbotTrajectoryLoader.loadTrajectory("paths/output/ExitTurnAroundRedRightSide.wpilib.json");
+    public static Trajectory scoreCubeRedRightSideTrajectory = DreadbotTrajectoryLoader.loadTrajectory("paths/output/ScoreCubeRedRightSide.wpilib.json");
+    public static Trajectory returnToCommunityRedRightSideTrajectory = DreadbotTrajectoryLoader.loadTrajectory("paths/output/ReturnToCommunityRedRightSide.wpilib.json");
 
     /*
      * Blue Side
