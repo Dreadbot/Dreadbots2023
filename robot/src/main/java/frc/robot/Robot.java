@@ -12,6 +12,7 @@ import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
 import util.misc.BufferedPrint;
 import util.misc.DreadbotPowerLogger;
+import util.misc.DreadbotTrajectoryUtils;
 import util.misc.DreadbotTrajectoryUtils.DreadbotTrajectoryLoader;
 
 /**
@@ -24,15 +25,35 @@ public class Robot extends TimedRobot {
     private Command autonomousCommand;
     private RobotContainer robotContainer;
 
-    static String exitTurnRightJSON = "paths/output/ExitTurnRight.wpilib.json";
-    static String exitTurnLeftJSON = "paths/output/ExitTurnLeft.wpilib.json";
-    static String exitTurnAroundToRightJSON = "paths/output/ExitTurnAroundToRight.wpilib.json";
-    static String exitTurnAroundToLeftJSON = "paths/output/ExitTurnAroundToLeft.wpilib.json";
-    public static Trajectory exitTurnRightTrajectory = DreadbotTrajectoryLoader.loadTrajectory(exitTurnRightJSON);
-    public static Trajectory exitTurnLeftTrajectory = DreadbotTrajectoryLoader.loadTrajectory(exitTurnLeftJSON);
-    public static Trajectory exitTurnAroundToRightTrajectory = DreadbotTrajectoryLoader.loadTrajectory(exitTurnAroundToRightJSON);
-    public static Trajectory exitTurnAroundToLeftTrajectory = DreadbotTrajectoryLoader.loadTrajectory(exitTurnAroundToLeftJSON);
+    /*
+     * Red Side
+    */
 
+    public static Trajectory pickupCubeRedLeftSideTrajectory = DreadbotTrajectoryLoader.loadTrajectory("paths/output/PickupCubeRedLeftSide.wpilib.json");
+    public static Trajectory returnToGridRedLeftSideTrajectory = DreadbotTrajectoryLoader.loadTrajectory("paths/output/ReturnToGridRedLeftSide.wpilib.json");
+    public static Trajectory exitRedLeftSideTrajectory = DreadbotTrajectoryLoader.loadTrajectory("paths/output/ExitRedLeftSide.wpilib.json");
+    public static Trajectory exitTurnAroundRedLeftSide = DreadbotTrajectoryLoader.loadTrajectory("paths/output/ExitTurnAroundRedLeftSide.wpilib.json");
+
+    public static Trajectory pickupCubeRedRightSideTrajectory = DreadbotTrajectoryLoader.loadTrajectory("paths/output/PickupCubeRedRightSide.wpilib.json");
+    public static Trajectory returnToGridRedRightSideTrajectory = DreadbotTrajectoryLoader.loadTrajectory("paths/output/ReturnToGridRedRightSide.wpilib.json");
+    public static Trajectory exitRedRightSideTrajectory = DreadbotTrajectoryLoader.loadTrajectory("paths/output/ExitRedRightSide.wpilib.json");
+    public static Trajectory exitTurnAroundRedRightSide = DreadbotTrajectoryLoader.loadTrajectory("paths/output/ExitTurnAroundRedRightSide.wpilib.json");
+    public static Trajectory scoreCubeRedRightSideTrajectory = DreadbotTrajectoryLoader.loadTrajectory("paths/output/ScoreCubeRedRightSide.wpilib.json");
+    public static Trajectory returnToCommunityRedRightSideTrajectory = DreadbotTrajectoryLoader.loadTrajectory("paths/output/ReturnToCommunityRedRightSide.wpilib.json");
+
+    /*
+     * Blue Side
+    */
+
+    public static Trajectory pickupCubeBlueLeftSideTrajectory = DreadbotTrajectoryLoader.loadTrajectory("paths/output/PickupCubeBlueLeftSide.wpilib.json");
+    public static Trajectory returnToGridBlueLeftSideTrajectory = DreadbotTrajectoryLoader.loadTrajectory("paths/output/ReturnToGridBlueLeftSide.wpilib.json");
+    public static Trajectory exitBlueLeftSideTrajectory = DreadbotTrajectoryLoader.loadTrajectory("paths/output/ExitBlueLeftSide.wpilib.json");
+    public static Trajectory exitTurnAroundBlueLeftSideTrajectory = DreadbotTrajectoryLoader.loadTrajectory("paths/output/ExitTurnAroundBlueLeftSide.wpilib.json");
+    
+    public static Trajectory pickupCubeBlueRightSideTrajectory = DreadbotTrajectoryLoader.loadTrajectory("paths/output/PickupCubeBlueRightSide.wpilib.json");
+    public static Trajectory returnToGridBlueRightSideTrajectory = DreadbotTrajectoryLoader.loadTrajectory("paths/output/ReturnToGridBlueRightSide.wpilib.json");
+    public static Trajectory exitBlueRightSideTrajectory = DreadbotTrajectoryLoader.loadTrajectory("paths/output/ExitBlueRightSide.wpilib.json");
+    public static Trajectory exitTurnAroundBlueRightSideTrajectory = DreadbotTrajectoryLoader.loadTrajectory("paths/output/ExitTurnAroundBlueRightSide.wpilib.json");
 
     private final PowerDistribution pdh = new PowerDistribution(10, ModuleType.kRev);
 
@@ -88,8 +109,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
-        autonomousCommand = robotContainer.getAutonomousCommand();
-        
+        CommandScheduler.getInstance().cancelAll();
         autonomousCommand = robotContainer.getAutonomousCommand();
 
         // schedule the autonomous command (example)

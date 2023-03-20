@@ -39,7 +39,7 @@ public class Arm extends DreadbotSubsystem {
     }
 
     public boolean isInsideBot(){
-        return elevatorMotor.getPosition() < ArmConstants.INSIDE_BOT_POSITION;
+        return elevatorMotor.getPosition() < ArmConstants.INSIDE_BOT_POSITION && !getLowerSwitch();
     }
 
     public double getMinVal() {

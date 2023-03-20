@@ -20,7 +20,7 @@ public abstract class Constants {
       public static final double TURBO_ROT_SPEED_LIMITER = 0.75;
       public static final double WHEEL_CIRCUMFRENCE = 0.53449; // dinosaur's wheel circ: 0.498727834
       public static final double GEAR_RATIO = 6.25 / 1;
-      public static final double AUTON_DRIVE_SPEED = 0.2;
+      public static final double AUTON_DRIVE_SPEED = 0.25;
       public static final double SLEW_RATE_LIMIT = 1;
       public static final double TURTLE_MODE_MAX_SPEED = 0.4;
       public static final double TURBO_MODE_MIN_SPEED = TURTLE_MODE_MAX_SPEED;
@@ -35,7 +35,7 @@ public abstract class Constants {
     public static class BalanceConstants {
       public static final double MAX_SPEED = 0.125;
       public static final double SCALE = -0.3; //invert sign when we replaced Nav-X
-      public static final double LEVEL_DEGREES = 11; //Angle where considered level 
+      public static final double LEVEL_DEGREES = 11; //Angle where considered level (11)
     }
     public static class AutonomousConstants {
       public static final double KS_VOLTS = 0.15117; 
@@ -43,7 +43,7 @@ public abstract class Constants {
       public static final double KA_VOLT_SECONDS_SQUARED_PER_METER = 0.40129;
       public static final double KP_DRIVE_VELOCITY = 0.63592;
       public static final double MAX_SPEED_METERS_PER_SECOND = 1.5;
-      public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = .5;
+      public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = .75;
       public static final double RAMSETE_B = 2;
       public static final double RAMSETE_ZETA = 0.7;
       public static final double TRACK_WIDTH = Units.inchesToMeters(26);
@@ -55,13 +55,13 @@ public abstract class Constants {
     }
     public static class IntakeConstants {
       public static final double INTAKE_PORT = 5;
-      public static final double INTAKE_SPEED = .5;
+      public static final double INTAKE_SPEED = .35;
     }
     public static class ArmConstants {
       public static final int ELEVATOR_MOTOR_PORT = 6;
       public static final double MAX_ELEVATOR_POSITION = 287 * 1.5; // make sure to hit limit switch
-      public static final double INSIDE_BOT_POSITION = 144.433 * 0.75; // for gearing of the arm
       public static final double LOW_POST_POSITION = 154.433 * 0.75;
+      public static final double INSIDE_BOT_POSITION = LOW_POST_POSITION;
       public static final double MEDIUM_POST_POSITION = 221.463 * 0.75;
       public static final double PICKUP_ELEVATOR_POSITION = 30 * 0.75;
       public static final double ELEVATOR_MOTOR_SPEED = 1;

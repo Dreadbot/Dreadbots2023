@@ -10,11 +10,13 @@ public class AutonDriveStraightCommand extends CommandBase {
     private final Drive drive;
     private final double distance;
     private double startPosition;
+    private double speed;
     private RelativeEncoder encoder;
 
-    public AutonDriveStraightCommand(Drive drive, double distance) {
+    public AutonDriveStraightCommand(Drive drive, double distance, double speed) {
         this.drive = drive;
         this.distance = distance;
+        this.speed = speed;
         this.encoder = drive.getMotorEncoder(1);
         addRequirements(drive);
     }
@@ -26,7 +28,8 @@ public class AutonDriveStraightCommand extends CommandBase {
 
     @Override
     public void execute() {
-        drive.ArcadeDrive(DriveConstants.AUTON_DRIVE_SPEED, 0, false, false, false);
+        double driveSpeed = speed * Math.signum(distance);
+        drive.ArcadeDrive(driveSpeed, 0, false, false, false);
     }
 
     @Override
@@ -34,6 +37,6 @@ public class AutonDriveStraightCommand extends CommandBase {
         double metersTraveled = ((encoder.getPosition() - startPosition) / DriveConstants.GEAR_RATIO) * DriveConstants.WHEEL_CIRCUMFRENCE;
         //System.out.println("Meters Travelled: " + metersTraveled);
 
-        return metersTraveled >= distance;
+        return Math.abs(metersTraveled) >= Math.abs(distance);
     }
 }
