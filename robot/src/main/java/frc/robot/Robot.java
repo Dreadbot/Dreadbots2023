@@ -109,6 +109,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void autonomousInit() {
+        CommandScheduler.getInstance().cancelAll();
         autonomousCommand = robotContainer.getAutonomousCommand();
 
         // schedule the autonomous command (example)

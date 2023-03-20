@@ -146,7 +146,12 @@ public final class Autos {
     public static CommandBase partialLink(Drive drive, Arm arm, Grabber grabber, Intake intake, Trajectory pickupPath, Trajectory returnPath) {
       DoubleSupplier nullJoyStick = () -> 0;
       return new SequentialCommandGroup(
+        new GrabberOpenCommand(grabber, arm),
+        new GrabberWaitCommand(.3, grabber),
+        new GrabberCloseCommand(grabber),
+        new GrabberWaitCommand(.35, grabber),
         new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, nullJoyStick),
+        new GrabberWaitCommand(1, grabber),
         new GrabberOpenCommand(grabber, arm),
         new GrabberWaitCommand(.35, grabber),
         new ArmToPositionCommand(arm, grabber, -5, nullJoyStick)
@@ -199,7 +204,7 @@ public final class Autos {
           .alongWith(new WaitCommand(.25)
             .andThen(new AutonDriveStraightCommand(drive, 4.9, DriveConstants.AUTON_DRIVE_SPEED))),
         new WaitCommand(0.2),
-        new AutonDriveStraightCommand(drive, -2.6, 0.2),
+        new AutonDriveStraightCommand(drive, -2.68, 0.2),
         new BalanceCommand(drive, gyro),
         new BrakeCommand(drive, gyro)
       ).raceWith(new FeedMotorsCommand(drive).repeatedly());
