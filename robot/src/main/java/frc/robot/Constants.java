@@ -70,7 +70,16 @@ public abstract class Constants {
       public static final int TOP_LIMIT_SWITCH_PORT = 1;
       public static final int LOWER_LIMIT_SWITCH_PORT = 0;
     }
-    private Constants() throws IllegalStateException {
-        throw new IllegalStateException("Constants is a utility class. It should not be instantiated.");
+    public static class SwerveConstants {
+      public static final double ATTAINABLE_MAX_SPEED = 0.5;
+      public static final double MODULE_OFFSET = Units.inchesToMeters(13.0) / 2; // 13 inches between wheels, half to meet at center
+      // Encoder offsets are in degrees, not radians
+      public static final double FRONT_LEFT_ENCODER_OFFSET = -25.225 - 4;
+      public static final double FRONT_RIGHT_ENCODER_OFFSET = -32.695 + 2;
+      public static final double BACK_LEFT_ENCODER_OFFSET = -46.494 + 2;
+      public static final double BACK_RIGHT_ENCODER_OFFSET = 60.293 - 3;
+      public static final double DRIVE_GEAR_RATIO = (14.0 / 50.0) * (27.0 / 17.0) * (15.0 / 45.0);
+      public static final double TURN_GEAR_RATIO = 150 / 7;
+      public static final double WHEEL_DIAMETER = Units.inchesToMeters(4.0);
     }
 }
