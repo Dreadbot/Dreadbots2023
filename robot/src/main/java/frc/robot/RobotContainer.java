@@ -15,7 +15,7 @@ import frc.robot.commands.armCommands.ArmCommand;
 import frc.robot.commands.armCommands.ArmToPositionCommand;
 import frc.robot.commands.autonCommands.AutoAlignConeCommand;
 import frc.robot.commands.autonCommands.AutoAlignCubeCommand;
-import frc.robot.commands.autonCommands.Autos;
+//import frc.robot.commands.autonCommands.Autos;
 import frc.robot.commands.autonCommands.BalanceCommand;
 import frc.robot.commands.autonCommands.BrakeCommand;
 import frc.robot.commands.driveCommands.DriveCommand;
@@ -57,26 +57,26 @@ public class RobotContainer {
     private final DreadbotController secondaryController = new DreadbotController(OperatorConstants.SECONDARY_JOYSTICK_PORT);
     private final NetworkTableInstance ntInstance = NetworkTableInstance.getDefault();
     private final NetworkTable smartDashboard = ntInstance.getTable("SmartDashboard");
-    SendableChooser<Integer> autonChooser = new SendableChooser<Integer>();
+    SendableChooser<Command> autonChooser = new SendableChooser<Command>();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
         
-        autonChooser.setDefaultOption("Score and Balance", 1);
-        autonChooser.addOption("Red Left Partial Link", 2);
-        autonChooser.addOption("Red Right Partial Link", 3);
-        autonChooser.addOption("Blue Left Partial Link", 4);
-        autonChooser.addOption("Blue Right Partial Link", 5);
-        autonChooser.addOption("Score, Leave, and Balance", 6);
+        autonChooser.setDefaultOption("Score and Balance", drive.buildAuto(null, "ScoreAndBalance"));
+        // autonChooser.addOption("Red Left Partial Link");
+        // autonChooser.addOption("Red Right Partial Link", 3);
+        // autonChooser.addOption("Blue Left Partial Link", 4);
+        // autonChooser.addOption("Blue Right Partial Link", 5);
+        // autonChooser.addOption("Score, Leave, and Balance", 6);
         //autonChooser.addOption("Score (ur bad)", 7) //UNCOMMENT HERE FOR SCORE AND SIT STILL!!!!!!
         SmartDashboard.putData(autonChooser);
         // Configure the trigger bindings
         configureBindings();
     }
     private void configureBindings() {
-        DriveCommand driveCommand = new DriveCommand(drive, primaryController::getYAxis, primaryController::getZAxis);
+        DriveCommand driveCommand = new DriveCommand(drive, primaryController::getYAxis,primaryController::getXAxis, primaryController::getZAxis);
         ArmCommand armCommand = new ArmCommand(arm, grabber, secondaryController::getYAxis, secondaryController.getLeftTrigger(), secondaryController.getLeftBumper());
         DefaultGrabberOpenCommand grabberOpenCommand = new DefaultGrabberOpenCommand(grabber, arm);
         drive.setDefaultCommand(driveCommand);
@@ -108,7 +108,7 @@ public class RobotContainer {
             .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber).unless(arm::getNotLowerSwitch))
             .andThen(new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, secondaryController::getYAxis)));
 
-        Autos.generateCommands(drive, arm, grabber, gyro, intake);
+        //Autos.generateCommands(drive, arm, grabber, gyro, intake);
     }
 
     /**
@@ -117,34 +117,8 @@ public class RobotContainer {
      * @return the command to run in autonomous
      */
     public Command getAutonomousCommand() {
-        int chosenAuton = autonChooser.getSelected();
-        switch(chosenAuton) {
-            case 1:
-                return Autos.scoreAndBalanceCommand;
-            case 2:
-                drive.resetGyro();
-                drive.resetOdometry(Robot.pickupCubeRedLeftSideTrajectory.getInitialPose());
-                return Autos.partialLinkRedLeftSideCommand;
-            case 3:
-                drive.resetGyro();
-                drive.resetOdometry(Robot.pickupCubeRedRightSideTrajectory.getInitialPose());
-                return Autos.partialLinkRedRightSideCommand;
-            case 4:
-                drive.resetGyro();
-                drive.resetOdometry(Robot.pickupCubeBlueLeftSideTrajectory.getInitialPose());
-                return Autos.partialLinkBlueLeftSideCommand;
-            case 5:
-                drive.resetGyro();
-                drive.resetOdometry(Robot.pickupCubeBlueRightSideTrajectory.getInitialPose());
-                return Autos.partialLinkBlueRightSideCommand;
-            case 6:
-                return Autos.scoreLeaveandBalance;
-            case 7:
-                //:Withered:
-                return Autos.scoreCommand;
-            default:
-                return Autos.scoreAndBalanceCommand;
-        }
+        return autonChooser.getSelected();
+        
     }
 
     public void autonPeriodic() {

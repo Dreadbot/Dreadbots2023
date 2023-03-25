@@ -31,11 +31,11 @@ public class BrakeCommand extends CommandBase {
         double difference = targetPosition - currentPosition;
 
         if(difference > 2) {
-            drive.ArcadeDrive(BalanceConstants.MAX_SPEED + 0.1, 0, false, false, false);
+            drive.drive(BalanceConstants.MAX_SPEED + 0.1, 0, 0, false);
         } else if (difference < -2){
-            drive.ArcadeDrive(-(BalanceConstants.MAX_SPEED + 0.1), 0, false, false, false);
+            drive.drive(-(BalanceConstants.MAX_SPEED + 0.1), 0, 0, false);
         } else {
-            drive.ArcadeDrive(0, 0, false, false, false);
+            drive.drive(0, 0, 0, false);
         }
     }
 

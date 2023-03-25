@@ -79,4 +79,9 @@ public class SwerveModule {
     public DreadbotMotor getTurnMotor() {
         return this.turningMotor;
     }
+
+    public void close() throws Exception{
+        driveMotor.close();
+        turningMotor.close();
+    }
 }

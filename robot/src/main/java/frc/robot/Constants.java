@@ -15,6 +15,7 @@ public abstract class Constants {
     }
     public static class DriveConstants {
       public static final double FORWARD_SPEED_LIMITER = 0.75;
+      public static final double STRAFE_SPEED_LIMITER = 0.75;
       public static final double ROT_SPEED_LIMITER = 0.75;
       public static final double TURBO_FORWARD_SPEED_LIMITER = 0.75;
       public static final double TURBO_ROT_SPEED_LIMITER = 0.75;
@@ -25,12 +26,13 @@ public abstract class Constants {
       public static final double TURTLE_MODE_MAX_SPEED = 0.4;
       public static final double TURBO_MODE_MIN_SPEED = TURTLE_MODE_MAX_SPEED;
       public static final boolean IsBotRed5 = false;
+      public static final boolean IS_FIELD_ORIENTED = true;
     }
     public static class MotorConstants {
       public static final int FRONT_LEFT_MOTOR_PORT = 1;
-      public static final int FRONT_RIGHT_MOTOR_PORT = 2;
-      public static final int BACK_LEFT_MOTOR_PORT = 3;
-      public static final int BACK_RIGHT_MOTOR_PORT = 4;
+      public static final int FRONT_RIGHT_MOTOR_PORT = 3;
+      public static final int BACK_LEFT_MOTOR_PORT = 5;
+      public static final int BACK_RIGHT_MOTOR_PORT = 7;
     }
     public static class BalanceConstants {
       public static final double MAX_SPEED = 0.125;

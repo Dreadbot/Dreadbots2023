@@ -39,7 +39,7 @@ public class BalanceCommand extends CommandBase {
         // }
           
         // i++;
-        drive.ArcadeDrive(speed, 0.00d, false, false, false);
+        drive.drive(speed, 0.00d, 0.0, false);
     }
 
     @Override

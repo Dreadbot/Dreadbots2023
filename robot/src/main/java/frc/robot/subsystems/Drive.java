@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import java.util.HashMap;
 import java.util.List;
 
+import com.ctre.phoenix.sensors.CANCoder;
 import com.kauailabs.navx.frc.AHRS;
 import com.pathplanner.lib.PathConstraints;
 import com.pathplanner.lib.PathPlanner;
@@ -10,6 +11,7 @@ import com.pathplanner.lib.PathPlannerTrajectory;
 import com.pathplanner.lib.auto.PIDConstants;
 import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import com.revrobotics.CANSparkMax;
+import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
 import edu.wpi.first.math.geometry.Pose2d;
@@ -20,15 +22,12 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
-import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.SPI;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.util.misc.DreadbotMotor;
 import frc.robot.util.misc.SwerveModule;
-import edu.wpi.first.wpilibj.SerialPort;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import util.misc.DreadbotSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.SubsystemBase;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 
 public class Drive extends DreadbotSubsystem {
     //Double check locations
@@ -44,13 +43,17 @@ public class Drive extends DreadbotSubsystem {
     private SwerveModule backLeftModule;
     private SwerveModule backRightModule;
 
-    private AHRS gyro = new AHRS(SerialPort.Port.kUSB);
+    private AHRS gyro;
 
     private SwerveDriveKinematics kinematics;
 
     private SwerveDriveOdometry odometry;
 
-    public Drive() {
+    private final double initialPitch;
+
+    public Drive(AHRS gyro) {
+        this.gyro = gyro;
+
         frontLeftModule = new SwerveModule(
             new DreadbotMotor(new CANSparkMax(1, MotorType.kBrushless), "Front Left Drive"),
             new DreadbotMotor(new CANSparkMax(2, MotorType.kBrushless), "Front Left Turn"),
@@ -102,13 +105,16 @@ public class Drive extends DreadbotSubsystem {
         frontRightModule.putValuesToSmartDashboard("front right");
         backLeftModule.putValuesToSmartDashboard("back left");
         backRightModule.putValuesToSmartDashboard("back right");
+
+        initialPitch = gyro.getPitch();
     }
 
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative){
-        SwerveModuleState[] swerveModuleStates = 
-            kinematics.toSwerveModuleStates(
-                new ChassisSpeeds(xSpeed, ySpeed, rot)
-            );
+        SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(
+            fieldRelative ? 
+            ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())
+            : new ChassisSpeeds(xSpeed, ySpeed, rot)
+        );
         frontLeftModule.putValuesToSmartDashboard("front left");
         frontRightModule.putValuesToSmartDashboard("front right");
         backLeftModule.putValuesToSmartDashboard("back left");
@@ -125,21 +131,9 @@ public class Drive extends DreadbotSubsystem {
         backRightModule.setDesiredState(swerveModuleStates[3]);
     }
 
-    public void updateOdometry() {
-        odometry.update(
-            gyro.getRotation2d(),
-            new SwerveModulePosition[] {
-                frontLeftModule.getPosition(),
-                frontRightModule.getPosition(),
-                backLeftModule.getPosition(),
-                backRightModule.getPosition()
-            }
-        );
-    }
-
     public void resetOdometry(Pose2d pose) {
         odometry.resetPosition(
-            new Rotation2d(Units.degreesToRadians(gyro.getYaw())),
+            gyro.getRotation2d(),
             new SwerveModulePosition[] {
                 frontLeftModule.getPosition(),
                 frontRightModule.getPosition(),
@@ -151,7 +145,16 @@ public class Drive extends DreadbotSubsystem {
     }
 
     public Pose2d getPosition(){
-        return odometry.getPoseMeters();
+        return odometry.update(getGyroPosition(), new SwerveModulePosition[] {
+            frontLeftModule.getPosition(),
+            frontRightModule.getPosition(),
+            backLeftModule.getPosition(),
+            backRightModule.getPosition()
+        });
+    }
+
+    public Rotation2d getGyroPosition() {
+        return gyro.getRotation2d();
     }
 
     public void followSpeeds(ChassisSpeeds speeds){
@@ -167,21 +170,66 @@ public class Drive extends DreadbotSubsystem {
     public Command buildAuto(HashMap<String, Command> eventMap, String pathName) {
         List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(
             pathName,
-            new PathConstraints(1.0, 0.1)
+            new PathConstraints(2.0, 0.5)
         );
 
         SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
             this::getPosition,
             this::resetOdometry,
             kinematics,
-            new PIDConstants(0.0, 0.0, 0.0),
-            new PIDConstants(0.0, 0.0, 0.0),
+            new PIDConstants(2.5, 0.0, 0.0),
+            new PIDConstants(2, 0.0, 0.0),
             this::setDesiredState,
             eventMap,
             true,
             this
         );
+        return autoBuilder.fullAuto(pathGroup).andThen(new InstantCommand());
+    }
 
-        return autoBuilder.fullAuto(pathGroup);
+    @Override
+    public void close() throws Exception {
+        stopMotors();
+        frontLeftModule.close();
+        frontRightModule.close();
+        backLeftModule.close();
+        backLeftModule.close();
+    }
+
+    @Override
+    public void stopMotors() {
+        drive(0, 0, 0, false);
+        
+    }
+
+    public void resetGyro(){
+        gyro.reset();
+    }
+
+    public double getPitch(){
+        return gyro.getPitch() - initialPitch;
+    }
+
+    public RelativeEncoder getMotorEncoder(int wheel){
+        switch(wheel){
+            case 1:
+                return frontLeftModule.getDriveMotor().getEncoder();
+            case 2:
+                return frontLeftModule.getTurnMotor().getEncoder();
+            case 3:
+                return backLeftModule.getDriveMotor().getEncoder();
+            case 4:
+                return backLeftModule.getTurnMotor().getEncoder();
+            case 5:
+                return backRightModule.getDriveMotor().getEncoder();
+            case 6:
+                return backRightModule.getTurnMotor().getEncoder();
+            case 7:
+                return frontRightModule.getDriveMotor().getEncoder();
+            case 8:
+                return frontRightModule.getTurnMotor().getEncoder();
+            default:
+                return frontLeftModule.getDriveMotor().getEncoder();
+        }
     }
 }
