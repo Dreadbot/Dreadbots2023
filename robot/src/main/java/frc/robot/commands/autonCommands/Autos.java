@@ -51,11 +51,7 @@ public final class Autos {
     public static Command partialLinkRedLeftSideCommand;
     public static Command partialLinkRedRightSideCommand;
     public static Command singleScorePickupCommand;
-    /*
-     * Blue Side
-    */
-    public static Command partialLinkBlueLeftSideCommand;
-    public static Command partialLinkBlueRightSideCommand;
+    public static Command partialLinkCubeRightSideCommand;
 
     /*
      * Center
@@ -69,8 +65,7 @@ public final class Autos {
       
       partialLinkRedLeftSideCommand = partialLink(drive, arm, grabber, intake, Robot.pickupCubeRedLeftSideTrajectory, Robot.returnToGridRedLeftSideTrajectory);
       partialLinkRedRightSideCommand = partialLink(drive, arm, grabber, intake, Robot.pickupCubeRedRightSideTrajectory, Robot.returnToGridRedRightSideTrajectory);
-      partialLinkBlueLeftSideCommand = partialLink(drive, arm, grabber, intake, Robot.pickupCubeBlueLeftSideTrajectory, Robot.returnToGridBlueLeftSideTrajectory);
-      partialLinkBlueRightSideCommand = partialLink(drive, arm, grabber, intake, Robot.pickupCubeBlueRightSideTrajectory, Robot.returnToGridBlueRightSideTrajectory);
+      partialLinkCubeRightSideCommand = partialLink(drive, arm, grabber, intake, Robot.scoreCubeRedRightSideTrajectory, Robot.returnToConeRightSideTrajectory);
       singleScorePickupCommand = singleScorePickup(drive, arm, grabber, intake, Robot.scoreCubeRedRightSideTrajectory, Robot.returnToCommunityRedRightSideTrajectory);
       scoreAndBalanceCommand = scoreAndBalance(drive, arm, grabber, gyro);
       scoreCommand = score(arm, grabber);

@@ -67,8 +67,7 @@ public class RobotContainer {
         autonChooser.setDefaultOption("Score and Balance", 1);
         autonChooser.addOption("Red Left Partial Link", 2);
         autonChooser.addOption("Red Right Partial Link", 3);
-        autonChooser.addOption("Blue Left Partial Link", 4);
-        autonChooser.addOption("Blue Right Partial Link", 5);
+        autonChooser.addOption("Cube Left Partial Link", 4);
         autonChooser.addOption("Score, Leave, and Balance", 6);
         //autonChooser.addOption("Score (ur bad)", 7) //UNCOMMENT HERE FOR SCORE AND SIT STILL!!!!!!
         SmartDashboard.putData(autonChooser);
@@ -131,12 +130,8 @@ public class RobotContainer {
                 return Autos.partialLinkRedRightSideCommand;
             case 4:
                 drive.resetGyro();
-                drive.resetOdometry(Robot.pickupCubeBlueLeftSideTrajectory.getInitialPose());
-                return Autos.partialLinkBlueLeftSideCommand;
-            case 5:
-                drive.resetGyro();
-                drive.resetOdometry(Robot.pickupCubeBlueRightSideTrajectory.getInitialPose());
-                return Autos.partialLinkBlueRightSideCommand;
+                drive.resetOdometry(Robot.scoreCubeRedRightSideTrajectory.getInitialPose());
+                return Autos.partialLinkCubeRightSideCommand;
             case 6:
                 return Autos.scoreLeaveandBalance;
             case 7:
