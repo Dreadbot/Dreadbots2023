@@ -35,7 +35,7 @@ public class ArmCommand extends CommandBase {
         } else if (Math.abs(joystickValue.getAsDouble()) > 0.10 && arm.getElevatorPosition() < ArmConstants.INSIDE_BOT_POSITION) {
             grabber.closeGrabber(); 
         }
-        
+        SmartDashboard.putNumber("Elevator Position", arm.getElevatorPosition());
         double speed = DreadbotMath.applyDeadbandToValue(joystickValue.getAsDouble(), 0.08);
         if(Math.signum(speed) < 0 && arm.getElevatorPosition() < ArmConstants.PICKUP_ELEVATOR_POSITION - 3) {
             speed = speed * 0.4; //slow down bot if reaching the botton

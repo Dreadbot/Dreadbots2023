@@ -65,11 +65,12 @@ public class RobotContainer {
     public RobotContainer() {
         
         autonChooser.setDefaultOption("Score and Balance", 1);
-        autonChooser.addOption("Red Left Partial Link", 2);
-        autonChooser.addOption("Red Right Partial Link", 3);
+        autonChooser.addOption("Left Partial Link", 2);
+        autonChooser.addOption("Right Partial Link", 3);
         autonChooser.addOption("Cube Left Partial Link", 4);
+        autonChooser.addOption("Cube Right Partial Link", 5);
         autonChooser.addOption("Score, Leave, and Balance", 6);
-        //autonChooser.addOption("Score (ur bad)", 7) //UNCOMMENT HERE FOR SCORE AND SIT STILL!!!!!!
+        autonChooser.addOption("Score (ur bad)", 7); //UNCOMMENT HERE FOR SCORE AND SIT STILL!!!!!!
         SmartDashboard.putData(autonChooser);
         // Configure the trigger bindings
         configureBindings();
@@ -122,20 +123,24 @@ public class RobotContainer {
                 return Autos.scoreAndBalanceCommand;
             case 2:
                 drive.resetGyro();
-                drive.resetOdometry(Robot.pickupCubeRedLeftSideTrajectory.getInitialPose());
-                return Autos.partialLinkRedLeftSideCommand;
+                drive.resetOdometry(Robot.pickupCubeLeftSideTrajectory.getInitialPose());
+                return Autos.partialLinkLeftSideCommand;
             case 3:
                 drive.resetGyro();
-                drive.resetOdometry(Robot.pickupCubeRedRightSideTrajectory.getInitialPose());
-                return Autos.partialLinkRedRightSideCommand;
+                drive.resetOdometry(Robot.pickupCubeRightSideTrajectory.getInitialPose());
+                return Autos.partialLinkRightSideCommand;
             case 4:
                 drive.resetGyro();
-                drive.resetOdometry(Robot.scoreCubeRedRightSideTrajectory.getInitialPose());
+                drive.resetOdometry(Robot.scoreCubeLeftSideTrajectory.getInitialPose());
+                return Autos.partialLinkCubeLeftSideCommand;
+            case 5:
+                drive.resetGyro();
+                drive.resetOdometry(Robot.scoreCubeRightSideTrajectory.getInitialPose());
                 return Autos.partialLinkCubeRightSideCommand;
             case 6:
                 return Autos.scoreLeaveandBalance;
             case 7:
-                //:Withered:
+            //:Withered:
                 return Autos.scoreCommand;
             default:
                 return Autos.scoreAndBalanceCommand;
@@ -149,5 +154,8 @@ public class RobotContainer {
     public void teleopPeriodic() {
         SmartDashboard.putBoolean("Lower Limit switch", arm.getLowerSwitch());
         SmartDashboard.putBoolean("Upper Limit switch", arm.getUpperSwitch());
+    }
+    public void autonInit() {
+        drive.resetEncoders();
     }
 }

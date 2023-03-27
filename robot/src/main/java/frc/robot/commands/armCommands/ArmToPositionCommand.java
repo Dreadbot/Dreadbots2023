@@ -33,7 +33,7 @@ public class ArmToPositionCommand extends CommandBase{
     @Override
     public void execute() {
         double armSpeed = 1;
-        if(arm.getElevatorPosition() < ArmConstants.PICKUP_ELEVATOR_POSITION - 3) {
+        if(arm.getElevatorPosition() < ArmConstants.PICKUP_ELEVATOR_POSITION - 3 || arm.getElevatorPosition() > ArmConstants.MAX_ELEVATOR_POSITION - 10) {
             armSpeed = 0.6; // slow down the bot if we are close to 0
         }
         if(arm.getLowerSwitch() && direction < 0) {
@@ -47,7 +47,7 @@ public class ArmToPositionCommand extends CommandBase{
     }
     @Override
     public boolean isFinished() {
-        if (Math.abs(cancelJoystick.getAsDouble()) > .05 ) {
+        if (Math.abs(cancelJoystick.getAsDouble()) > .05) {
             return true;
         }
         if(direction > 0) {
