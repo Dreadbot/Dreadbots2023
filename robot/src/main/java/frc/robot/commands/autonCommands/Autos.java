@@ -151,9 +151,10 @@ public final class Autos {
           .andThen(followPath(drive, pickupPath))),
         new GrabberCloseCommand(grabber),
         new GrabberWaitCommand(0.25, grabber),
-        new ArmToPositionCommand(arm, grabber, ArmConstants.PICKUP_ELEVATOR_POSITION, nullJoyStick)
-          .alongWith(followPath(drive, returnPath)),
-        new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, nullJoyStick),
+        new ArmToPositionCommand(arm, grabber, ArmConstants.PICKUP_ELEVATOR_POSITION, nullJoyStick),
+        followPath(drive, returnPath)
+        .alongWith(new WaitCommand(2)
+            .andThen(new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, nullJoyStick))),
         new GrabberOpenCommand(grabber, arm),
         new GrabberWaitCommand(.35, grabber),
         new ArmToPositionCommand(arm, grabber, -5, nullJoyStick)
@@ -175,9 +176,10 @@ public final class Autos {
         new AutonDriveStraightCommand(drive, 0.1, 0.1),
         new GrabberCloseCommand(grabber),
         new GrabberWaitCommand(0.25, grabber),
-        new ArmToPositionCommand(arm, grabber, ArmConstants.PICKUP_ELEVATOR_POSITION, nullJoyStick)
-          .alongWith(followPath(drive, returnPath)),
-        new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, nullJoyStick),
+        new ArmToPositionCommand(arm, grabber, ArmConstants.PICKUP_ELEVATOR_POSITION, nullJoyStick),
+        followPath(drive, returnPath)
+        .alongWith(new WaitCommand(2)
+            .andThen(new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, nullJoyStick))),
         new GrabberWaitCommand(.35, grabber),
         new GrabberOpenCommand(grabber, arm),
         new GrabberWaitCommand(.35, grabber),
