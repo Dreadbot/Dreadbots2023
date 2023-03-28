@@ -62,22 +62,22 @@ public class Drive extends DreadbotSubsystem {
         );
         // frontLeftModule.getDriveMotor().setInverted(true);
         frontRightModule = new SwerveModule(
-            new DreadbotMotor(new CANSparkMax(7, MotorType.kBrushless), "Front Right Drive"),
-            new DreadbotMotor(new CANSparkMax(8, MotorType.kBrushless), "Front Right Turn"),
-            new CANCoder(12),
+            new DreadbotMotor(new CANSparkMax(3, MotorType.kBrushless), "Front Right Drive"),
+            new DreadbotMotor(new CANSparkMax(4, MotorType.kBrushless), "Front Right Turn"),
+            new CANCoder(10),
             SwerveConstants.FRONT_RIGHT_ENCODER_OFFSET
         );
         backLeftModule = new SwerveModule(
-            new DreadbotMotor(new CANSparkMax(3, MotorType.kBrushless), "Back Left Drive"),
-            new DreadbotMotor(new CANSparkMax(4, MotorType.kBrushless), "Back Left Turn"),
-            new CANCoder(10),
+            new DreadbotMotor(new CANSparkMax(5, MotorType.kBrushless), "Back Left Drive"),
+            new DreadbotMotor(new CANSparkMax(6, MotorType.kBrushless), "Back Left Turn"),
+            new CANCoder(11),
             SwerveConstants.BACK_LEFT_ENCODER_OFFSET
         );
         // backLeftModule.getDriveMotor().setInverted(true);
         backRightModule = new SwerveModule(
-            new DreadbotMotor(new CANSparkMax(5, MotorType.kBrushless), "Back Right Drive"),
-            new DreadbotMotor(new CANSparkMax(6, MotorType.kBrushless), "Back Right Turn"),
-            new CANCoder(11),
+            new DreadbotMotor(new CANSparkMax(7, MotorType.kBrushless), "Back Right Drive"),
+            new DreadbotMotor(new CANSparkMax(8, MotorType.kBrushless), "Back Right Turn"),
+            new CANCoder(12),
             SwerveConstants.BACK_RIGHT_ENCODER_OFFSET
         );
 
