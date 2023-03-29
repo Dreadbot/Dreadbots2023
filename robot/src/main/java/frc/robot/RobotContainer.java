@@ -58,7 +58,7 @@ public class RobotContainer {
     private final DreadbotController secondaryController = new DreadbotController(OperatorConstants.SECONDARY_JOYSTICK_PORT);
     private final NetworkTableInstance ntInstance = NetworkTableInstance.getDefault();
     private final NetworkTable smartDashboard = ntInstance.getTable("SmartDashboard");
-    private HashMap<String, Command> autonEvents = new HashMap();
+    private HashMap<String, Command> autonEvents = new HashMap<String, Command>();
     private SendableChooser<Command> autonChooser = new SendableChooser<Command>();
 
     /**
@@ -71,13 +71,18 @@ public class RobotContainer {
             .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber)
             .andThen(new ArmToPositionCommand(arm, grabber, ArmConstants.PICKUP_ELEVATOR_POSITION, secondaryController::getYAxis))));
         autonEvents.put("score", new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, () -> 0.0)
-                .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber))
-                .andThen(new GrabberOpenCommand(grabber, arm)));
+            .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber))
+            .andThen(new GrabberOpenCommand(grabber, arm)));
+        autonEvents.put("score-low", new ArmToPositionCommand(arm, grabber, ArmConstants.LOW_POST_POSITION, () -> 0.0)
+            .andThen(new GrabberOpenCommand(grabber, arm)));
     
         autonChooser.setDefaultOption(
             "Score, Leave, and Balance", drive.buildAuto(autonEvents, "ScoreLeaveBalance"));
         autonChooser.addOption("Partial Link Bump", drive.buildAuto(autonEvents, "PartialLinkBump"));
         autonChooser.addOption("Partial Link No Bump", drive.buildAuto(autonEvents, "PartialLinkNonBump"));
+        autonChooser.addOption("Low Link Bump", drive.buildAuto(autonEvents, "LowLinkBump"));
+        autonChooser.addOption("Low Link No Bump", drive.buildAuto(autonEvents, "LowLinkNonBump"));
+
         SmartDashboard.putData(autonChooser);
         // Configure the trigger bindings
         configureBindings();
