@@ -74,7 +74,8 @@ public abstract class Constants {
     }
     public static class SwerveConstants {
       public static final double ATTAINABLE_MAX_SPEED = 0.5;
-      public static final double MODULE_OFFSET = Units.inchesToMeters(13.0) / 2; // 13 inches between wheels, half to meet at center
+      public static final double MODULE_Y_OFFSET = Units.inchesToMeters(26.0) / 2; // Between the front and back
+      public static final double MODULE_X_OFFSET = Units.inchesToMeters(23.0) / 2; // Between the left and right
       // Encoder offsets are in degrees, not radians
       public static final double FRONT_LEFT_ENCODER_OFFSET = -25.225 - 4;
       public static final double FRONT_RIGHT_ENCODER_OFFSET = -32.695 + 2;
