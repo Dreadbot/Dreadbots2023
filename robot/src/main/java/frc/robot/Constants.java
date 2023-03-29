@@ -62,6 +62,7 @@ public abstract class Constants {
     public static class ArmConstants {
       public static final int ELEVATOR_MOTOR_PORT = 6;
       public static final double MAX_ELEVATOR_POSITION = 287 * 1.5; // make sure to hit limit switch
+      public static final double MIN_ELEVATOR_POSITION = -5;
       public static final double LOW_POST_POSITION = 154.433 * 0.75;
       public static final double INSIDE_BOT_POSITION = LOW_POST_POSITION;
       public static final double MEDIUM_POST_POSITION = 221.463 * 0.75;

@@ -17,7 +17,7 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "retract-arm"
+          "score"
         ],
         "executionBehavior": "parallel",
         "waitBehavior": "none",
@@ -26,16 +26,16 @@
     },
     {
       "anchorPoint": {
-        "x": 6.8465868893416895,
-        "y": 4.632057265226931
+        "x": 6.9930247053372545,
+        "y": 4.617139794242728
       },
       "prevControl": {
-        "x": 5.862701851408148,
-        "y": 4.8108594803432805
+        "x": 6.009139667403713,
+        "y": 4.795942009359078
       },
       "nextControl": {
-        "x": 5.862701851408148,
-        "y": 4.8108594803432805
+        "x": 6.009139667403713,
+        "y": 4.795942009359078
       },
       "holonomicAngle": -10.298554338026316,
       "isReversal": true,
@@ -76,7 +76,7 @@
   ],
   "markers": [
     {
-      "position": 1.63,
+      "position": 1.75,
       "names": [
         "extend-arm"
       ]
