@@ -33,10 +33,10 @@ public class Drive extends DreadbotSubsystem {
     //Double check locations
     //What is location in comparasion to front of bot 
     //Example x and y's seem to be swapped?
-    private final Translation2d frontLeftLocation = new Translation2d(-SwerveConstants.MODULE_X_OFFSET, SwerveConstants.MODULE_Y_OFFSET);
-    private final Translation2d frontRightLocation = new Translation2d(SwerveConstants.MODULE_X_OFFSET, SwerveConstants.MODULE_Y_OFFSET);
-    private final Translation2d backLeftLocation = new Translation2d(-SwerveConstants.MODULE_X_OFFSET, -SwerveConstants.MODULE_Y_OFFSET);
-    private final Translation2d backRightLocation = new Translation2d(SwerveConstants.MODULE_X_OFFSET, -SwerveConstants.MODULE_Y_OFFSET);
+    private final Translation2d frontLeftLocation = new Translation2d(SwerveConstants.MODULE_X_OFFSET, SwerveConstants.MODULE_Y_OFFSET);
+    private final Translation2d frontRightLocation = new Translation2d(SwerveConstants.MODULE_X_OFFSET, -SwerveConstants.MODULE_Y_OFFSET);
+    private final Translation2d backLeftLocation = new Translation2d(-SwerveConstants.MODULE_X_OFFSET, SwerveConstants.MODULE_Y_OFFSET);
+    private final Translation2d backRightLocation = new Translation2d(-SwerveConstants.MODULE_X_OFFSET, -SwerveConstants.MODULE_Y_OFFSET);
 
     private SwerveModule frontLeftModule;
     private SwerveModule frontRightModule;
@@ -108,7 +108,6 @@ public class Drive extends DreadbotSubsystem {
 
         initialPitch = gyro.getPitch();
     }
-
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative){
         SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(
             fieldRelative ? 
@@ -170,7 +169,7 @@ public class Drive extends DreadbotSubsystem {
     public Command buildAuto(HashMap<String, Command> eventMap, String pathName) {
         List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(
             pathName,
-            new PathConstraints(2.0, 0.5)
+            new PathConstraints(0.5, 0.5)
         );
 
         SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
@@ -199,7 +198,6 @@ public class Drive extends DreadbotSubsystem {
     @Override
     public void stopMotors() {
         drive(0, 0, 0, false);
-        
     }
 
     public void resetGyro(){
@@ -231,5 +229,11 @@ public class Drive extends DreadbotSubsystem {
             default:
                 return frontLeftModule.getDriveMotor().getEncoder();
         }
+    }
+    public void putValuesToSmartDashboard() {
+        frontLeftModule.putValuesToSmartDashboard("front left");
+        frontRightModule.putValuesToSmartDashboard("front right");
+        backLeftModule.putValuesToSmartDashboard("back left");
+        backRightModule.putValuesToSmartDashboard("back right");
     }
 }

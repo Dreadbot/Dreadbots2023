@@ -65,16 +65,16 @@ public class RobotContainer {
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        autonEvents.put("retract-arm", new ArmToPositionCommand(arm, grabber, ArmConstants.MIN_ELEVATOR_POSITION, () -> 0.0));
-        autonEvents.put("extend-arm", new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, () -> 0.0));
-        autonEvents.put("grab", new GrabberCloseCommand(grabber)
-            .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber)
-            .andThen(new ArmToPositionCommand(arm, grabber, ArmConstants.PICKUP_ELEVATOR_POSITION, secondaryController::getYAxis))));
-        autonEvents.put("score", new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, () -> 0.0)
-            .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber))
-            .andThen(new GrabberOpenCommand(grabber, arm)));
-        autonEvents.put("score-low", new ArmToPositionCommand(arm, grabber, ArmConstants.LOW_POST_POSITION, () -> 0.0)
-            .andThen(new GrabberOpenCommand(grabber, arm)));
+        // autonEvents.put("retract-arm", new ArmToPositionCommand(arm, grabber, ArmConstants.MIN_ELEVATOR_POSITION, () -> 0.0));
+        // autonEvents.put("extend-arm", new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, () -> 0.0));
+        // autonEvents.put("grab", new GrabberCloseCommand(grabber)
+        //     .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber)
+        //     .andThen(new ArmToPositionCommand(arm, grabber, ArmConstants.PICKUP_ELEVATOR_POSITION, secondaryController::getYAxis))));
+        // autonEvents.put("score", new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, () -> 0.0)
+        //     .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber))
+        //     .andThen(new GrabberOpenCommand(grabber, arm)));
+        // autonEvents.put("score-low", new ArmToPositionCommand(arm, grabber, ArmConstants.LOW_POST_POSITION, () -> 0.0)
+        //     .andThen(new GrabberOpenCommand(grabber, arm)));
     
         autonChooser.setDefaultOption(
             "Score, Leave, and Balance", drive.buildAuto(autonEvents, "ScoreLeaveBalance"));
@@ -106,6 +106,7 @@ public class RobotContainer {
             .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber))
             .andThen(new ArmToPositionCommand(arm, grabber, -5, secondaryController::getYAxis)))
                 .unless(arm::isInsideBot));
+        secondaryController.getRightBumper().onTrue(new GrabberOpenCommand(grabber, arm));
         secondaryController.getStartButton().onTrue(new CameraCommand(smartDashboard));
         secondaryController.getAButton().onTrue(new GrabberCloseCommand(grabber)
             .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber)
@@ -140,5 +141,8 @@ public class RobotContainer {
     public void teleopPeriodic() {
         SmartDashboard.putBoolean("Lower Limit switch", arm.getLowerSwitch());
         SmartDashboard.putBoolean("Upper Limit switch", arm.getUpperSwitch());
+    }
+    public void robotPeriodic() {
+        drive.putValuesToSmartDashboard();
     }
 }
