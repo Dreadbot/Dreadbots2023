@@ -33,10 +33,10 @@ public class Drive extends DreadbotSubsystem {
     //Double check locations
     //What is location in comparasion to front of bot 
     //Example x and y's seem to be swapped?
-    private final Translation2d frontLeftLocation = new Translation2d(SwerveConstants.MODULE_OFFSET, SwerveConstants.MODULE_OFFSET);
-    private final Translation2d frontRightLocation = new Translation2d(SwerveConstants.MODULE_OFFSET, -SwerveConstants.MODULE_OFFSET);
-    private final Translation2d backLeftLocation = new Translation2d(-SwerveConstants.MODULE_OFFSET, SwerveConstants.MODULE_OFFSET);
-    private final Translation2d backRightLocation = new Translation2d(-SwerveConstants.MODULE_OFFSET, -SwerveConstants.MODULE_OFFSET);
+    private final Translation2d frontLeftLocation = new Translation2d(-SwerveConstants.MODULE_X_OFFSET, SwerveConstants.MODULE_Y_OFFSET);
+    private final Translation2d frontRightLocation = new Translation2d(SwerveConstants.MODULE_X_OFFSET, SwerveConstants.MODULE_Y_OFFSET);
+    private final Translation2d backLeftLocation = new Translation2d(-SwerveConstants.MODULE_X_OFFSET, -SwerveConstants.MODULE_Y_OFFSET);
+    private final Translation2d backRightLocation = new Translation2d(SwerveConstants.MODULE_X_OFFSET, -SwerveConstants.MODULE_Y_OFFSET);
 
     private SwerveModule frontLeftModule;
     private SwerveModule frontRightModule;

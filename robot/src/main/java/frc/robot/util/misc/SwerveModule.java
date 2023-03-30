@@ -28,7 +28,7 @@ public class SwerveModule {
         this.turningCanCoder = turningCanCoder;
         this.turningCanCoder.configMagnetOffset(-canCoderOffset); // even after passing in the correct offsets, this STILL refuses to work, so we just subtract the offset manually
         this.canCoderOffset = canCoderOffset;
-        this.turningMotor.setInverted(true);
+        // this.turningMotor.setInverted(true);
         this.drivePIDController = driveMotor.getPIDController();
         this.drivePIDController.setP(0.1);
         this.drivePIDController.setFF(1);
@@ -58,10 +58,10 @@ public class SwerveModule {
 
     public void setDesiredState(SwerveModuleState desiredState) {
         SwerveModuleState optimizedState = SwerveModuleState.optimize(desiredState, new Rotation2d(Units.degreesToRadians(turningCanCoder.getAbsolutePosition())));
-        // driveMotor.setP(SmartDashboard.getNumber("Drive P", 0));
-        // driveMotor.setI(SmartDashboard.getNumber("Drive I", 0));
-        // driveMotor.setD(SmartDashboard.getNumber("Drive D", 0));
-        // driveMotor.setFF(SmartDashboard.getNumber("Drive FF", 0));
+        driveMotor.setP(SmartDashboard.getNumber("Drive P", 0));
+        driveMotor.setI(SmartDashboard.getNumber("Drive I", 0));
+        driveMotor.setD(SmartDashboard.getNumber("Drive D", 0));
+        driveMotor.setFF(SmartDashboard.getNumber("Drive FF", 0));
 
         double turnOutput = turningPIDController.calculate(Units.degreesToRadians(turningCanCoder.getAbsolutePosition()), optimizedState.angle.getRadians());
         drivePIDController.setReference(optimizedState.speedMetersPerSecond, ControlType.kVelocity);
@@ -69,7 +69,7 @@ public class SwerveModule {
     }
 
     public void putValuesToSmartDashboard(String name) {
-        SmartDashboard.putNumber(name +" Can Coder", turningCanCoder.getAbsolutePosition());
+        SmartDashboard.putNumber(name +" Can Coder", turningCanCoder.getPosition());
     }
 
     public DreadbotMotor getDriveMotor() {

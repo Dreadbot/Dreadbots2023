@@ -39,6 +39,7 @@ import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.SerialPort;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import java.util.HashMap;
 
 /**
  * This class is where the bulk of the robot should be declared. Since Command-based is a
@@ -57,20 +58,31 @@ public class RobotContainer {
     private final DreadbotController secondaryController = new DreadbotController(OperatorConstants.SECONDARY_JOYSTICK_PORT);
     private final NetworkTableInstance ntInstance = NetworkTableInstance.getDefault();
     private final NetworkTable smartDashboard = ntInstance.getTable("SmartDashboard");
-    SendableChooser<Command> autonChooser = new SendableChooser<Command>();
+    private HashMap<String, Command> autonEvents = new HashMap<String, Command>();
+    private SendableChooser<Command> autonChooser = new SendableChooser<Command>();
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
      */
     public RobotContainer() {
-        
-        autonChooser.setDefaultOption("Score and Balance", drive.buildAuto(null, "ScoreAndBalance"));
-        // autonChooser.addOption("Red Left Partial Link");
-        // autonChooser.addOption("Red Right Partial Link", 3);
-        // autonChooser.addOption("Blue Left Partial Link", 4);
-        // autonChooser.addOption("Blue Right Partial Link", 5);
-        // autonChooser.addOption("Score, Leave, and Balance", 6);
-        //autonChooser.addOption("Score (ur bad)", 7) //UNCOMMENT HERE FOR SCORE AND SIT STILL!!!!!!
+        autonEvents.put("retract-arm", new ArmToPositionCommand(arm, grabber, ArmConstants.MIN_ELEVATOR_POSITION, () -> 0.0));
+        autonEvents.put("extend-arm", new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, () -> 0.0));
+        autonEvents.put("grab", new GrabberCloseCommand(grabber)
+            .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber)
+            .andThen(new ArmToPositionCommand(arm, grabber, ArmConstants.PICKUP_ELEVATOR_POSITION, secondaryController::getYAxis))));
+        autonEvents.put("score", new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, () -> 0.0)
+            .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber))
+            .andThen(new GrabberOpenCommand(grabber, arm)));
+        autonEvents.put("score-low", new ArmToPositionCommand(arm, grabber, ArmConstants.LOW_POST_POSITION, () -> 0.0)
+            .andThen(new GrabberOpenCommand(grabber, arm)));
+    
+        autonChooser.setDefaultOption(
+            "Score, Leave, and Balance", drive.buildAuto(autonEvents, "ScoreLeaveBalance"));
+        autonChooser.addOption("Partial Link Bump", drive.buildAuto(autonEvents, "PartialLinkBump"));
+        autonChooser.addOption("Partial Link No Bump", drive.buildAuto(autonEvents, "PartialLinkNonBump"));
+        autonChooser.addOption("Low Link Bump", drive.buildAuto(autonEvents, "LowLinkBump"));
+        autonChooser.addOption("Low Link No Bump", drive.buildAuto(autonEvents, "LowLinkNonBump"));
+
         SmartDashboard.putData(autonChooser);
         // Configure the trigger bindings
         configureBindings();
