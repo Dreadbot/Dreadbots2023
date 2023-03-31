@@ -26,7 +26,7 @@ public abstract class Constants {
       public static final double TURTLE_MODE_MAX_SPEED = 0.4;
       public static final double TURBO_MODE_MIN_SPEED = TURTLE_MODE_MAX_SPEED;
       public static final boolean IsBotRed5 = false;
-      public static final boolean IS_FIELD_ORIENTED = false;
+      public static final boolean IS_FIELD_ORIENTED = true;
     }
     // public static class MotorConstants {
     //   public static final int FRONT_LEFT_MOTOR_PORT = 1;
@@ -56,7 +56,7 @@ public abstract class Constants {
       public static final double WAIT_PERIOD = .35;
     }
     public static class IntakeConstants {
-      public static final double INTAKE_PORT = 5;
+      public static final double INTAKE_PORT = 13;
       public static final double INTAKE_SPEED = .35;
     }
     public static class ArmConstants {

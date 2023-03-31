@@ -8,6 +8,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.GrabberConstants;
 import frc.robot.Constants.OperatorConstants;
@@ -67,14 +68,19 @@ public class RobotContainer {
     public RobotContainer() {
         // autonEvents.put("retract-arm", new ArmToPositionCommand(arm, grabber, ArmConstants.MIN_ELEVATOR_POSITION, () -> 0.0));
         // autonEvents.put("extend-arm", new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, () -> 0.0));
-        // autonEvents.put("grab", new GrabberCloseCommand(grabber)
-        //     .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber)
-        //     .andThen(new ArmToPositionCommand(arm, grabber, ArmConstants.PICKUP_ELEVATOR_POSITION, secondaryController::getYAxis))));
-        // autonEvents.put("score", new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, () -> 0.0)
-        //     .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber))
-        //     .andThen(new GrabberOpenCommand(grabber, arm)));
-        // autonEvents.put("score-low", new ArmToPositionCommand(arm, grabber, ArmConstants.LOW_POST_POSITION, () -> 0.0)
-        //     .andThen(new GrabberOpenCommand(grabber, arm)));
+        Command armToBottom = new ArmToPositionCommand(arm, grabber, -5, () -> 0.0);
+        
+        autonEvents.put("grab", new GrabberCloseCommand(grabber)
+            .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber)
+            .andThen(new ArmToPositionCommand(arm, grabber, ArmConstants.PICKUP_ELEVATOR_POSITION, () -> 0.0))));
+        autonEvents.put("score", new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, () -> 0.0)
+            .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber))
+            .andThen(new GrabberOpenCommand(grabber, arm)))
+            .andThen(armToBottom);
+        autonEvents.put("score-low", new ArmToPositionCommand(arm, grabber, ArmConstants.LOW_POST_POSITION, () -> 0.0)
+            .andThen(new GrabberOpenCommand(grabber, arm)))
+            .andThen(armToBottom);
+        autonEvents.put("intake", new WaitCommand(3).deadlineWith(new IntakeCommand(intake)));
     
         autonChooser.setDefaultOption(
             "Score, Leave, and Balance", drive.buildAuto(autonEvents, "ScoreLeaveBalance"));
