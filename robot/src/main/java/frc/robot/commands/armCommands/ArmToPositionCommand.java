@@ -33,8 +33,8 @@ public class ArmToPositionCommand extends CommandBase{
     @Override
     public void execute() {
         double armSpeed = 1;
-        if(direction < 0 && arm.getElevatorPosition() < ArmConstants.PICKUP_ELEVATOR_POSITION - 3) {
-            armSpeed = 0.4; // slow down the bot if we are close to 0
+        if(arm.getElevatorPosition() < ArmConstants.PICKUP_ELEVATOR_POSITION - 3 || arm.getElevatorPosition() > ArmConstants.MAX_ELEVATOR_POSITION - 10) {
+            armSpeed = 0.6; // slow down the bot if we are close to 0
         }
         if(arm.getLowerSwitch() && direction < 0) {
             grabber.openGrabber();

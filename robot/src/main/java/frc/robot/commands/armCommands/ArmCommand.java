@@ -37,7 +37,8 @@ public class ArmCommand extends CommandBase {
         }
         
         double speed = DreadbotMath.applyDeadbandToValue(joystickValue.getAsDouble(), 0.08);
-        if(arm.getElevatorPosition() < ArmConstants.PICKUP_ELEVATOR_POSITION - 3) {
+        double elevatorPosition = arm.getElevatorPosition();
+        if(elevatorPosition < ArmConstants.PICKUP_ELEVATOR_POSITION - 3 || elevatorPosition > ArmConstants.MAX_ELEVATOR_POSITION - 10) {
             speed = speed * 0.6; //slow down bot if reaching the botton
         }
         arm.elevate(speed * (turtleMode.getAsBoolean() ? ArmConstants.ELEVATOR_MANUAL_TURTLE_SPEED : ArmConstants.ELEVATOR_MANUAL_SPEED));

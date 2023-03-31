@@ -12,7 +12,7 @@ public class Intake extends DreadbotSubsystem {
 
     public Intake() {
         this.motor = new DreadbotMotor(new CANSparkMax((int) IntakeConstants.INTAKE_PORT, MotorType.kBrushless), "motor");
-        motor.setInverted(true);
+        motor.setInverted(false);
     }
 
     public void intake() {

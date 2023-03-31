@@ -76,9 +76,15 @@
   ],
   "markers": [
     {
-      "position": 1.75,
+      "position": 1.85,
       "names": [
         "score"
+      ]
+    },
+    {
+      "position": 0.7,
+      "names": [
+        "intake"
       ]
     }
   ]

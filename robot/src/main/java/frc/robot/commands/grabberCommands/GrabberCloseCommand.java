@@ -7,7 +7,6 @@ public class GrabberCloseCommand extends InstantCommand {
 
     public GrabberCloseCommand(Grabber grabberPneumatic) {
         this.grabberPneumatic = grabberPneumatic;
-        addRequirements(grabberPneumatic);
     }
     public void execute() {
         grabberPneumatic.closeGrabber();

@@ -169,7 +169,7 @@ public class Drive extends DreadbotSubsystem {
     public Command buildAuto(HashMap<String, Command> eventMap, String pathName) {
         List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(
             pathName,
-            new PathConstraints(0.7, 0.5)
+            new PathConstraints(1.25, 0.8)
         );
 
         SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
@@ -183,7 +183,7 @@ public class Drive extends DreadbotSubsystem {
             true,
             this
         );
-        return autoBuilder.fullAuto(pathGroup).andThen(new InstantCommand());
+        return autoBuilder.fullAuto(pathGroup);
     }
 
     @Override
