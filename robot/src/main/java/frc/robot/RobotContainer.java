@@ -69,6 +69,7 @@ public class RobotContainer {
         // autonEvents.put("retract-arm", new ArmToPositionCommand(arm, grabber, ArmConstants.MIN_ELEVATOR_POSITION, () -> 0.0));
         // autonEvents.put("extend-arm", new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, () -> 0.0));
         
+        autonEvents.put("retract", new ArmToPositionCommand(arm, grabber, -5, () -> 0.0));
         autonEvents.put("grab", new GrabberCloseCommand(grabber)
             .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber)
             .andThen(new ArmToPositionCommand(arm, grabber, ArmConstants.PICKUP_ELEVATOR_POSITION, () -> 0.0))));
@@ -76,6 +77,9 @@ public class RobotContainer {
             .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber))
             .andThen(new GrabberOpenCommand(grabber, arm))
             .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber))
+            .andThen(new ArmToPositionCommand(arm, grabber, -5, () -> 0.0)));
+        autonEvents.put("score-cube", new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, () -> 0.0)
+            .andThen(new GrabberOpenCommand(grabber, arm))
             .andThen(new ArmToPositionCommand(arm, grabber, -5, () -> 0.0)));
         autonEvents.put("score-low", new ArmToPositionCommand(arm, grabber, ArmConstants.LOW_POST_POSITION, () -> 0.0)
             .andThen(new GrabberOpenCommand(grabber, arm))
@@ -95,7 +99,7 @@ public class RobotContainer {
         configureBindings();
     }
     private void configureBindings() {
-        DriveCommand driveCommand = new DriveCommand(drive, primaryController::getYAxis, () -> 0.0, primaryController::getZAxis);
+        DriveCommand driveCommand = new DriveCommand(drive, primaryController::getYAxis, primaryController::getXAxis, primaryController::getZAxis);
         ArmCommand armCommand = new ArmCommand(arm, grabber, secondaryController::getYAxis, secondaryController.getLeftTrigger(), secondaryController.getLeftBumper());
         DefaultGrabberOpenCommand grabberOpenCommand = new DefaultGrabberOpenCommand(grabber, arm);
         drive.setDefaultCommand(driveCommand);

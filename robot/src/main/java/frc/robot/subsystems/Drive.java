@@ -22,6 +22,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.util.misc.DreadbotMotor;
 import frc.robot.util.misc.SwerveModule;
@@ -143,6 +144,17 @@ public class Drive extends DreadbotSubsystem {
         );
     }
 
+    public void xModules() {
+        resetModules();
+        SwerveModuleState[] states = {
+            new SwerveModuleState(.0, new Rotation2d(Units.degreesToRadians(-135))),
+            new SwerveModuleState(.0, new Rotation2d(Units.degreesToRadians(-135))),
+            new SwerveModuleState(.0, new Rotation2d(Units.degreesToRadians(45))),
+            new SwerveModuleState(.0, new Rotation2d(Units.degreesToRadians(45))),
+        };
+        setDesiredState(states);
+    }
+
     public Pose2d getPosition(){
         return odometry.update(getGyroPosition(), new SwerveModulePosition[] {
             frontLeftModule.getPosition(),
@@ -166,10 +178,17 @@ public class Drive extends DreadbotSubsystem {
         backRightModule.setDesiredState(swerveModuleStates[3]);
     }
 
+    public void resetModules() {
+        frontLeftModule.zeroModule();
+        frontRightModule.zeroModule();
+        backLeftModule.zeroModule();
+        backRightModule.zeroModule();
+    }
+
     public Command buildAuto(HashMap<String, Command> eventMap, String pathName) {
         List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(
             pathName,
-            new PathConstraints(1.25, 0.8)
+            new PathConstraints(2.50, 1.25)
         );
 
         SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(

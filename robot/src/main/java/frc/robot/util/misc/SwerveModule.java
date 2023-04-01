@@ -56,6 +56,10 @@ public class SwerveModule {
         driveMotor.resetEncoder();
     }
 
+    public void zeroModule() {
+        driveMotor.getEncoder().setPosition(0);
+    }
+
     public void setDesiredState(SwerveModuleState desiredState) {
         SwerveModuleState optimizedState = SwerveModuleState.optimize(desiredState, new Rotation2d(Units.degreesToRadians(turningCanCoder.getAbsolutePosition())));
 
