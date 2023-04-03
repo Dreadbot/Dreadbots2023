@@ -17,6 +17,7 @@ public class Lighting extends DreadbotSubsystem {
     public Lighting() {
         this.ledDriver = new Spark(0);
         currentColor = Color.Yellow;
+        SmartDashboard.putBoolean("Requested Piece", false);
     }
 
     public void setColor(Color color) {
@@ -27,7 +28,7 @@ public class Lighting extends DreadbotSubsystem {
         } else if(color == Color.Purple) {
             ledDriver.set(0.91);
             currentColor = Color.Purple;
-            SmartDashboard.putBoolean("Requested Piece", true);
+            SmartDashboard.putBoolean("Requested Piece", falseg);
         }
     }
 
