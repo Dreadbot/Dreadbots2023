@@ -20,7 +20,7 @@ public class SwerveModule {
     private CANCoder turningCanCoder;
     private double canCoderOffset;
     private SparkMaxPIDController drivePIDController;
-    private PIDController turningPIDController = new PIDController(2, 0, 0);
+    private PIDController turningPIDController = new PIDController(6.5, 0, 0);
     
     public SwerveModule(DreadbotMotor driveMotor, DreadbotMotor turnMotor, CANCoder turningCanCoder, double canCoderOffset) {
         this.driveMotor = driveMotor;
@@ -36,6 +36,11 @@ public class SwerveModule {
         this.driveMotor.getEncoder().setPositionConversionFactor(SwerveConstants.WHEEL_DIAMETER * Math.PI * SwerveConstants.DRIVE_GEAR_RATIO); //convert from revolutions to meters
         this.driveMotor.getEncoder().setVelocityConversionFactor((SwerveConstants.WHEEL_DIAMETER * Math.PI * SwerveConstants.DRIVE_GEAR_RATIO) / 60);
         turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
+    }
+
+    public SwerveModule(DreadbotMotor driveMotor, DreadbotMotor turnMotor, CANCoder turningCanCoder, double canCoderOffset, double drivePOverride) {
+        this(driveMotor, turnMotor, turningCanCoder, canCoderOffset);
+        this.drivePIDController.setP(drivePOverride);
     }
 
     public SwerveModuleState getState() {

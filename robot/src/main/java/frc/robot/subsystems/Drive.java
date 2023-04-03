@@ -14,6 +14,8 @@ import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.PIDController;
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.geometry.Translation2d;
@@ -23,12 +25,15 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.Constants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.util.misc.DreadbotMotor;
 import frc.robot.util.misc.SwerveModule;
 import util.misc.DreadbotSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class Drive extends DreadbotSubsystem {
     //Double check locations
@@ -50,7 +55,15 @@ public class Drive extends DreadbotSubsystem {
 
     private SwerveDriveOdometry odometry;
 
+    private SlewRateLimiter forwardSlewRateLimiter = new SlewRateLimiter(1.5, -1.5, .2);
+    private SlewRateLimiter strafeSlewRateLimiter = new SlewRateLimiter(1.5, -1.5, .2);
+
     private final double initialPitch;
+
+    public boolean isTeleop = false;
+    private boolean isTurning = false;
+    private float targetAngle = 0;
+    private PIDController turningController = new PIDController(-0.0006, 0.0, 0.0);
 
     public Drive(AHRS gyro) {
         this.gyro = gyro;
@@ -108,8 +121,27 @@ public class Drive extends DreadbotSubsystem {
         backRightModule.putValuesToSmartDashboard("back right");
 
         initialPitch = gyro.getPitch();
+
+        turningController.enableContinuousInput(-180, 180);
     }
+
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative){
+        if (isTeleop) {
+            if (rot != 0) {
+                isTurning = true;
+                targetAngle = gyro.getYaw();
+            } else if (isTurning) {
+                isTurning = false;
+            }
+        }
+
+        if (!isTurning && ySpeed > 0) {
+            rot = turningController.calculate(gyro.getYaw(), targetAngle);
+        }
+
+        xSpeed = forwardSlewRateLimiter.calculate(xSpeed);
+        ySpeed = strafeSlewRateLimiter.calculate(ySpeed);
+
         SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(
             fieldRelative ? 
             ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())
@@ -147,10 +179,10 @@ public class Drive extends DreadbotSubsystem {
     public void xModules() {
         resetModules();
         SwerveModuleState[] states = {
-            new SwerveModuleState(.0, new Rotation2d(Units.degreesToRadians(-135))),
-            new SwerveModuleState(.0, new Rotation2d(Units.degreesToRadians(-135))),
-            new SwerveModuleState(.0, new Rotation2d(Units.degreesToRadians(45))),
-            new SwerveModuleState(.0, new Rotation2d(Units.degreesToRadians(45))),
+            new SwerveModuleState(.0, new Rotation2d(Units.degreesToRadians(135))),
+            new SwerveModuleState(.0, new Rotation2d(Units.degreesToRadians(135))),
+            new SwerveModuleState(.0, new Rotation2d(Units.degreesToRadians(-45))),
+            new SwerveModuleState(.0, new Rotation2d(Units.degreesToRadians(-45))),
         };
         setDesiredState(states);
     }

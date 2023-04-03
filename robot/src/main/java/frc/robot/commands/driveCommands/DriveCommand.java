@@ -1,7 +1,9 @@
 package frc.robot.commands.driveCommands;
 
+import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
+import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
@@ -14,8 +16,9 @@ public class DriveCommand extends CommandBase {
     private final DoubleSupplier joystickForwardAxis;
     private final DoubleSupplier joystickStrafeAxis;
     private final DoubleSupplier joystickRotationalAxis;
-    private boolean turboMode;
-    private boolean turtleMode;
+    private boolean turboMode = false;
+    private boolean turtleMode = false;
+    private boolean fieldOriented = true;
     protected double lastForward;
     protected double lastRotation;
 
@@ -24,8 +27,6 @@ public class DriveCommand extends CommandBase {
         this.joystickForwardAxis = joystickForwardAxis;
         this.joystickStrafeAxis = joystickStrafeAxis;
         this.joystickRotationalAxis = joystickRotationalAxis;
-        this.turboMode = false;
-        this.turtleMode = false;
         addRequirements(drive);
     }
 
@@ -35,9 +36,9 @@ public class DriveCommand extends CommandBase {
      */
     @Override
     public void execute() {
-        double forward = (joystickForwardAxis.getAsDouble() * DriveConstants.FORWARD_SPEED_LIMITER);
-        double strafe = (joystickStrafeAxis.getAsDouble() * DriveConstants.STRAFE_SPEED_LIMITER);
-        double rotation = (joystickRotationalAxis.getAsDouble() * DriveConstants.ROT_SPEED_LIMITER);
+        double forward = (DreadbotMath.applyDeadbandToValue(joystickForwardAxis.getAsDouble(), 0.05) * DriveConstants.FORWARD_SPEED_LIMITER);
+        double strafe = (DreadbotMath.applyDeadbandToValue(joystickStrafeAxis.getAsDouble(), 0.05) * DriveConstants.STRAFE_SPEED_LIMITER);
+        double rotation = (DreadbotMath.applyDeadbandToValue(joystickRotationalAxis.getAsDouble(), 0.05) * DriveConstants.ROT_SPEED_LIMITER);
 
         boolean addSlew = true;
         if (this.turboMode) {
@@ -55,7 +56,8 @@ public class DriveCommand extends CommandBase {
             rotation =  Math.signum(joystickRotationalAxis.getAsDouble()) * DreadbotMath.linearInterpolation(0, DriveConstants.TURTLE_MODE_MAX_SPEED,  Math.abs(joystickRotationalAxis.getAsDouble()));
             addSlew = false;
         }
-        drive.drive(forward, strafe, rotation, DriveConstants.IS_FIELD_ORIENTED);// addSlew, turboMode); //invert forward and rotation axis
+
+        drive.drive(forward, strafe, rotation, fieldOriented);// addSlew, turboMode); //invert forward and rotation axis
         // save off the values so they are available for unit tests
         lastForward = forward;
         lastRotation = rotation;
@@ -75,5 +77,9 @@ public class DriveCommand extends CommandBase {
 
     public void disableTurtle() {
         this.turtleMode = false;
+    }
+
+    public void toggleFieldOrientation() {
+        this.fieldOriented = !this.fieldOriented;
     }
 }

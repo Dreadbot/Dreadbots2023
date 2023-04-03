@@ -20,8 +20,10 @@ import frc.robot.commands.autonCommands.AutoAlignCubeCommand;
 import frc.robot.commands.autonCommands.BalanceCommand;
 import frc.robot.commands.autonCommands.BrakeCommand;
 import frc.robot.commands.driveCommands.DriveCommand;
+import frc.robot.commands.driveCommands.FieldOrientationCommand;
 import frc.robot.commands.driveCommands.TurboCommand;
 import frc.robot.commands.driveCommands.TurtleCommand;
+import frc.robot.commands.driveCommands.XWheelsCommand;
 import frc.robot.commands.grabberCommands.DefaultGrabberOpenCommand;
 import frc.robot.commands.grabberCommands.GrabberCloseCommand;
 import frc.robot.commands.grabberCommands.GrabberOpenCommand;
@@ -112,6 +114,8 @@ public class RobotContainer {
         primaryController.getRightTrigger().whileTrue(new IntakeCommand(intake));
         primaryController.getAButton().onTrue(new AutoAlignConeCommand(drive));
         primaryController.getBButton().onTrue(new AutoAlignCubeCommand(drive));
+        primaryController.getXButton().whileTrue(new XWheelsCommand(drive));
+        primaryController.getBackButton().onTrue(new FieldOrientationCommand(driveCommand));
         secondaryController.getLeftTrigger().whileTrue(new GrabberCloseCommand(grabber)); //needed for extra conditions were we want to close no matter what
         secondaryController.getRightTrigger().onTrue((new GrabberOpenCommand(grabber, arm)
             .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber))
@@ -142,11 +146,18 @@ public class RobotContainer {
      */
     public Command getAutonomousCommand() {
         return autonChooser.getSelected();
-        
+    }
+
+    public void autonomousInit() {
+        drive.isTeleop = false;
     }
 
     public void autonPeriodic() {
 
+    }
+
+    public void teleopInit() {
+        drive.isTeleop = true;
     }
    
     public void teleopPeriodic() {

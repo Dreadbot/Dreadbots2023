@@ -114,6 +114,8 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
         }
+
+        robotContainer.autonomousInit();
     }
 
     /**
@@ -133,6 +135,8 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
+
+        robotContainer.teleopInit();
     }
 
     /**

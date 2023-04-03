@@ -26,7 +26,8 @@ public abstract class Constants {
       public static final double TURTLE_MODE_MAX_SPEED = 0.4;
       public static final double TURBO_MODE_MIN_SPEED = TURTLE_MODE_MAX_SPEED;
       public static final boolean IsBotRed5 = false;
-      public static final boolean IS_FIELD_ORIENTED = false;
+      public static final boolean IS_FIELD_ORIENTED = true;
+      public static final double ANGLE_GAIN = 0.002;
     }
     // public static class MotorConstants {
     //   public static final int FRONT_LEFT_MOTOR_PORT = 1;
@@ -80,7 +81,7 @@ public abstract class Constants {
       // Encoder offsets are in degrees, not radians
       public static final double FRONT_LEFT_ENCODER_OFFSET = -137.021 + 180 + 3;
       public static final double FRONT_RIGHT_ENCODER_OFFSET = -31.816 - 4;
-      public static final double BACK_LEFT_ENCODER_OFFSET = -116.895 + 6;
+      public static final double BACK_LEFT_ENCODER_OFFSET = -116.895 + 4;
       public static final double BACK_RIGHT_ENCODER_OFFSET = -121.904 + 180 + 4;
       public static final double DRIVE_GEAR_RATIO = (14.0 / 50.0) * (27.0 / 17.0) * (15.0 / 45.0);
       public static final double TURN_GEAR_RATIO = 150 / 7;
