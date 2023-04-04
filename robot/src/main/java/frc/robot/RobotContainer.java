@@ -31,10 +31,12 @@ import frc.robot.commands.grabberCommands.GrabberWaitCommand;
 import frc.robot.commands.intakeCommands.IntakeCommand;
 import frc.robot.commands.intakeCommands.OuttakeCommand;
 import frc.robot.commands.virtualCommands.CameraCommand;
+import frc.robot.commands.virtualCommands.ToggleLightingCommand;
 import frc.robot.subsystems.Arm;
 import frc.robot.subsystems.Drive;
 import frc.robot.subsystems.Grabber;
 import frc.robot.subsystems.Intake;
+import frc.robot.subsystems.Lighting;
 import util.controls.DreadbotController;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.networktables.NetworkTable;
@@ -56,6 +58,7 @@ public class RobotContainer {
     private final Grabber grabber = new Grabber();
     private final Intake intake = new Intake();
     private final Arm arm = new Arm();
+    private final Lighting lighting = new Lighting();
     private final DreadbotController primaryController = new DreadbotController(OperatorConstants.PRIMARY_JOYSTICK_PORT);
     private final DreadbotController secondaryController = new DreadbotController(OperatorConstants.SECONDARY_JOYSTICK_PORT);
     private final NetworkTableInstance ntInstance = NetworkTableInstance.getDefault();
@@ -121,7 +124,6 @@ public class RobotContainer {
             .andThen(new ArmToPositionCommand(arm, grabber, -5, secondaryController::getYAxis)))
                 .unless(arm::isInsideBot));
         secondaryController.getRightBumper().onTrue(new GrabberOpenCommand(grabber, arm));
-        secondaryController.getStartButton().onTrue(new CameraCommand(smartDashboard));
         secondaryController.getAButton().onTrue(new GrabberCloseCommand(grabber)
             .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber)
             .andThen(new ArmToPositionCommand(arm, grabber, ArmConstants.PICKUP_ELEVATOR_POSITION, secondaryController::getYAxis))));
@@ -134,6 +136,8 @@ public class RobotContainer {
         secondaryController.getYButton().onTrue(new GrabberCloseCommand(grabber)
             .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber).unless(arm::getNotLowerSwitch))
             .andThen(new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, secondaryController::getYAxis)));
+        secondaryController.getBackButton().onTrue(new CameraCommand(smartDashboard));
+        secondaryController.getStartButton().onTrue(new ToggleLightingCommand(lighting));
 
         //Autos.generateCommands(drive, arm, grabber, gyro, intake);
     }
