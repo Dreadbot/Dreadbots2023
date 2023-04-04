@@ -28,7 +28,7 @@ public class Lighting extends DreadbotSubsystem {
         } else if(color == Color.Purple) {
             ledDriver.set(0.91);
             currentColor = Color.Purple;
-            SmartDashboard.putBoolean("Requested Piece", falseg);
+            SmartDashboard.putBoolean("Requested Piece", false);
         }
     }
 
