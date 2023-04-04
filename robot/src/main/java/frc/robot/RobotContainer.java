@@ -51,7 +51,6 @@ import java.util.HashMap;
  * subsystems, commands, and trigger mappings) should be declared here.
  */
 public class RobotContainer {
-
     private final AHRS gyro = new AHRS(SerialPort.Port.kUSB1);
     private final Drive drive = new Drive(gyro);
     private final Grabber grabber = new Grabber();
@@ -88,6 +87,7 @@ public class RobotContainer {
             .andThen(new ArmToPositionCommand(arm, grabber, -5, () -> 0.0)));
         autonEvents.put("intake", new IntakeCommand(intake).withTimeout(3.0));
         autonEvents.put("wait", new WaitCommand(15.0));
+        autonEvents.put("balance", new BalanceCommand(drive, gyro));
     
         autonChooser.setDefaultOption(
             "Score, Leave, and Balance", drive.buildAuto(autonEvents, "ScoreLeaveBalance"));
@@ -100,6 +100,7 @@ public class RobotContainer {
         // Configure the trigger bindings
         configureBindings();
     }
+
     private void configureBindings() {
         DriveCommand driveCommand = new DriveCommand(drive, primaryController::getYAxis, primaryController::getXAxis, primaryController::getZAxis);
         ArmCommand armCommand = new ArmCommand(arm, grabber, secondaryController::getYAxis, secondaryController.getLeftTrigger(), secondaryController.getLeftBumper());
@@ -107,13 +108,11 @@ public class RobotContainer {
         drive.setDefaultCommand(driveCommand);
         arm.setDefaultCommand(armCommand);
         grabber.setDefaultCommand(grabberOpenCommand);
-        primaryController.getXButton().whileTrue(new BalanceCommand(drive, gyro).andThen(new BrakeCommand(drive, gyro)));
         primaryController.getLeftBumper().whileTrue(new TurtleCommand(driveCommand));
         primaryController.getRightBumper().whileTrue(new TurboCommand(driveCommand));
         primaryController.getLeftTrigger().whileTrue(new OuttakeCommand(intake));
         primaryController.getRightTrigger().whileTrue(new IntakeCommand(intake));
-        primaryController.getAButton().onTrue(new AutoAlignConeCommand(drive));
-        primaryController.getBButton().onTrue(new AutoAlignCubeCommand(drive));
+        primaryController.getAButton().whileTrue(new BalanceCommand(drive, gyro));
         primaryController.getXButton().whileTrue(new XWheelsCommand(drive));
         primaryController.getBackButton().onTrue(new FieldOrientationCommand(driveCommand));
         secondaryController.getLeftTrigger().whileTrue(new GrabberCloseCommand(grabber)); //needed for extra conditions were we want to close no matter what
@@ -164,6 +163,7 @@ public class RobotContainer {
         SmartDashboard.putBoolean("Lower Limit switch", arm.getLowerSwitch());
         SmartDashboard.putBoolean("Upper Limit switch", arm.getUpperSwitch());
     }
+
     public void robotPeriodic() {
         drive.putValuesToSmartDashboard();
     }

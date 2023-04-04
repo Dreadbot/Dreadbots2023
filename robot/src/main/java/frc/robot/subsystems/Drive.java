@@ -120,7 +120,7 @@ public class Drive extends DreadbotSubsystem {
         backLeftModule.putValuesToSmartDashboard("back left");
         backRightModule.putValuesToSmartDashboard("back right");
 
-        initialPitch = gyro.getPitch();
+        initialPitch = gyro.getRoll();
 
         turningController.enableContinuousInput(-180, 180);
     }
@@ -135,9 +135,9 @@ public class Drive extends DreadbotSubsystem {
             }
         }
 
-        if (!isTurning && ySpeed > 0) {
-            rot = turningController.calculate(gyro.getYaw(), targetAngle);
-        }
+        // if (!isTurning && ySpeed > 0) {
+        //     rot = turningController.calculate(gyro.getYaw(), targetAngle);
+        // }
 
         xSpeed = forwardSlewRateLimiter.calculate(xSpeed);
         ySpeed = strafeSlewRateLimiter.calculate(ySpeed);
@@ -256,7 +256,7 @@ public class Drive extends DreadbotSubsystem {
     }
 
     public double getPitch(){
-        return gyro.getPitch() - initialPitch;
+        return gyro.getRoll() - initialPitch;
     }
 
     public RelativeEncoder getMotorEncoder(int wheel){

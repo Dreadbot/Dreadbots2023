@@ -36,9 +36,9 @@ public abstract class Constants {
     //   public static final int BACK_RIGHT_MOTOR_PORT = 7;
     // }
     public static class BalanceConstants {
-      public static final double MAX_SPEED = 0.125;
-      public static final double SCALE = -0.3; //invert sign when we replaced Nav-X
-      public static final double LEVEL_DEGREES = 11; //Angle where considered level (11)
+      public static final double MAX_SPEED = 0.2;
+      public static final double SCALE = 0.01; //invert sign when we replaced Nav-X
+      public static final double LEVEL_DEGREES = 7; //Angle where considered level (11 for comp)
     }
     public static class AutonomousConstants {
       public static final double KS_VOLTS = 0.15117; 
