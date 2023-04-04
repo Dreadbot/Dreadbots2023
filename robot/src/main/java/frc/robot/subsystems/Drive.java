@@ -65,6 +65,8 @@ public class Drive extends DreadbotSubsystem {
     private float targetAngle = 0;
     private PIDController turningController = new PIDController(-0.0006, 0.0, 0.0);
 
+    public boolean isXMode = false;
+
     public Drive(AHRS gyro) {
         this.gyro = gyro;
 
@@ -126,6 +128,8 @@ public class Drive extends DreadbotSubsystem {
     }
 
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative){
+        if(isXMode)
+            return;
         if (isTeleop) {
             if (rot != 0) {
                 isTurning = true;
@@ -179,12 +183,13 @@ public class Drive extends DreadbotSubsystem {
     public void xModules() {
         resetModules();
         SwerveModuleState[] states = {
-            new SwerveModuleState(.0, new Rotation2d(Units.degreesToRadians(135))),
+            new SwerveModuleState(.0, new Rotation2d(Units.degreesToRadians(135 - 90))),
             new SwerveModuleState(.0, new Rotation2d(Units.degreesToRadians(135))),
             new SwerveModuleState(.0, new Rotation2d(Units.degreesToRadians(-45))),
-            new SwerveModuleState(.0, new Rotation2d(Units.degreesToRadians(-45))),
+            new SwerveModuleState(.0, new Rotation2d(Units.degreesToRadians(-45 + 90))),
         };
         setDesiredState(states);
+        isXMode = true;
     }
 
     public Pose2d getPosition(){

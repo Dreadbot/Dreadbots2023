@@ -6,6 +6,7 @@ import frc.robot.subsystems.Drive;
 public class XWheelsCommand extends CommandBase {
     Drive drive;
 
+
     public XWheelsCommand(Drive drive) {
         this.drive = drive;
     }
@@ -13,5 +14,10 @@ public class XWheelsCommand extends CommandBase {
     @Override
     public void execute() {
         drive.xModules();
+    }
+
+    @Override 
+    public void end(boolean interrupted){
+        drive.isXMode = false;
     }
 }
