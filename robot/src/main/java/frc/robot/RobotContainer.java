@@ -99,6 +99,8 @@ public class RobotContainer {
         autonChooser.addOption("Low Link Bump", drive.buildAuto(autonEvents, "LowLinkBump"));
         autonChooser.addOption("Low Link No Bump", drive.buildAuto(autonEvents, "LowLinkNonBump"));
 
+        System.out.println("Here");
+
         SmartDashboard.putData(autonChooser);
         // Configure the trigger bindings
         configureBindings();

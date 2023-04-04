@@ -20,22 +20,22 @@
           "score"
         ],
         "executionBehavior": "sequential",
-        "waitBehavior": "none",
-        "waitTime": 0
+        "waitBehavior": "deadline",
+        "waitTime": 3.45
       }
     },
     {
       "anchorPoint": {
-        "x": 6.879498405516064,
-        "y": 0.95
+        "x": 6.886060024304466,
+        "y": 0.9134957192171198
       },
       "prevControl": {
-        "x": 4.399076988502896,
-        "y": 0.969140703610502
+        "x": 4.405638607291298,
+        "y": 0.9326364228276218
       },
       "nextControl": {
-        "x": 4.399076988502896,
-        "y": 0.969140703610502
+        "x": 4.405638607291298,
+        "y": 0.9326364228276218
       },
       "holonomicAngle": 0.0,
       "isReversal": true,
@@ -53,11 +53,11 @@
     },
     {
       "anchorPoint": {
-        "x": 1.9,
+        "x": 1.93,
         "y": 1.05
       },
       "prevControl": {
-        "x": 2.9663903792671165,
+        "x": 2.996390379267117,
         "y": 0.8624260106397323
       },
       "nextControl": null,
@@ -81,7 +81,7 @@
   "isReversed": null,
   "markers": [
     {
-      "position": 1.95,
+      "position": 1.85,
       "names": [
         "score"
       ]
@@ -90,6 +90,12 @@
       "position": 0.8,
       "names": [
         "intake"
+      ]
+    },
+    {
+      "position": 0.0,
+      "names": [
+        "retract"
       ]
     }
   ]
