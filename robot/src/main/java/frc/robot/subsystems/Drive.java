@@ -260,6 +260,10 @@ public class Drive extends DreadbotSubsystem {
         gyro.reset();
     }
 
+    public void zeroYaw(){
+        gyro.zeroYaw();
+    }
+
     public double getPitch(){
         return gyro.getRoll() - initialPitch;
     }

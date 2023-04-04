@@ -8,6 +8,7 @@ import com.kauailabs.navx.frc.AHRS;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 import edu.wpi.first.wpilibj2.command.WaitCommand;
 import frc.robot.Constants.ArmConstants;
 import frc.robot.Constants.GrabberConstants;
@@ -120,6 +121,7 @@ public class RobotContainer {
         primaryController.getAButton().whileTrue(new BalanceCommand(drive, gyro));
         primaryController.getXButton().whileTrue(new XWheelsCommand(drive));
         primaryController.getBackButton().onTrue(new FieldOrientationCommand(driveCommand));
+        primaryController.getStartButton().onTrue(new InstantCommand(drive :: resetGyro));
         secondaryController.getLeftTrigger().whileTrue(new GrabberCloseCommand(grabber)); //needed for extra conditions were we want to close no matter what
         secondaryController.getRightTrigger().onTrue((new GrabberOpenCommand(grabber, arm)
             .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber))
