@@ -68,9 +68,10 @@
       "isStopPoint": false,
       "stopEvent": {
         "names": [
-          "score"
+          "score",
+          "instant"
         ],
-        "executionBehavior": "sequential",
+        "executionBehavior": "parallel",
         "waitBehavior": "minimum",
         "waitTime": 15.0
       }

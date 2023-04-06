@@ -16,9 +16,7 @@
       "isLocked": false,
       "isStopPoint": false,
       "stopEvent": {
-        "names": [
-          "score"
-        ],
+        "names": [],
         "executionBehavior": "sequential",
         "waitBehavior": "none",
         "waitTime": 0
@@ -26,15 +24,15 @@
     },
     {
       "anchorPoint": {
-        "x": 6.0,
+        "x": 6.5,
         "y": 2.74
       },
       "prevControl": {
-        "x": 5.117230429429991,
+        "x": 5.617230429429991,
         "y": 2.74
       },
       "nextControl": {
-        "x": 5.117230429429991,
+        "x": 5.617230429429991,
         "y": 2.74
       },
       "holonomicAngle": 0,
@@ -55,7 +53,7 @@
         "y": 2.75
       },
       "prevControl": {
-        "x": 4.899999999999999,
+        "x": 4.8999999999999995,
         "y": 2.7499999999999996
       },
       "nextControl": null,

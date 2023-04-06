@@ -37,7 +37,7 @@ public abstract class Constants {
     // }
     public static class BalanceConstants {
       public static final double MAX_SPEED = 0.2;
-      public static final double SCALE = 0.01; //invert sign when we replaced Nav-X
+      public static final double SCALE = 0.015;
       public static final double LEVEL_DEGREES = 7; //Angle where considered level (11 for comp)
     }
     public static class AutonomousConstants {
@@ -45,8 +45,8 @@ public abstract class Constants {
       public static final double KV_VOLT_SECONDS_PER_METER = 1.5553;
       public static final double KA_VOLT_SECONDS_SQUARED_PER_METER = 0.40129;
       public static final double KP_DRIVE_VELOCITY = 0.63592;
-      public static final double MAX_SPEED_METERS_PER_SECOND = 1.5;
-      public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = .75;
+      public static final double MAX_SPEED_METERS_PER_SECOND = 2.50;
+      public static final double MAX_ACCELERATION_METERS_PER_SECOND_SQUARED = 1.25;
       public static final double RAMSETE_B = 2;
       public static final double RAMSETE_ZETA = 0.7;
       public static final double TRACK_WIDTH = Units.inchesToMeters(26);

@@ -27,6 +27,7 @@ import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
 import edu.wpi.first.wpilibj.Joystick;
 import frc.robot.Constants;
+import frc.robot.Constants.AutonomousConstants;
 import frc.robot.Constants.SwerveConstants;
 import frc.robot.util.misc.DreadbotMotor;
 import frc.robot.util.misc.SwerveModule;
@@ -222,10 +223,10 @@ public class Drive extends DreadbotSubsystem {
         backRightModule.zeroModule();
     }
 
-    public Command buildAuto(HashMap<String, Command> eventMap, String pathName) {
+    public Command buildAuto(HashMap<String, Command> eventMap, String pathName, double maxVelocity, double maxAcceleration) {
         List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(
             pathName,
-            new PathConstraints(2.50, 1.25)
+            new PathConstraints(maxVelocity, maxAcceleration)
         );
 
         SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
@@ -240,6 +241,10 @@ public class Drive extends DreadbotSubsystem {
             this
         );
         return autoBuilder.fullAuto(pathGroup);
+    }
+
+    public Command buildAuto(HashMap<String, Command> eventMap, String pathName) {
+        return this.buildAuto(eventMap, pathName, AutonomousConstants.MAX_SPEED_METERS_PER_SECOND, AutonomousConstants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
     }
 
     @Override

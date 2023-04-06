@@ -4,6 +4,7 @@ import java.util.function.BooleanSupplier;
 import java.util.function.DoubleSupplier;
 
 import edu.wpi.first.math.filter.SlewRateLimiter;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.CommandBase;
 import frc.robot.Constants;
 import frc.robot.Constants.DriveConstants;
@@ -28,6 +29,7 @@ public class DriveCommand extends CommandBase {
         this.joystickStrafeAxis = joystickStrafeAxis;
         this.joystickRotationalAxis = joystickRotationalAxis;
         addRequirements(drive);
+        SmartDashboard.putBoolean("Field Oriented", fieldOriented);
     }
 
     /*  Normal Mode: move at 75% of joystick value (min speed = 0; max speed = .75)
@@ -81,5 +83,6 @@ public class DriveCommand extends CommandBase {
 
     public void toggleFieldOrientation() {
         this.fieldOriented = !this.fieldOriented;
+        SmartDashboard.putBoolean("Field Oriented", fieldOriented);
     }
 }

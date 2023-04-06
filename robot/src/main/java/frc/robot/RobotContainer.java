@@ -92,15 +92,14 @@ public class RobotContainer {
         autonEvents.put("intake", new IntakeCommand(intake).withTimeout(3.0));
         autonEvents.put("wait", new WaitCommand(15.0));
         autonEvents.put("balance", new BalanceCommand(drive, gyro));
+        autonEvents.put("instant", new InstantCommand(() -> {}, drive));
     
         autonChooser.setDefaultOption(
-            "Score, Leave, and Balance", drive.buildAuto(autonEvents, "ScoreLeaveBalance"));
+            "Score, Leave, and Balance", drive.buildAuto(autonEvents, "ScoreLeaveBalance", 1.5, 0.60));
         autonChooser.addOption("Partial Link Bump", drive.buildAuto(autonEvents, "PartialLinkBump"));
         autonChooser.addOption("Partial Link No Bump", drive.buildAuto(autonEvents, "PartialLinkNonBump"));
         autonChooser.addOption("Low Link Bump", drive.buildAuto(autonEvents, "LowLinkBump"));
         autonChooser.addOption("Low Link No Bump", drive.buildAuto(autonEvents, "LowLinkNonBump"));
-
-        System.out.println("Here");
 
         SmartDashboard.putData(autonChooser);
         // Configure the trigger bindings
@@ -121,7 +120,7 @@ public class RobotContainer {
         primaryController.getAButton().whileTrue(new BalanceCommand(drive, gyro));
         primaryController.getXButton().whileTrue(new XWheelsCommand(drive));
         primaryController.getBackButton().onTrue(new FieldOrientationCommand(driveCommand));
-        primaryController.getStartButton().onTrue(new InstantCommand(drive :: resetGyro));
+        primaryController.getStartButton().onTrue(new InstantCommand(drive::resetGyro));
         secondaryController.getLeftTrigger().whileTrue(new GrabberCloseCommand(grabber)); //needed for extra conditions were we want to close no matter what
         secondaryController.getRightTrigger().onTrue((new GrabberOpenCommand(grabber, arm)
             .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber))
