@@ -95,7 +95,7 @@ public class RobotContainer {
         autonEvents.put("instant", new InstantCommand(() -> {}, drive));
     
         autonChooser.setDefaultOption(
-            "Score, Leave, and Balance", drive.buildAuto(autonEvents, "ScoreLeaveBalance", 1.5, 0.60));
+            "Score, Leave, and Balance", drive.buildAuto(autonEvents, "ScoreLeaveBalance", 1.5, 0.9));
         autonChooser.addOption("Partial Link Bump", drive.buildAuto(autonEvents, "PartialLinkBump"));
         autonChooser.addOption("Partial Link No Bump", drive.buildAuto(autonEvents, "PartialLinkNonBump"));
         autonChooser.addOption("Low Link Bump", drive.buildAuto(autonEvents, "LowLinkBump"));
