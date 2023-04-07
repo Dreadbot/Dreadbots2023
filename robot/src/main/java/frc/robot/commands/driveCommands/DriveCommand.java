@@ -38,9 +38,9 @@ public class DriveCommand extends CommandBase {
      */
     @Override
     public void execute() {
-        double forward = (DreadbotMath.applyDeadbandToValue(joystickForwardAxis.getAsDouble(), 0.05) * DriveConstants.FORWARD_SPEED_LIMITER);
-        double strafe = (DreadbotMath.applyDeadbandToValue(joystickStrafeAxis.getAsDouble(), 0.05) * DriveConstants.STRAFE_SPEED_LIMITER);
-        double rotation = (DreadbotMath.applyDeadbandToValue(joystickRotationalAxis.getAsDouble(), 0.05) * DriveConstants.ROT_SPEED_LIMITER);
+        double forward = (DreadbotMath.applyDeadbandToValue(joystickForwardAxis.getAsDouble(), DriveConstants.DEADBAND) * DriveConstants.FORWARD_SPEED_LIMITER);
+        double strafe = (DreadbotMath.applyDeadbandToValue(joystickStrafeAxis.getAsDouble(), DriveConstants.DEADBAND) * DriveConstants.STRAFE_SPEED_LIMITER);
+        double rotation = (DreadbotMath.applyDeadbandToValue(joystickRotationalAxis.getAsDouble(), DriveConstants.DEADBAND) * DriveConstants.ROT_SPEED_LIMITER);
 
         boolean addSlew = true;
         if (this.turboMode) {

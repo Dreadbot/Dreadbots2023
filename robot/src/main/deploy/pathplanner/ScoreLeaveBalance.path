@@ -27,15 +27,15 @@
     {
       "anchorPoint": {
         "x": 6.3,
-        "y": 2.9
+        "y": 2.75
       },
       "prevControl": {
         "x": 5.417230429429991,
-        "y": 2.9
+        "y": 2.75
       },
       "nextControl": {
         "x": 5.417230429429991,
-        "y": 2.9
+        "y": 2.75
       },
       "holonomicAngle": 0,
       "isReversal": true,
@@ -52,16 +52,13 @@
     {
       "anchorPoint": {
         "x": 3.8,
-        "y": 2.9
+        "y": 2.75
       },
       "prevControl": {
         "x": 4.799999999999999,
-        "y": 2.8999999999999995
+        "y": 2.7499999999999996
       },
-      "nextControl": {
-        "x": 2.8000000000000007,
-        "y": 2.9000000000000004
-      },
+      "nextControl": null,
       "holonomicAngle": 0,
       "isReversal": false,
       "velOverride": null,
@@ -72,53 +69,6 @@
           "balance"
         ],
         "executionBehavior": "sequential",
-        "waitBehavior": "none",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 5.755651511303022,
-        "y": 3.9452628905257816
-      },
-      "prevControl": {
-        "x": 4.277825755651511,
-        "y": 3.422631445262891
-      },
-      "nextControl": {
-        "x": 7.233477266954534,
-        "y": 4.467894335788673
-      },
-      "holonomicAngle": 0,
-      "isReversal": false,
-      "velOverride": null,
-      "isLocked": false,
-      "isStopPoint": false,
-      "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
-        "waitBehavior": "none",
-        "waitTime": 0
-      }
-    },
-    {
-      "anchorPoint": {
-        "x": 2.263144526289053,
-        "y": -0.5949961899923788
-      },
-      "prevControl": {
-        "x": 4.748310896621794,
-        "y": 1.936449072898147
-      },
-      "nextControl": null,
-      "holonomicAngle": 0,
-      "isReversal": false,
-      "velOverride": null,
-      "isLocked": false,
-      "isStopPoint": false,
-      "stopEvent": {
-        "names": [],
-        "executionBehavior": "parallel",
         "waitBehavior": "none",
         "waitTime": 0
       }

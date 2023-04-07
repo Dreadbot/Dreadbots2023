@@ -23,11 +23,12 @@ public abstract class Constants {
       public static final double GEAR_RATIO = 6.25 / 1;
       public static final double AUTON_DRIVE_SPEED = 0.25;
       public static final double SLEW_RATE_LIMIT = 1;
-      public static final double TURTLE_MODE_MAX_SPEED = 0.4;
+      public static final double TURTLE_MODE_MAX_SPEED = 0.35;
       public static final double TURBO_MODE_MIN_SPEED = TURTLE_MODE_MAX_SPEED;
       public static final boolean IsBotRed5 = false;
       public static final boolean IS_FIELD_ORIENTED = true;
       public static final double ANGLE_GAIN = 0.002;
+      public static final double DEADBAND = 0.08;
     }
     // public static class MotorConstants {
     //   public static final int FRONT_LEFT_MOTOR_PORT = 1;
@@ -38,7 +39,7 @@ public abstract class Constants {
     public static class BalanceConstants {
       public static final double MAX_SPEED = 0.2;
       public static final double SCALE = 0.010;
-      public static final double LEVEL_DEGREES = 10; //Angle where considered level (11 for comp)
+      public static final double LEVEL_DEGREES = 8; //Angle where considered level (11 for comp)
     }
     public static class AutonomousConstants {
       public static final double KS_VOLTS = 0.15117; 
@@ -75,7 +76,7 @@ public abstract class Constants {
       public static final int LOWER_LIMIT_SWITCH_PORT = 0;
     }
     public static class SwerveConstants {
-      public static final double ATTAINABLE_MAX_SPEED = 1.25;
+      public static final double ATTAINABLE_MAX_SPEED = 2.50;
       public static final double MODULE_Y_OFFSET = Units.inchesToMeters(26.0) / 2; // Between the front and back
       public static final double MODULE_X_OFFSET = Units.inchesToMeters(23.0) / 2; // Between the left and right
       // Encoder offsets are in degrees, not radians
