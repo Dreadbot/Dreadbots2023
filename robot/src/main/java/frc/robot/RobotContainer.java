@@ -85,6 +85,7 @@ public class RobotContainer {
             .andThen(new ArmToPositionCommand(arm, grabber, -5, () -> 0.0)));
         autonEvents.put("score-cube", new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, () -> 0.0)
             .andThen(new GrabberOpenCommand(grabber, arm))
+            .andThen(new GrabberWaitCommand(.4, grabber))
             .andThen(new ArmToPositionCommand(arm, grabber, -5, () -> 0.0)));
         autonEvents.put("score-low", new ArmToPositionCommand(arm, grabber, ArmConstants.LOW_POST_POSITION, () -> 0.0)
             .andThen(new GrabberOpenCommand(grabber, arm))
@@ -95,7 +96,8 @@ public class RobotContainer {
         autonEvents.put("instant", new InstantCommand(() -> {}, drive));
     
         autonChooser.setDefaultOption(
-            "Score, Leave, and Balance", drive.buildAuto(autonEvents, "ScoreLeaveBalance", 1.5, 0.9));
+            "Score, Leave, and Balance", drive.buildAuto(autonEvents, "ScoreLeaveBalance", 1.5, 0.75));
+        autonChooser.addOption("Score and Balance", drive.buildAuto(autonEvents, "ScoreBalance"));
         autonChooser.addOption("Partial Link Bump", drive.buildAuto(autonEvents, "PartialLinkBump"));
         autonChooser.addOption("Partial Link No Bump", drive.buildAuto(autonEvents, "PartialLinkNonBump"));
         autonChooser.addOption("Low Link Bump", drive.buildAuto(autonEvents, "LowLinkBump"));
