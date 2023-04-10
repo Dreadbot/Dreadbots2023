@@ -46,7 +46,7 @@ public class DriveCommand extends CommandBase {
         if (this.turboMode) {
             // make forward negative right here and test
             forward = Math.signum(joystickForwardAxis.getAsDouble()) * DreadbotMath.linearInterpolation(DriveConstants.TURBO_MODE_MIN_SPEED, 1, Math.abs(joystickForwardAxis.getAsDouble()));
-            strafe = Math.signum(joystickStrafeAxis.getAsDouble()) * DreadbotMath.linearInterpolation(DriveConstants.TURBO_MODE_MIN_SPEED, 1, Math.abs(joystickForwardAxis.getAsDouble()));
+            strafe = Math.signum(joystickStrafeAxis.getAsDouble()) * DreadbotMath.linearInterpolation(DriveConstants.TURBO_MODE_MIN_SPEED, 1, Math.abs(joystickStrafeAxis.getAsDouble()));
             // Because this is done after the linearInterpolation, the deadband ends up being .05
             if (Math.abs(forward) <= OperatorConstants.TURBO_CONTROLLER_DEADBAND) {
                 forward = 0;
