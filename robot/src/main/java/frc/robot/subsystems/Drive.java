@@ -1,224 +1,304 @@
 package frc.robot.subsystems;
 
+import java.util.HashMap;
+import java.util.List;
 
+import com.ctre.phoenix.sensors.CANCoder;
 import com.kauailabs.navx.frc.AHRS;
+import com.pathplanner.lib.PathConstraints;
+import com.pathplanner.lib.PathPlanner;
+import com.pathplanner.lib.PathPlannerTrajectory;
+import com.pathplanner.lib.auto.PIDConstants;
+import com.pathplanner.lib.auto.SwerveAutoBuilder;
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.RelativeEncoder;
-import com.revrobotics.CANSparkMax.IdleMode;
 import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 
+import edu.wpi.first.math.controller.PIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
-import edu.wpi.first.math.kinematics.DifferentialDriveOdometry;
-import edu.wpi.first.math.kinematics.DifferentialDriveWheelSpeeds;
-import edu.wpi.first.wpilibj.drive.DifferentialDrive;
-import edu.wpi.first.wpilibj.motorcontrol.MotorControllerGroup;
+import edu.wpi.first.math.geometry.Rotation2d;
+import edu.wpi.first.math.geometry.Translation2d;
+import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
+import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
+import edu.wpi.first.math.kinematics.SwerveModulePosition;
+import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
+import edu.wpi.first.wpilibj.Joystick;
+import frc.robot.Constants;
 import frc.robot.Constants.AutonomousConstants;
-import frc.robot.Constants.DriveConstants;
-import frc.robot.Constants.MotorConstants;
-import util.misc.DreadbotMotor;
+import frc.robot.Constants.SwerveConstants;
+import frc.robot.util.misc.DreadbotMotor;
+import frc.robot.util.misc.SwerveModule;
 import util.misc.DreadbotSubsystem;
+import edu.wpi.first.wpilibj2.command.Command;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class Drive extends DreadbotSubsystem {
-    private final DifferentialDrive diffDrive;
-    
-    private final DreadbotMotor frontLeftMotor;
-    private final DreadbotMotor frontRightMotor;
-    private final DreadbotMotor backLeftMotor;
-    private final DreadbotMotor backRightMotor;
+    //Double check locations
+    //What is location in comparasion to front of bot 
+    //Example x and y's seem to be swapped?
+    private final Translation2d frontLeftLocation = new Translation2d(SwerveConstants.MODULE_X_OFFSET, SwerveConstants.MODULE_Y_OFFSET);
+    private final Translation2d frontRightLocation = new Translation2d(SwerveConstants.MODULE_X_OFFSET, -SwerveConstants.MODULE_Y_OFFSET);
+    private final Translation2d backLeftLocation = new Translation2d(-SwerveConstants.MODULE_X_OFFSET, SwerveConstants.MODULE_Y_OFFSET);
+    private final Translation2d backRightLocation = new Translation2d(-SwerveConstants.MODULE_X_OFFSET, -SwerveConstants.MODULE_Y_OFFSET);
 
-    private final MotorControllerGroup leftMotors;
-    private final MotorControllerGroup rightMotors;
+    private SwerveModule frontLeftModule;
+    private SwerveModule frontRightModule;
+    private SwerveModule backLeftModule;
+    private SwerveModule backRightModule;
 
-    protected final SlewRateLimiter slewRate;
-    protected final SlewRateLimiter turboSlewRate;
-    private final DifferentialDriveOdometry odometry;
+    private AHRS gyro;
 
-    private final AHRS gyro;
-    public final double InitialPitch;
+    private SwerveDriveKinematics kinematics;
+
+    private SwerveDriveOdometry odometry;
+
+    private SlewRateLimiter forwardSlewRateLimiter = new SlewRateLimiter(1.5, -1.5, .2);
+    private SlewRateLimiter strafeSlewRateLimiter = new SlewRateLimiter(1.5, -1.5, .2);
+
+    private final double initialPitch;
+
+    public boolean isTeleop = false;
+    private boolean isTurning = false;
+    private float targetAngle = 0;
+    private PIDController turningController = new PIDController(-0.0006, 0.0, 0.0);
+
+    public boolean isXMode = false;
 
     public Drive(AHRS gyro) {
-        this.frontLeftMotor = new DreadbotMotor(new CANSparkMax(MotorConstants.FRONT_LEFT_MOTOR_PORT, MotorType.kBrushless), "frontLeft");
-        this.frontRightMotor = new DreadbotMotor(new CANSparkMax(MotorConstants.FRONT_RIGHT_MOTOR_PORT, MotorType.kBrushless), "frontRight");
-        this.backLeftMotor = new DreadbotMotor(new CANSparkMax(MotorConstants.BACK_LEFT_MOTOR_PORT, MotorType.kBrushless), "backLeft");
-        this.backRightMotor = new DreadbotMotor(new CANSparkMax(MotorConstants.BACK_RIGHT_MOTOR_PORT, MotorType.kBrushless), "backRight");
-
-        frontLeftMotor.setIdleMode(IdleMode.kBrake);
-        frontRightMotor.setIdleMode(IdleMode.kBrake);
-        backLeftMotor.setIdleMode(IdleMode.kBrake);
-        backRightMotor.setIdleMode(IdleMode.kBrake);
-
-        frontLeftMotor.setInverted(false);
-        frontRightMotor.setInverted(true);
-        backLeftMotor.setInverted(false);
-        backRightMotor.setInverted(true);
-        
-
-        leftMotors = new MotorControllerGroup(frontLeftMotor.getSparkMax(), backLeftMotor.getSparkMax());
-        rightMotors = new MotorControllerGroup(frontRightMotor.getSparkMax(), backRightMotor.getSparkMax());
-
-        leftMotors.setInverted(false);
-        rightMotors.setInverted(false);
-        diffDrive = new DifferentialDrive(leftMotors, rightMotors);
         this.gyro = gyro;
-        InitialPitch = gyro.getPitch();
 
-        odometry = new DifferentialDriveOdometry(
-            gyro.getRotation2d(),
-            (frontLeftMotor.getEncoder().getPosition() / AutonomousConstants.ROTATIONS_PER_METER),
-            (frontRightMotor.getEncoder().getPosition() / AutonomousConstants.ROTATIONS_PER_METER)
+        frontLeftModule = new SwerveModule(
+            new DreadbotMotor(new CANSparkMax(1, MotorType.kBrushless), "Front Left Drive"),
+            new DreadbotMotor(new CANSparkMax(2, MotorType.kBrushless), "Front Left Turn"),
+            new CANCoder(9),
+            SwerveConstants.FRONT_LEFT_ENCODER_OFFSET
         );
-        slewRate = new SlewRateLimiter(DriveConstants.SLEW_RATE_LIMIT, -DriveConstants.SLEW_RATE_LIMIT, 0.2);
-        turboSlewRate = new SlewRateLimiter(DriveConstants.TURBO_FORWARD_SPEED_LIMITER, -DriveConstants.TURBO_FORWARD_SPEED_LIMITER, .4);
-    }
-
-    public double getPitch() {
-        return gyro.getPitch() - InitialPitch;
-    }
-
-    @Override
-    public void periodic() {
-        odometry.update(
-            gyro.getRotation2d(),
-            (frontLeftMotor.getEncoder().getPosition() / AutonomousConstants.ROTATIONS_PER_METER),
-            (frontRightMotor.getEncoder().getPosition() / AutonomousConstants.ROTATIONS_PER_METER)
+        // frontLeftModule.getDriveMotor().setInverted(true);
+        frontRightModule = new SwerveModule(
+            new DreadbotMotor(new CANSparkMax(3, MotorType.kBrushless), "Front Right Drive"),
+            new DreadbotMotor(new CANSparkMax(4, MotorType.kBrushless), "Front Right Turn"),
+            new CANCoder(10),
+            SwerveConstants.FRONT_RIGHT_ENCODER_OFFSET
         );
-    }
-    public double ArcadeDrive(double xSpeed, double rot) {
+        backLeftModule = new SwerveModule(
+            new DreadbotMotor(new CANSparkMax(5, MotorType.kBrushless), "Back Left Drive"),
+            new DreadbotMotor(new CANSparkMax(6, MotorType.kBrushless), "Back Left Turn"),
+            new CANCoder(11),
+            SwerveConstants.BACK_LEFT_ENCODER_OFFSET
+        );
+        // backLeftModule.getDriveMotor().setInverted(true);
+        backRightModule = new SwerveModule(
+            new DreadbotMotor(new CANSparkMax(7, MotorType.kBrushless), "Back Right Drive"),
+            new DreadbotMotor(new CANSparkMax(8, MotorType.kBrushless), "Back Right Turn"),
+            new CANCoder(12),
+            SwerveConstants.BACK_RIGHT_ENCODER_OFFSET
+        );
 
-        return ArcadeDrive(xSpeed, rot, true, true, false);
+        gyro.reset();
+
+        kinematics = new SwerveDriveKinematics(
+            frontLeftLocation,
+            frontRightLocation,
+            backLeftLocation,
+            backRightLocation
+        );
+
+        odometry  = new SwerveDriveOdometry(
+            kinematics,
+            gyro.getRotation2d(),
+            new SwerveModulePosition[] {
+                frontLeftModule.getPosition(),
+                frontRightModule.getPosition(),
+                backLeftModule.getPosition(),
+                backRightModule.getPosition()
+            }
+        );
+
+        frontLeftModule.putValuesToSmartDashboard("front left");
+        frontRightModule.putValuesToSmartDashboard("front right");
+        backLeftModule.putValuesToSmartDashboard("back left");
+        backRightModule.putValuesToSmartDashboard("back right");
+
+        initialPitch = gyro.getRoll();
+
+        turningController.enableContinuousInput(-180, 180);
     }
 
-    public double ArcadeDrive(double xSpeed, double rot, boolean squareSpeed, boolean addSlew, boolean turboMode) {
-        if(addSlew) {
-            xSpeed = addSlewRate(xSpeed);
-            if(turboMode)
-                xSpeed = addTurboSlewRate(xSpeed);
+    public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative){
+        if(isXMode)
+            return;
+        if (isTeleop) {
+            if (rot != 0) {
+                isTurning = true;
+                targetAngle = gyro.getYaw();
+            } else if (isTurning) {
+                isTurning = false;
+            }
         }
-        if(DriveConstants.IsBotRed5){
-            xSpeed = -xSpeed;
-            rot = -rot;
-        }
-        diffDrive.arcadeDrive(xSpeed, rot, squareSpeed);
-        return xSpeed;
+
+        // if (!isTurning && ySpeed > 0) {
+        //     rot = turningController.calculate(gyro.getYaw(), targetAngle);
+        // }
+
+        xSpeed = forwardSlewRateLimiter.calculate(xSpeed);
+        ySpeed = strafeSlewRateLimiter.calculate(ySpeed);
+
+        SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(
+            fieldRelative ? 
+            ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())
+            : new ChassisSpeeds(xSpeed, ySpeed, rot)
+        );
+        frontLeftModule.putValuesToSmartDashboard("front left");
+        frontRightModule.putValuesToSmartDashboard("front right");
+        backLeftModule.putValuesToSmartDashboard("back left");
+        backRightModule.putValuesToSmartDashboard("back right");
+
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SwerveConstants.ATTAINABLE_MAX_SPEED);
+        setDesiredState(swerveModuleStates);
     }
 
-    public void CurvatureDrive(double xSpeed, double rot) {
-        diffDrive.curvatureDrive(addSlewRate(xSpeed), rot, true);
-    }
-
-    public void TankDrive(double ySpeed, double wSpeed) { // WUMBO SPEED
-        diffDrive.tankDrive(ySpeed, wSpeed);
-    }
-
-    public void TankDriveVoltage(double yVolts, double wVolts) {
-        leftMotors.setVoltage(yVolts);
-        rightMotors.setVoltage(wVolts);
-        diffDrive.feed();
-    }
-
-    public RelativeEncoder getMotorEncoder(int wheel) {
-        switch(wheel) {
-            case 1:
-                return frontLeftMotor.getEncoder();
-            case 2:
-                return frontRightMotor.getEncoder();
-            case 3:
-                return backLeftMotor.getEncoder();
-            case 4:
-                return backRightMotor.getEncoder();
-            default:
-                return frontLeftMotor.getEncoder();
-        }
-    }
-
-    private double addSlewRate(double joystickAxis){
-        return slewRate.calculate(joystickAxis);
-    }
-
-    private double addTurboSlewRate(double joystickAxis){
-        return turboSlewRate.calculate(joystickAxis);
+    public void setDesiredState(SwerveModuleState[] swerveModuleStates) {
+        frontLeftModule.setDesiredState(swerveModuleStates[0]);
+        frontRightModule.setDesiredState(swerveModuleStates[1]);
+        backLeftModule.setDesiredState(swerveModuleStates[2]);
+        backRightModule.setDesiredState(swerveModuleStates[3]);
     }
 
     public void resetOdometry(Pose2d pose) {
-        resetEncoders();
         odometry.resetPosition(
             gyro.getRotation2d(),
-            (frontLeftMotor.getEncoder().getPosition() / AutonomousConstants.ROTATIONS_PER_METER),
-            (frontRightMotor.getEncoder().getPosition() / AutonomousConstants.ROTATIONS_PER_METER),
+            new SwerveModulePosition[] {
+                frontLeftModule.getPosition(),
+                frontRightModule.getPosition(),
+                backLeftModule.getPosition(),
+                backRightModule.getPosition()
+            },
             pose
         );
     }
 
-    public DifferentialDriveWheelSpeeds getWheelSpeeds() {
-        return new DifferentialDriveWheelSpeeds(
-           ((frontLeftMotor.getEncoder().getVelocity() / 60) / AutonomousConstants.ROTATIONS_PER_METER),
-           ((frontRightMotor.getEncoder().getVelocity() / 60) / AutonomousConstants.ROTATIONS_PER_METER)
+    public void xModules() {
+        resetModules();
+        SwerveModuleState[] states = {
+            new SwerveModuleState(.0, new Rotation2d(Units.degreesToRadians(135 - 90))),
+            new SwerveModuleState(.0, new Rotation2d(Units.degreesToRadians(135))),
+            new SwerveModuleState(.0, new Rotation2d(Units.degreesToRadians(-45))),
+            new SwerveModuleState(.0, new Rotation2d(Units.degreesToRadians(-45 + 90))),
+        };
+        setDesiredState(states);
+        isXMode = true;
+    }
+
+    public Pose2d getPosition(){
+        return odometry.update(getGyroPosition(), new SwerveModulePosition[] {
+            frontLeftModule.getPosition(),
+            frontRightModule.getPosition(),
+            backLeftModule.getPosition(),
+            backRightModule.getPosition()
+        });
+    }
+
+    public Rotation2d getGyroPosition() {
+        return gyro.getRotation2d();
+    }
+
+    public void followSpeeds(ChassisSpeeds speeds){
+        SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(speeds);
+
+        SwerveDriveKinematics.desaturateWheelSpeeds(swerveModuleStates, SwerveConstants.ATTAINABLE_MAX_SPEED);
+        frontLeftModule.setDesiredState(swerveModuleStates[0]);
+        frontRightModule.setDesiredState(swerveModuleStates[1]);
+        backLeftModule.setDesiredState(swerveModuleStates[2]);
+        backRightModule.setDesiredState(swerveModuleStates[3]);
+    }
+
+    public void resetModules() {
+        frontLeftModule.zeroModule();
+        frontRightModule.zeroModule();
+        backLeftModule.zeroModule();
+        backRightModule.zeroModule();
+    }
+
+    public Command buildAuto(HashMap<String, Command> eventMap, String pathName, double maxVelocity, double maxAcceleration) {
+        List<PathPlannerTrajectory> pathGroup = PathPlanner.loadPathGroup(
+            pathName,
+            new PathConstraints(maxVelocity, maxAcceleration)
         );
+
+        SwerveAutoBuilder autoBuilder = new SwerveAutoBuilder(
+            this::getPosition,
+            this::resetOdometry,
+            kinematics,
+            new PIDConstants(2.5, 0.0, 0.0),
+            new PIDConstants(2, 0.0, 0.0),
+            this::setDesiredState,
+            eventMap,
+            true,
+            this
+        );
+        return autoBuilder.fullAuto(pathGroup);
     }
 
-    public void resetEncoders() {
-        frontLeftMotor.resetEncoder();
-        frontRightMotor.resetEncoder();
-        backLeftMotor.resetEncoder();
-        backRightMotor.resetEncoder();
+    public Command buildAuto(HashMap<String, Command> eventMap, String pathName) {
+        return this.buildAuto(eventMap, pathName, AutonomousConstants.MAX_SPEED_METERS_PER_SECOND, AutonomousConstants.MAX_ACCELERATION_METERS_PER_SECOND_SQUARED);
     }
 
-    public double getHeading() {
-        return gyro.getRotation2d().getDegrees();
-    }
-
-    public Pose2d getPose() {
-        return odometry.getPoseMeters();
-    }
-
-    public void resetGyro() {
-        gyro.reset();
-    }
-    
     @Override
     public void close() throws Exception {
         stopMotors();
-        frontLeftMotor.close();
-        frontRightMotor.close();
-        backLeftMotor.close();
-        backRightMotor.close();
+        frontLeftModule.close();
+        frontRightModule.close();
+        backLeftModule.close();
+        backLeftModule.close();
     }
 
     @Override
     public void stopMotors() {
-        leftMotors.stopMotor();
-        rightMotors.stopMotor();
+        drive(0, 0, 0, false);
     }
 
-    // Constructor for testing, allows injection of mock motors
-    public Drive(DreadbotMotor fl, DreadbotMotor fr, DreadbotMotor bl, DreadbotMotor br) {
-        this.frontLeftMotor = fl;
-        this.frontRightMotor = fr;
-        this.backLeftMotor = bl;
-        this.backRightMotor = br;
-        this.gyro = null;
-        this.odometry = null;
-        this.InitialPitch = 0;
-        frontLeftMotor.setIdleMode(IdleMode.kBrake);
-        frontRightMotor.setIdleMode(IdleMode.kBrake);
-        backLeftMotor.setIdleMode(IdleMode.kBrake);
-        backRightMotor.setIdleMode(IdleMode.kBrake);
-
-        frontLeftMotor.setInverted(false);
-        backLeftMotor.setInverted(false);
-        frontRightMotor.setInverted(true);
-        backRightMotor.setInverted(true);
-
-        leftMotors = new MotorControllerGroup(frontLeftMotor.getSparkMax(), backLeftMotor.getSparkMax());
-        rightMotors = new MotorControllerGroup(frontRightMotor.getSparkMax(), backRightMotor.getSparkMax());
-
-        diffDrive = new DifferentialDrive(leftMotors, rightMotors);
-        slewRate = new SlewRateLimiter(DriveConstants.SLEW_RATE_LIMIT, -DriveConstants.SLEW_RATE_LIMIT, 0.2);
-        turboSlewRate = new SlewRateLimiter(DriveConstants.TURBO_FORWARD_SPEED_LIMITER, -DriveConstants.TURBO_FORWARD_SPEED_LIMITER, .4);
+    public void resetGyro(){
+        gyro.reset();
     }
 
-    public void feedMotors() {
-        diffDrive.feed();
+    public void zeroYaw(){
+        gyro.zeroYaw();
+    }
+
+    public double getPitch(){
+        return gyro.getRoll() - initialPitch;
+    }
+
+    public RelativeEncoder getMotorEncoder(int wheel){
+        switch(wheel){
+            case 1:
+                return frontLeftModule.getDriveMotor().getEncoder();
+            case 2:
+                return frontLeftModule.getTurnMotor().getEncoder();
+            case 3:
+                return backLeftModule.getDriveMotor().getEncoder();
+            case 4:
+                return backLeftModule.getTurnMotor().getEncoder();
+            case 5:
+                return backRightModule.getDriveMotor().getEncoder();
+            case 6:
+                return backRightModule.getTurnMotor().getEncoder();
+            case 7:
+                return frontRightModule.getDriveMotor().getEncoder();
+            case 8:
+                return frontRightModule.getTurnMotor().getEncoder();
+            default:
+                return frontLeftModule.getDriveMotor().getEncoder();
+        }
+    }
+    public void putValuesToSmartDashboard() {
+        frontLeftModule.putValuesToSmartDashboard("front left");
+        frontRightModule.putValuesToSmartDashboard("front right");
+        backLeftModule.putValuesToSmartDashboard("back left");
+        backRightModule.putValuesToSmartDashboard("back right");
     }
 }

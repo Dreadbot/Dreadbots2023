@@ -10,6 +10,7 @@ public class GrabberOpenCommand extends InstantCommand {
     public GrabberOpenCommand(Grabber grabberPneumatic, Arm arm) {
         this.grabberPneumatic = grabberPneumatic;
         this.arm = arm;
+        addRequirements(grabberPneumatic, arm);
     }
     public void execute() {
         if(!arm.isInsideBot())

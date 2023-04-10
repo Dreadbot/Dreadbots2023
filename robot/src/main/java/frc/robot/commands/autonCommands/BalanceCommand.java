@@ -27,10 +27,13 @@ public class BalanceCommand extends CommandBase {
         speed = MathUtil.clamp(speed, -BalanceConstants.MAX_SPEED, BalanceConstants.MAX_SPEED);
 
         if (Math.abs(pitch) < BalanceConstants.LEVEL_DEGREES) {
+            System.out.println(pitch);
             speed = 0;
         } else if (Math.abs(previousPitch) - Math.abs(pitch) > 0.5 && Math.abs(pitch) > BalanceConstants.LEVEL_DEGREES){
             speed = -speed;
         }
+        
+        System.out.println(speed);
      
         // if(i % 25 == 0) {
         //     SmartDashboard.putNumber("Pitch", pitch);
@@ -39,7 +42,8 @@ public class BalanceCommand extends CommandBase {
         // }
           
         // i++;
-        drive.ArcadeDrive(speed, 0.00d, false, false, false);
+
+        drive.drive(speed, 0.00d, 0.0, false);
     }
 
     @Override

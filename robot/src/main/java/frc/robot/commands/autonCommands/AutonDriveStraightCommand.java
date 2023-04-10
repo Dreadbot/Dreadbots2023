@@ -29,7 +29,7 @@ public class AutonDriveStraightCommand extends CommandBase {
     @Override
     public void execute() {
         double driveSpeed = speed * Math.signum(distance);
-        drive.ArcadeDrive(driveSpeed, 0, false, false, false);
+        drive.drive(driveSpeed, 0, 0, false);
     }
 
     @Override

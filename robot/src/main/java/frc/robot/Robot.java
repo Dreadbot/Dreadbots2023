@@ -10,9 +10,6 @@ import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.PowerDistribution.ModuleType;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
-import util.misc.BufferedPrint;
-import util.misc.DreadbotPowerLogger;
-import util.misc.DreadbotTrajectoryUtils;
 import util.misc.DreadbotTrajectoryUtils.DreadbotTrajectoryLoader;
 
 /**
@@ -80,6 +77,7 @@ public class Robot extends TimedRobot {
      */
     @Override
     public void robotPeriodic() {
+        robotContainer.robotPeriodic();
         // Runs the Scheduler.  This is responsible for polling buttons, adding newly-scheduled
         // commands, running already-scheduled commands, removing finished or interrupted commands,
         // and running subsystem periodic() methods.  This must be called from the robot's periodic
@@ -116,6 +114,8 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.schedule();
         }
+
+        robotContainer.autonomousInit();
     }
 
     /**
@@ -135,6 +135,8 @@ public class Robot extends TimedRobot {
         if (autonomousCommand != null) {
             autonomousCommand.cancel();
         }
+
+        robotContainer.teleopInit();
     }
 
     /**

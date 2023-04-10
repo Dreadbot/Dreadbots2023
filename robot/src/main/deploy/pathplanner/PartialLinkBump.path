@@ -1,0 +1,103 @@
+{
+  "waypoints": [
+    {
+      "anchorPoint": {
+        "x": 1.8,
+        "y": 0.48
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 2.8,
+        "y": 0.48
+      },
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "score"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "deadline",
+        "waitTime": 3.45
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 7.2,
+        "y": 0.88
+      },
+      "prevControl": {
+        "x": 4.719578582986832,
+        "y": 0.8991407036105005
+      },
+      "nextControl": {
+        "x": 4.719578582986832,
+        "y": 0.8991407036105005
+      },
+      "holonomicAngle": 0.0,
+      "isReversal": true,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": true,
+      "stopEvent": {
+        "names": [
+          "grab"
+        ],
+        "executionBehavior": "sequential",
+        "waitBehavior": "none",
+        "waitTime": 0
+      }
+    },
+    {
+      "anchorPoint": {
+        "x": 1.93,
+        "y": 1.05
+      },
+      "prevControl": {
+        "x": 3.045466090932182,
+        "y": 0.5226060452120916
+      },
+      "nextControl": null,
+      "holonomicAngle": 0,
+      "isReversal": false,
+      "velOverride": null,
+      "isLocked": false,
+      "isStopPoint": false,
+      "stopEvent": {
+        "names": [
+          "score",
+          "instant"
+        ],
+        "executionBehavior": "parallel",
+        "waitBehavior": "minimum",
+        "waitTime": 15.0
+      }
+    }
+  ],
+  "maxVelocity": 1.5,
+  "maxAcceleration": 0.9,
+  "isReversed": null,
+  "markers": [
+    {
+      "position": 1.85,
+      "names": [
+        "score"
+      ]
+    },
+    {
+      "position": 0.8,
+      "names": [
+        "intake"
+      ]
+    },
+    {
+      "position": 0.0,
+      "names": [
+        "retract"
+      ]
+    }
+  ]
+}
