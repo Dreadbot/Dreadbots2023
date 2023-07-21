@@ -59,6 +59,13 @@ public class DriveCommand extends CommandBase {
             addSlew = false;
         }
 
+        // --- Driver assist code; may help with drift ---
+        // if (forward > 0 && !fieldOriented) {
+        //     rotation -= 0.06 * forward;
+        // } else if (forward < 0 && !fieldOriented) {
+        //     rotation -= 0.03 * forward;
+        // }
+
         drive.drive(forward, strafe, rotation, fieldOriented);// addSlew, turboMode); //invert forward and rotation axis
         // save off the values so they are available for unit tests
         lastForward = forward;
