@@ -4,6 +4,8 @@
 
 package util.math;
 
+import edu.wpi.first.math.Vector;
+
 /**
  * Provides several functions and utilities common to robot code development,
  * including range functions, joystick deadband calculators, and drive value
@@ -89,6 +91,14 @@ public interface DreadbotMath {
      */
     static double applyDeadbandToValue(final double inputValue, final double deadband) {
         return applyDeadbandToValue(inputValue, -deadband, deadband, 0.0d);
+    }
+
+    static Vector2D applyDeadbandToVector(final Vector2D inputValue, final double deadband) {
+        double magnitude = inputValue.norm();
+        if (magnitude < deadband) {
+            return new Vector2D(0, 0);
+        }
+        return inputValue;
     }
 
     /**

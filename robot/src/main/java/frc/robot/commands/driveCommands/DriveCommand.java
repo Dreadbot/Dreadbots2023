@@ -11,6 +11,7 @@ import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OperatorConstants;
 import frc.robot.subsystems.Drive;
 import util.math.DreadbotMath;
+import util.math.Vector2D;
 
 public class DriveCommand extends CommandBase {
     private final Drive drive;
@@ -38,8 +39,10 @@ public class DriveCommand extends CommandBase {
      */
     @Override
     public void execute() {
-        double forward = (DreadbotMath.applyDeadbandToValue(joystickForwardAxis.getAsDouble(), DriveConstants.DEADBAND) * DriveConstants.FORWARD_SPEED_LIMITER);
-        double strafe = (DreadbotMath.applyDeadbandToValue(joystickStrafeAxis.getAsDouble(), DriveConstants.DEADBAND) * DriveConstants.STRAFE_SPEED_LIMITER);
+        Vector2D joystickValue = DreadbotMath.applyDeadbandToVector(new Vector2D(joystickForwardAxis.getAsDouble(), joystickStrafeAxis.getAsDouble()), DriveConstants.DEADBAND);
+
+        double forward = joystickValue.x1 * DriveConstants.FORWARD_SPEED_LIMITER;
+        double strafe = joystickValue.x2 * DriveConstants.STRAFE_SPEED_LIMITER;
         double rotation = (DreadbotMath.applyDeadbandToValue(joystickRotationalAxis.getAsDouble(), DriveConstants.DEADBAND) * DriveConstants.ROT_SPEED_LIMITER);
 
         boolean addSlew = true;
