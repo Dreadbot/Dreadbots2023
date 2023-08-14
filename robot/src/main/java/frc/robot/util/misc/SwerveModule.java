@@ -28,7 +28,7 @@ public class SwerveModule {
         this.turningCanCoder = turningCanCoder;
         this.turningCanCoder.configMagnetOffset(-canCoderOffset); // even after passing in the correct offsets, this STILL refuses to work, so we just subtract the offset manually
         this.canCoderOffset = canCoderOffset;
-        this.turningMotor.setInverted(true);
+        this.turningMotor.setInverted(true);    
         this.drivePIDController = driveMotor.getPIDController();
         this.drivePIDController.setP(0.1);
         this.drivePIDController.setFF(1);
@@ -36,7 +36,7 @@ public class SwerveModule {
         this.driveMotor.getEncoder().setPositionConversionFactor(SwerveConstants.WHEEL_DIAMETER * Math.PI * SwerveConstants.DRIVE_GEAR_RATIO); //convert from revolutions to meters
         this.driveMotor.getEncoder().setVelocityConversionFactor((SwerveConstants.WHEEL_DIAMETER * Math.PI * SwerveConstants.DRIVE_GEAR_RATIO) / 60);
         turningPIDController.enableContinuousInput(-Math.PI, Math.PI);
-    }
+    }   
 
     public SwerveModule(DreadbotMotor driveMotor, DreadbotMotor turnMotor, CANCoder turningCanCoder, double canCoderOffset, double drivePOverride) {
         this(driveMotor, turnMotor, turningCanCoder, canCoderOffset);
@@ -75,6 +75,7 @@ public class SwerveModule {
 
     public void putValuesToSmartDashboard(String name) {
         SmartDashboard.putNumber(name +" Can Coder", turningCanCoder.getAbsolutePosition());
+        SmartDashboard.putNumber(name + " Turning Motor Encoder", turningMotor.getEncoder().getPosition() * SwerveConstants.TURN_GEAR_RATIO);
     }
 
     public DreadbotMotor getDriveMotor() {
