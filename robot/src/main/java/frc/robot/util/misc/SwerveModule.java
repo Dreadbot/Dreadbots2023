@@ -28,7 +28,7 @@ public class SwerveModule {
         this.turningCanCoder = turningCanCoder;
         this.turningCanCoder.configMagnetOffset(-canCoderOffset); // even after passing in the correct offsets, this STILL refuses to work, so we just subtract the offset manually
         this.canCoderOffset = canCoderOffset;
-        this.turningMotor.setInverted(true);    
+        this.turningMotor.setInverted(true);
         this.drivePIDController = driveMotor.getPIDController();
         this.drivePIDController.setP(0.1);
         this.drivePIDController.setFF(1);

@@ -157,7 +157,6 @@ public class RobotContainer {
     }
 
     public void autonomousInit() {
-        drive.isTeleop = false;
     }
 
     public void autonPeriodic() {
@@ -165,7 +164,6 @@ public class RobotContainer {
     }
 
     public void teleopInit() {
-        drive.isTeleop = true;
     }
    
     public void teleopPeriodic() {

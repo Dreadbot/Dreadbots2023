@@ -33,7 +33,7 @@ public class ArmCommand extends CommandBase {
         } else if(arm.getLowerSwitch() && joystickValue.getAsDouble() < 0.10){
             grabber.openGrabber();
         } else if (Math.abs(joystickValue.getAsDouble()) > 0.10 && arm.getElevatorPosition() < ArmConstants.INSIDE_BOT_POSITION) {
-            grabber.closeGrabber(); 
+            grabber.closeGrabber();
         }
         
         double speed = DreadbotMath.applyDeadbandToValue(joystickValue.getAsDouble(), 0.08);
@@ -44,6 +44,7 @@ public class ArmCommand extends CommandBase {
                 speed *= 0.5;
             }
         }
+        
         arm.elevate(speed * (turtleMode.getAsBoolean() ? ArmConstants.ELEVATOR_MANUAL_TURTLE_SPEED : ArmConstants.ELEVATOR_MANUAL_SPEED));
     }
 }
