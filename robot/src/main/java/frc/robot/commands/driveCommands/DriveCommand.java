@@ -39,15 +39,20 @@ public class DriveCommand extends CommandBase {
      */
     @Override
     public void execute() {
+        // Joystick values will be between -1 and 1
         Vector2D joystickValue = DreadbotMath.applyDeadbandToVector(new Vector2D(joystickForwardAxis.getAsDouble(), joystickStrafeAxis.getAsDouble()), 0.10);
+
 
         double forward = joystickValue.x1 * DriveConstants.FORWARD_SPEED_LIMITER;
         double strafe = joystickValue.x2 * DriveConstants.STRAFE_SPEED_LIMITER;
+        // forward/strafe values will be between -.75 and +.75
         double rotation = (DreadbotMath.applyDeadbandToValue(joystickRotationalAxis.getAsDouble(), DriveConstants.DEADBAND) * DriveConstants.ROT_SPEED_LIMITER);
 
         boolean addSlew = true;
         if (this.turboMode) {
             // make forward negative right here and test
+
+            // forward/strafe values will be between +-(.35 and 1)
             forward = Math.signum(joystickForwardAxis.getAsDouble()) * DreadbotMath.linearInterpolation(DriveConstants.TURBO_MODE_MIN_SPEED, 1, Math.abs(joystickForwardAxis.getAsDouble()));
             strafe = Math.signum(joystickStrafeAxis.getAsDouble()) * DreadbotMath.linearInterpolation(DriveConstants.TURBO_MODE_MIN_SPEED, 1, Math.abs(joystickStrafeAxis.getAsDouble()));
             // Because this is done after the linearInterpolation, the deadband ends up being .05
@@ -56,6 +61,7 @@ public class DriveCommand extends CommandBase {
             }
         } else if (this.turtleMode) {
             // make forward negative right here and test
+            // forward/strafe values will be between -0.35 and 0.35)
             forward = Math.signum(joystickForwardAxis.getAsDouble()) * DreadbotMath.linearInterpolation(0, DriveConstants.TURTLE_MODE_MAX_SPEED, Math.abs(joystickForwardAxis.getAsDouble()));
             strafe = Math.signum(joystickStrafeAxis.getAsDouble()) * DreadbotMath.linearInterpolation(0, DriveConstants.TURTLE_MODE_MAX_SPEED, Math.abs(joystickStrafeAxis.getAsDouble()));
             rotation =  Math.signum(joystickRotationalAxis.getAsDouble()) * DreadbotMath.linearInterpolation(0, DriveConstants.TURTLE_MODE_MAX_SPEED,  Math.abs(joystickRotationalAxis.getAsDouble()));
@@ -69,6 +75,7 @@ public class DriveCommand extends CommandBase {
         //     rotation -= 0.03 * forward;
         // }
 
+        // Passing max value of 1.0 (turbo), 0.75 (normal), 0.35 (turtle) for forward and strafe
         drive.drive(forward, strafe, rotation, fieldOriented);// addSlew, turboMode); //invert forward and rotation axis
         // save off the values so they are available for unit tests
         lastForward = forward;

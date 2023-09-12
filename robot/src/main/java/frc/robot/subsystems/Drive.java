@@ -128,6 +128,7 @@ public class Drive extends DreadbotSubsystem {
         turningController.enableContinuousInput(-180, 180);
     }
 
+    // max value of 1.0 (turbo), 0.75 (normal), 0.35 (turtle) for forward and strafe passed in
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative){
         if(isXMode)
             return;
@@ -147,6 +148,11 @@ public class Drive extends DreadbotSubsystem {
         xSpeed = forwardSlewRateLimiter.calculate(xSpeed);
         ySpeed = strafeSlewRateLimiter.calculate(ySpeed);
 
+        // ChassisSpeeds takes speeds in MetersPerSecond
+
+        // ChassisSpeeds() takes xSpeed and ySpeed in MetersPerSecond
+        // max value of 1.0 (turbo), 0.75 (normal), 0.35 (turtle) for forward and strafe passed in
+        // So the robot's max speed in turbo is 1 meter per second.
         SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(
             fieldRelative ? 
             ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())
