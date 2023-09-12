@@ -76,6 +76,8 @@ public class DriveCommand extends CommandBase {
         // }
 
         // Passing max value of 1.0 (turbo), 0.75 (normal), 0.35 (turtle) for forward and strafe
+        // forward/strafe should probably be multiplied by a MAX_SPEED_METERS_PER_SECOND constant, probably with a
+        // value of like 2.5 or 3 (just guessing) to convert the -1 to +1 value to meters per second
         drive.drive(forward, strafe, rotation, fieldOriented);// addSlew, turboMode); //invert forward and rotation axis
         // save off the values so they are available for unit tests
         lastForward = forward;
