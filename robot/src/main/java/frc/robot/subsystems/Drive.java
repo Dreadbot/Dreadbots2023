@@ -126,6 +126,7 @@ public class Drive extends DreadbotSubsystem {
     }
 
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative){
+        SmartDashboard.putNumber("controllerRot", rot);
         if(isXMode) return;
         SmartDashboard.putNumber("actualAngle", gyro.getRotation2d().getDegrees());
         SmartDashboard.putNumber("targetAngle", targetAngle);
@@ -133,14 +134,15 @@ public class Drive extends DreadbotSubsystem {
             if (DreadbotMath.applyDeadbandToValue(rot, DriveConstants.DEADBAND) != 0) {
                 targetAngle = gyro.getRotation2d().getDegrees();
             } else {
-                rot = turningController.calculate(gyro.getRotation2d().getDegrees(), targetAngle);
+                    rot = turningController.calculate(gyro.getRotation2d().getDegrees(), targetAngle);
             }
         }
         SmartDashboard.putNumber("actualRotation", rot);
         
         xSpeed = forwardSlewRateLimiter.calculate(xSpeed);
         ySpeed = strafeSlewRateLimiter.calculate(ySpeed);
-
+        xSpeed *= SwerveConstants.ATTAINABLE_MAX_SPEED;
+        ySpeed *= SwerveConstants.ATTAINABLE_MAX_SPEED;
         SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(
             fieldRelative ? 
             ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())
