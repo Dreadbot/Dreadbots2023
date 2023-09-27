@@ -44,7 +44,6 @@ public class DriveCommand extends CommandBase {
         double forward = joystickValue.x1 * DriveConstants.FORWARD_SPEED_LIMITER;
         double strafe = joystickValue.x2 * DriveConstants.STRAFE_SPEED_LIMITER;
         double rotation = (DreadbotMath.applyDeadbandToValue(joystickRotationalAxis.getAsDouble(), DriveConstants.DEADBAND) * DriveConstants.ROT_SPEED_LIMITER);
-
         boolean addSlew = true;
         if (this.turboMode) {
             // make forward negative right here and test

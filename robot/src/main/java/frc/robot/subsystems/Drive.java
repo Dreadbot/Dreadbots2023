@@ -25,16 +25,16 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.math.util.Units;
-import edu.wpi.first.wpilibj.Joystick;
-import frc.robot.Constants;
+import edu.wpi.first.wpilibj.DriverStation;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.AutonomousConstants;
+import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.SwerveConstants;
+import frc.robot.util.math.DreadbotMath;
 import frc.robot.util.misc.DreadbotMotor;
 import frc.robot.util.misc.SwerveModule;
 import util.misc.DreadbotSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
-import edu.wpi.first.wpilibj2.command.InstantCommand;
-import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
 public class Drive extends DreadbotSubsystem {
     //Double check locations
@@ -60,11 +60,8 @@ public class Drive extends DreadbotSubsystem {
     private SlewRateLimiter strafeSlewRateLimiter = new SlewRateLimiter(1.5, -1.5, .2);
 
     private final double initialPitch;
-
-    public boolean isTeleop = false;
-    private boolean isTurning = false;
-    private float targetAngle = 0;
-    private PIDController turningController = new PIDController(-0.0006, 0.0, 0.0);
+    private double targetAngle;
+    private PIDController turningController = new PIDController(0.017, 0.007, 0.004); //0.015, 0.007, 0.002
 
     public boolean isXMode = false;
 
@@ -99,7 +96,7 @@ public class Drive extends DreadbotSubsystem {
         );
 
         gyro.reset();
-
+        targetAngle = gyro.getRotation2d().getDegrees();
         kinematics = new SwerveDriveKinematics(
             frontLeftLocation,
             frontRightLocation,
@@ -129,24 +126,23 @@ public class Drive extends DreadbotSubsystem {
     }
 
     public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative){
-        if(isXMode)
-            return;
-        if (isTeleop) {
-            if (rot != 0) {
-                isTurning = true;
-                targetAngle = gyro.getYaw();
-            } else if (isTurning) {
-                isTurning = false;
+        SmartDashboard.putNumber("controllerRot", rot);
+        if(isXMode) return;
+        SmartDashboard.putNumber("actualAngle", gyro.getRotation2d().getDegrees());
+        SmartDashboard.putNumber("targetAngle", targetAngle);
+        if (DriverStation.isTeleop()) {
+            if (DreadbotMath.applyDeadbandToValue(rot, DriveConstants.DEADBAND) != 0) {
+                targetAngle = gyro.getRotation2d().getDegrees();
+            } else {
+                    rot = turningController.calculate(gyro.getRotation2d().getDegrees(), targetAngle);
             }
         }
-
-        // if (!isTurning && ySpeed > 0) {
-        //     rot = turningController.calculate(gyro.getYaw(), targetAngle);
-        // }
-
+        SmartDashboard.putNumber("actualRotation", rot);
+        
         xSpeed = forwardSlewRateLimiter.calculate(xSpeed);
         ySpeed = strafeSlewRateLimiter.calculate(ySpeed);
-
+        xSpeed *= SwerveConstants.ATTAINABLE_MAX_SPEED;
+        ySpeed *= SwerveConstants.ATTAINABLE_MAX_SPEED;
         SwerveModuleState[] swerveModuleStates = kinematics.toSwerveModuleStates(
             fieldRelative ? 
             ChassisSpeeds.fromFieldRelativeSpeeds(xSpeed, ySpeed, rot, gyro.getRotation2d())

@@ -76,7 +76,7 @@ public abstract class Constants {
       public static final int LOWER_LIMIT_SWITCH_PORT = 0;
     }
     public static class SwerveConstants {
-      public static final double ATTAINABLE_MAX_SPEED = 2.5;
+      public static final double ATTAINABLE_MAX_SPEED = 1.5;
       public static final double MODULE_Y_OFFSET = Units.inchesToMeters(26.0) / 2; // Between the front and back
       public static final double MODULE_X_OFFSET = Units.inchesToMeters(23.0) / 2; // Between the left and right
       // Encoder offsets are in degrees, not radians

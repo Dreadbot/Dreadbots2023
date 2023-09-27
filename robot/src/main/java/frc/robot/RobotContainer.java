@@ -79,7 +79,7 @@ public class RobotContainer {
             .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber)
             .andThen(new ArmToPositionCommand(arm, grabber, ArmConstants.PICKUP_ELEVATOR_POSITION, () -> 0.0))));
         autonEvents.put("score", new ArmToPositionCommand(arm, grabber, ArmConstants.MAX_ELEVATOR_POSITION, () -> 0.0)
-            .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD + .1, grabber))
+            .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD + .4, grabber))
             .andThen(new GrabberOpenCommand(grabber, arm))
             .andThen(new GrabberWaitCommand(GrabberConstants.WAIT_PERIOD, grabber))
             .andThen(new ArmToPositionCommand(arm, grabber, -5, () -> 0.0)));
@@ -157,7 +157,6 @@ public class RobotContainer {
     }
 
     public void autonomousInit() {
-        drive.isTeleop = false;
     }
 
     public void autonPeriodic() {
@@ -165,7 +164,6 @@ public class RobotContainer {
     }
 
     public void teleopInit() {
-        drive.isTeleop = true;
     }
    
     public void teleopPeriodic() {

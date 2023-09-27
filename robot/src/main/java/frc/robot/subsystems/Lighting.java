@@ -6,6 +6,7 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import util.misc.DreadbotSubsystem;
 
 public class Lighting extends DreadbotSubsystem {
+
     public enum Color {
         Yellow,
         Purple
@@ -38,13 +39,11 @@ public class Lighting extends DreadbotSubsystem {
     @Override
     public void close() throws Exception {
         // TODO Auto-generated method stub
-        
     }
 
     @Override
     public void stopMotors() {
        
-        
     }
     
 }
